@@ -30,6 +30,7 @@ declare(strict_types = 1);
 
 // Include the parser infrastructure.
 require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/LGV_TZ_Lookup_Database.class.php';
 
 /***************************************************************************************************************************/
 /**
@@ -86,12 +87,16 @@ class LGV_TZ_Lookup_Entity {
     It will not require any constructor data, and will set itself up.
  */
 class LGV_TZ_Lookup_Listener extends \JsonStreamingParser\Listener\GeoJsonListener {
+    static $db_object;
+    
     /***********************************************************************************************************************/
     /**
-        The constructor. No parameters are necessary.
+        The constructor.
      */
-    public function __construct()
-    {
+    public function __construct($inDBObject ///< An initialized databas instance for this handler.
+                                ) {
+        self::$db_object = $inDBObject;
+        
         parent::__construct('LGV_TZ_Lookup_Listener::listener_action');
     }
 
@@ -119,6 +124,7 @@ class LGV_TZ_Lookup_Listener extends \JsonStreamingParser\Listener\GeoJsonListen
     private static function _process_entity(  $inEntity   ///< The new entity to be processed.
                                         ) {
         echo "<pre>$inEntity->tzID<br/><br/>".print_r($inEntity->domainRect, true)."</pre>";
+        self::$db_object->store_entity($inEntity);
     }
 
     /***********************************************************************************************************************/

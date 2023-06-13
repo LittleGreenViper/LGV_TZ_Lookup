@@ -8,18 +8,20 @@ require_once __DIR__.'/Sources/LGV_TZ_Lookup_Listener.class.php';
 
 $stream = fopen('combined-with-oceans.json', 'r');
 
-$listener = new LGV_TZ_Lookup_Listener();
-
 try {
+    require_once __DIR__.'/../../../TZInfo/config.php';
+    $db_object = new LGV_TZ_Lookup_Database($g_dbName, $g_dbUserName, $g_dbPassword);
+    $listener = new LGV_TZ_Lookup_Listener($db_object);
     $parser = new \JsonStreamingParser\Parser($stream, $listener);
     $time = microtime(true);
     $parser->parse();
     fclose($stream);
     
+    $seconds = intval(round(microtime(true) - $time));
+    $minutes = intval($seconds / 60);
+    $seconds = intval($seconds - ($minutes * 60));
     
-    $seconds = round((microtime(true) - $time) * 100) / 100;
-    
-    echo "This took $seconds seconds to run.";
+    echo "This took $minutes minutes and $seconds seconds to run.";
     
 } catch (Exception $e) {
     fclose($stream);
