@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 set_time_limit(180);
 
-require_once __DIR__.'/LGV_TZ_Lookup_Listener.class.php';
+require_once __DIR__.'/Sources/LGV_TZ_Lookup_Listener.class.php';
 
 $stream = fopen('combined-with-oceans.json', 'r');
 
@@ -25,5 +25,3 @@ try {
     fclose($stream);
     throw $e;
 }
-
-
