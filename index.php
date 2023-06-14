@@ -9,48 +9,57 @@ require_once __DIR__.'/Sources/LGV_TZ_Lookup_Loader.class.php';
 require_once __DIR__.'/../../../TZInfo/config.php';
 
 $queryString = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : NULL;
-if (!empty($queryString)) {
+if (!empty($queryString) || ("cli" == php_sapi_name())) {
     $queries = [];
+    $path = "";
     
-    $queryArray = explode('&', $queryString);
+    if ("cli" != php_sapi_name()) {
+        $queryArray = explode('&', $queryString);
     
-    foreach ($queryArray as $param) {
-        // Now, see if we have a bunch of parameters.
-        $key = trim($param);
-        $value = NULL;
+        foreach ($queryArray as $param) {
+            // Now, see if we have a bunch of parameters.
+            $key = trim($param);
+            $value = NULL;
 
-        $parts = explode('=', $param, 2);
+            $parts = explode('=', $param, 2);
         
-        if (1 < count($parts)) {
-            $key = trim($parts[0]);
-            $value = trim($parts[1]);
-        }
-
-        if (!empty($key)) {
-            if (empty($value)) {
-                $value = true;
+            if (1 < count($parts)) {
+                $key = trim($parts[0]);
+                $value = trim($parts[1]);
             }
 
-            $queries[$key] = $value;
+            if (!empty($key)) {
+                if (empty($value)) {
+                    $value = true;
+                }
+
+                $queries[$key] = $value;
+            }
         }
+    } else if (2 == $_SERVER['argc']) {
+        $path = dirname($_SERVER['argv'][0]);
+        $queries = [$_SERVER['argv'][1] => true];
     }
 
     if (!empty($queries)) {
         $db_object = new LGV_TZ_Lookup_Database($g_dbName, $g_dbUserName, $g_dbPassword);
         if (isset($queries['load'])) {
-            $stream = fopen('combined-with-oceans.json', 'r');
+            if ("cli" == php_sapi_name()) {
+                $stream = fopen("$path/combined-with-oceans.json", 'r');
 
-            try {
-                $listener = new LGV_TZ_Lookup_Loader($db_object);
-                $parser = new \JsonStreamingParser\Parser($stream, $listener);
-                $parser->parse();
-                fclose($stream);
-                echo('Load Successful');
-                header('HTTP/1.1 200 Load Successful');
-            } catch (Exception $e) {
-                fclose($stream);
-                echo('Load Error');
-                header('HTTP/1.1 500 Load Error');
+                try {
+                    $listener = new LGV_TZ_Lookup_Loader($db_object);
+                    $parser = new \JsonStreamingParser\Parser($stream, $listener);
+                    $parser->parse();
+                    fclose($stream);
+                    echo('1');
+                } catch (Exception $e) {
+                    fclose($stream);
+                    echo('0');
+                }
+            } else {
+                echo('Only Available Through CLI');
+                header('HTTP/1.1 403 Not Authorized');
             }
         } elseif (!empty($queries['ll'])) {
             $long_lat = explode(',', $queries['ll']);
@@ -63,10 +72,14 @@ if (!empty($queryString)) {
             }
         }
     } else {
-        echo('Illegal Query');
-        header('HTTP/1.1 400 Illegal Query');
+        if ("cli" == php_sapi_name()) {
+            echo("Usage: \$> php ".__FILE__." load\n\n\tInitializes the database from the GeoJSON file.\n\tIt will return 1, if successful, 0, if not. It may take some time.\n");
+        } else {
+            echo('Illegal Query');
+            header('HTTP/1.1 400 Illegal Query');
+        }
     }
 } else {
-    echo('Empty Query');
-    header('HTTP/1.1 400 Empty Query');
+    $s = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) ? "s" : "";
+    echo("<pre>Usage: http$s://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."?<em style='color:gray'>XXX</em>\n\n\tWhere '<em style='color:gray'>XXX</em>' is:\n\n\t\t&middot; ll=<em style='color:gray'>&lt;LONG&gt;,&lt;LAT&gt;</em>\n\t\t\tThis is the standard query. Provide the requested long/lat, as comma-delimited floating-point numbers, between -180 and 180.\n\t\t\tThe response will be <a href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>the TZ name</a> of the timezone that contains that point. It will be a simple string.</pre>");
 }

@@ -25,6 +25,8 @@
 /**
     \brief This is a modified GeoJSON listener for [the streaming JSON parser](https://github.com/salsify/jsonstreamingparser).
            It will initialize and load the database, from the GeoJSON file.
+           
+    >  NOTE: If you are calling this (via "load", then you also need to supply "cli" as a CLI argument (or you will get a "must be called via CLI" error).
  */
  
 declare(strict_types = 1);
