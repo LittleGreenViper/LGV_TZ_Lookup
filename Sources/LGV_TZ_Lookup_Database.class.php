@@ -84,6 +84,58 @@ class LGV_TZ_Lookup_Database {
     
     /***********************************************************************************************************************/
     /**
+        This queries the database, and returns the TZ IDs.
+        
+        \returns: An array of integers, which are the database IDs of table rows that have the long/lat in their domainRects.
+     */
+    public function get_tz_ids( $in_lng,    ///< The longitude 
+                                $in_lat     ///< The latitude
+                            ) {
+        $sql = "SELECT id, tzname FROM timezones WHERE east>=? AND west<=? AND north>=? AND south<=?";
+        $params = [$in_lng, $in_lng, $in_lat, $in_lat];
+        return $this->pdo_instance->preparedStatement($sql, $params, true);
+    }
+    
+    /***********************************************************************************************************************/
+    /**
+        \returns: An array of integers, which are the database IDs of table rows that have the long/lat in their domainRects.
+     */
+    public function get_tz_entities( $in_id_list ///< A list of IDs for the rows we want to check.
+                            ) {
+        $sql = "SELECT tzname, polygon FROM timezones WHERE";
+        $idSQL = "";
+        $params = [];
+        
+        foreach ($in_id_list as $id) {
+            if (!empty($idSQL)) {
+                $idSQL .= " OR";
+            }
+            
+            $idSQL .= " id=?";
+            $params[] = $id;
+        }
+        
+        if (!empty($params)) {
+            $ret = $this->pdo_instance->preparedStatement($sql.$idSQL, $params, true);
+            
+            if (!empty($ret)) {
+                $entities = [];
+                foreach($ret as $row) {
+                    $entity = ['tzname' => $row['tzname'], 'polygon' => unpack('VSRID/corder/ltype/Lnum_rings/Lnum_points/d*', $row['polygon'])];
+                    unset($entity['polygon']['SRID']);
+                    unset($entity['polygon']['order']);
+                    unset($entity['polygon']['type']);
+                    unset($entity['polygon']['num_rings']);
+                    unset($entity['polygon']['num_points']);
+                    $entity['polygon'] = array_chunk(array_values($entity['polygon']), 2);
+                    $entities[] = $entity;
+                }
+            }
+        }
+    }
+    
+    /***********************************************************************************************************************/
+    /**
         This clears the database.
      */
     public function reset_database() {

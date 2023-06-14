@@ -5,6 +5,7 @@ declare(strict_types = 1);
 
 set_time_limit(180);
 
+require_once __DIR__.'/Sources/LGV_TZ_Lookup_Query.class.php';
 require_once __DIR__.'/Sources/LGV_TZ_Lookup_Loader.class.php';
 require_once __DIR__.'/../../../TZInfo/config.php';
 
@@ -12,8 +13,7 @@ $queryString = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : NULL
 if (!empty($queryString) || ("cli" == php_sapi_name())) {
     $queries = [];
     $path = "";
-    
-    if ("cli" != php_sapi_name()) {
+    if (!empty($queryString)) {
         $queryArray = explode('&', $queryString);
     
         foreach ($queryArray as $param) {
@@ -36,9 +36,8 @@ if (!empty($queryString) || ("cli" == php_sapi_name())) {
                 $queries[$key] = $value;
             }
         }
-    } else if (2 == $_SERVER['argc']) {
+    } elseif (0 < $_SERVER['argc']) {
         $path = dirname($_SERVER['argv'][0]);
-        $queries = [$_SERVER['argv'][1] => true];
     }
 
     if (!empty($queries)) {
@@ -66,6 +65,9 @@ if (!empty($queryString) || ("cli" == php_sapi_name())) {
             if (2 == count($long_lat) && !empty($long_lat[0]) && !empty($long_lat[1])) {
                 $lng = floatval($long_lat[0]);
                 $lat = floatval($long_lat[1]);
+                
+                $lookup = new LGV_TZ_Lookup_Query($db_object);
+                echo($lookup->get_tz($lng, $lat));
             } else {
                 echo('Malformed Query');
                 header('HTTP/1.1 400 Malformed Query');
