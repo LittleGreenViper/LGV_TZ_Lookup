@@ -48,12 +48,12 @@ class LGV_TZ_Lookup_PDO {
 		
 		Will destroy previous connection (if one exists).
 	*/
-	public function __construct(    $inDatabase,    ///< database name (required)
-	                                $inUser,	    ///< user, (required)
-                                    $inPassword,    ///< password, (required)
-                                    $inDriver,	    ///< database server type (required)
-                                    $inHost,        ///< database server host (required)
-                                    $inPort 	    ///< database TCP port (required)
+	public function __construct(    $inDatabase,    ///< database name
+	                                $inUser,	    ///< database user
+                                    $inPassword,    ///< database password
+                                    $inDriver,	    ///< database server type
+                                    $inHost,        ///< database server host
+                                    $inPort 	    ///< database TCP port
 								) {
 		$this->_pdo = NULL;
 		$this->driver_type = strtolower($inDriver);

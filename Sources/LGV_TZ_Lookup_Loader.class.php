@@ -31,73 +31,34 @@ declare(strict_types = 1);
 // Include the parser infrastructure.
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/LGV_TZ_Lookup_Database.class.php';
+require_once __DIR__.'/LGV_TZ_Lookup_Entity.class.php';
 
 /***************************************************************************************************************************/
 /**
-    This class is basically a struct, containing one entity.
-
-    The entity is usually one multipolygon segment, as defined in the main data file. It may represent the entirety of a timezone,
-    but is more likely to be just one part.
-    
-    It has a timezone ID, a detailed list of polygon points, and a "domain rect," which is a simple rect that encompasses all of the points.
-    We use the domain rect to quickly triage comparisons, and find out where they apply, before applying a more expensive algorithm to do a more
-    exact polygon match.
- */
-class LGV_TZ_Lookup_Entity {
-    /***********************************************************************************************************************/
-    /**
-    This is [the standard TZ time zone designator](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) that applies to this entity.
-     */
-    var $tzID;
-    
-    /***********************************************************************************************************************/
-    /**
-    This is the domain rectangle that contains the East, West, North, and South boundaries of the polygon.
-     */
-    var $domainRect;
-    
-    /***********************************************************************************************************************/
-    /**
-    This is the exact polygon for the time zone.
-    It is a simple 2-element floating point array, with the longitude being [0], and the latitude being [1].
-     */
-    var $polygon;
-
-    /***********************************************************************************************************************/
-    /**
-    The default constructor. We simply pass in the values to be held by this instance.
-     */
-    function __construct (
-                            $inTZID,            ///< This is [the standard TZ time zone designator](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) that applies to this entity.
-                            $inDomainRect,      ///< This is the domain rectangle that contains the East, West, North, and South boundaries of the polygon.
-                            $inCoordinateArray  ///< This is the exact polygon for the time zone.
-                        ) {
-        $this->tzID = $inTZID;
-        $this->domainRect = $inDomainRect;
-        $this->polygon = $inCoordinateArray;
-    }
-}
-
-/***************************************************************************************************************************/
-/**
-    This class is a mainly static class that will process the main data file.
+    This class is a mainly static class that will process the main data file, and initialize the database.
 
     It extends the streamer's GeoJSON listener class.
     
     It will not require any constructor data, and will set itself up.
  */
-class LGV_TZ_Lookup_Listener extends \JsonStreamingParser\Listener\GeoJsonListener {
+class LGV_TZ_Lookup_Loader extends \JsonStreamingParser\Listener\GeoJsonListener {
+    /***********************************************************************************************************************/
+    /**
+        The database object we're accessing..
+     */
     static $db_object;
     
     /***********************************************************************************************************************/
     /**
         The constructor.
      */
-    public function __construct($inDBObject ///< An initialized databas instance for this handler.
+    public function __construct($inDBObject ///< An initialized database instance for this handler.
                                 ) {
         self::$db_object = $inDBObject;
         
-        parent::__construct('LGV_TZ_Lookup_Listener::listener_action');
+        parent::__construct('LGV_TZ_Lookup_Loader::listener_action');
+        
+        $inDBObject->reset_database();
     }
 
     /***********************************************************************************************************************/
@@ -121,9 +82,8 @@ class LGV_TZ_Lookup_Listener extends \JsonStreamingParser\Listener\GeoJsonListen
     /**
         This processes one new entity, after we have parsed it.
      */
-    private static function _process_entity(  $inEntity   ///< The new entity to be processed.
+    private static function _process_entity($inEntity   ///< The new entity to be processed.
                                         ) {
-        echo "<pre>$inEntity->tzID<br/><br/>".print_r($inEntity->domainRect, true)."</pre>";
         self::$db_object->store_entity($inEntity);
     }
 
@@ -154,7 +114,7 @@ class LGV_TZ_Lookup_Listener extends \JsonStreamingParser\Listener\GeoJsonListen
     private static function _extract_entity($tzid,          ///< This is [the standard TZ time zone designator](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) that applies to this entity.
                                             $coords_array   ///< This is the exact polygon for this entitye.
                                         ) {
-        $domainRect = array_reduce($coords_array, 'LGV_TZ_Lookup_Listener::_update_coords', ['east' => -1000, 'west' => 1000, 'north' => -1000, 'south' => 1000]);
+        $domainRect = array_reduce($coords_array, 'LGV_TZ_Lookup_Loader::_update_coords', ['east' => -1000, 'west' => 1000, 'north' => -1000, 'south' => 1000]);
     
         return new LGV_TZ_Lookup_Entity($tzid, $domainRect, $coords_array);
     }
