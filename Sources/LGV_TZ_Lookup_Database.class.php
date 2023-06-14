@@ -36,6 +36,7 @@ require_once __DIR__.'/LGV_TZ_Lookup_PDO.class.php';
 class LGV_TZ_Lookup_Database {
     /***********************************************************************************************************************/
     /**
+        This has our PDO connection to our database.
      */
     var $pdo_instance;
 
@@ -55,11 +56,27 @@ class LGV_TZ_Lookup_Database {
     
     /***********************************************************************************************************************/
     /**
+        This is an array map callback. It takes a coordinate pair, in lng.lat form, and creates a space-delimites string from it.
+        
+        \returns: A string, with the two numbers. These are also rounded to five decimal places.
      */
-    public function store_entity(   $inEntity
+    private static function _map_string_from_lng_lat($lng_lat   ///< This is a 2-element array of float, in the form of lng, lat.
+                                                    ) {
+        $lng = round($lng_lat[0] * 100000) / 100000;
+        $lat = round($lng_lat[1] * 100000) / 100000;
+        
+        return sprintf("%g %g", $lng, $lat);
+    }
+    
+    /***********************************************************************************************************************/
+    /**
+    This uses our PDO instance to save the entity as a table row.
+     */
+    public function store_entity(   $inEntity   ///< The entity to be saved into the database.
                                 ) {
-        $sql = "INSERT INTO `timezones` (`tzname`, `east`, `west`, `north`, `south`, `polygon`) VALUES (?, ?, ?, ?, ?, ?)";
-        $params = [$inEntity->tzID, $inEntity->domainRect['east'], $inEntity->domainRect['west'], $inEntity->domainRect['north'], $inEntity->domainRect['south'], NULL];
+        $polygon_string = 'POLYGON(('.implode(',', array_map('LGV_TZ_Lookup_Database::_map_string_from_lng_lat', $inEntity->polygon)).'))';
+        $sql = "INSERT INTO `timezones` (`tzname`, `east`, `west`, `north`, `south`, `polygon`) VALUES (?, ?, ?, ?, ?, PolygonFromText(?))";
+        $params = [$inEntity->tzID, $inEntity->domainRect['east'], $inEntity->domainRect['west'], $inEntity->domainRect['north'], $inEntity->domainRect['south'], $polygon_string];
         $this->pdo_instance->preparedStatement($sql, $params);
     }
 }
