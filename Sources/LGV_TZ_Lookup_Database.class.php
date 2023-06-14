@@ -58,7 +58,7 @@ class LGV_TZ_Lookup_Database {
     
     /***********************************************************************************************************************/
     /**
-        This is an array map callback. It takes a coordinate pair, in lng, lat form, and creates a space-delimites string from it.
+        This is an array map callback. It takes a coordinate pair, in lng, lat form, and creates a space-delimited string from it.
         
         \returns: A string, with the two numbers. These are also rounded to five decimal places.
      */

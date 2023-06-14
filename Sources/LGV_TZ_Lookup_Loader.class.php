@@ -24,6 +24,7 @@
 /***************************************************************************************************************************/
 /**
     \brief This is a modified GeoJSON listener for [the streaming JSON parser](https://github.com/salsify/jsonstreamingparser).
+           It will initialize and load the database, from the GeoJSON file.
  */
  
 declare(strict_types = 1);

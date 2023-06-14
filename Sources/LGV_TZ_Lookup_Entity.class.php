@@ -23,7 +23,7 @@
 */
 /***************************************************************************************************************************/
 /**
-    \brief This is a modified GeoJSON listener for [the streaming JSON parser](https://github.com/salsify/jsonstreamingparser).
+    \brief A simple struct for each element of information.
  */
  
 declare(strict_types = 1);
@@ -55,7 +55,7 @@ class LGV_TZ_Lookup_Entity {
     /***********************************************************************************************************************/
     /**
     This is the exact polygon for the time zone.
-    It is a simple 2-element floating point array, with the longitude being [0], and the latitude being [1].
+    It is an array of simple 2-element floating point arrays, with the longitude of each element being [0], and the latitude being [1].
      */
     var $polygon;
 
