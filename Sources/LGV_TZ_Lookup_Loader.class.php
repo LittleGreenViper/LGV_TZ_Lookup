@@ -45,7 +45,8 @@ require_once __DIR__.'/LGV_TZ_Lookup_Entity.class.php';
 class LGV_TZ_Lookup_Loader extends \JsonStreamingParser\Listener\GeoJsonListener {
     /***********************************************************************************************************************/
     /**
-        The database object we're accessing..
+        The database object we're accessing.
+        It's static, because that makes it easy to get in the callback.
      */
     static $db_object;
     

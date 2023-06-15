@@ -40,9 +40,9 @@ require_once __DIR__.'/LGV_TZ_Lookup_Database.class.php';
 class LGV_TZ_Lookup_Query {
     /***********************************************************************************************************************/
     /**
-        The database object we're accessing..
+        The database object we're accessing.
      */
-    static $db_object;
+    var $db_object;
     
     /***********************************************************************************************************************/
     /**
@@ -50,7 +50,7 @@ class LGV_TZ_Lookup_Query {
      */
     public function __construct($inDBObject ///< An initialized database instance for this handler.
                                 ) {
-        self::$db_object = $inDBObject;
+        $this->db_object = $inDBObject;
     }
     
     /***********************************************************************************************************************/
@@ -63,7 +63,7 @@ class LGV_TZ_Lookup_Query {
                             $in_lat     ///< The latitude
                         ) {
         // This does a fast lookup, using the domain rect (the "blunt instrument" rect that we created, when we stored the polygon).
-        $tzIDs = self::$db_object->get_tz_ids($in_lng, $in_lat);
+        $tzIDs = $this->db_object->get_tz_ids($in_lng, $in_lat);
         
         // We filter out the "Etc" timezones, crammed at the end.
         $filtered_ids = array_filter($tzIDs, 'LGV_TZ_Lookup_Query::_filter_out_etc');
@@ -73,7 +73,7 @@ class LGV_TZ_Lookup_Query {
             return array_values($filtered_ids)[0]['tzname'];
         } else {    // Otherwise, we have to look into each polygon, in a bit more detail, and return the first match.
             $idMap = array_map('LGV_TZ_Lookup_Query::_convert_to_ids', $filtered_ids);
-            $entities = self::$db_object->get_tz_entities($idMap);
+            $entities = $this->db_object->get_tz_entities($idMap);
             
             foreach($entities as $entity) {
                 if(self::_wn_PnPoly([$in_lng, $in_lat], $entity['polygon'])) {
