@@ -23,10 +23,17 @@
 */
 /***************************************************************************************************************************/
 /**
+    \brief This file has some basic query tests for the server.
  */
  
 declare(strict_types = 1);
 
+/***************************************************************************************************************************/
+/**
+This is a basic tester. It runs a list of long/lat pairs through the server, and compares the results, with the expected ones.
+
+\returns: HTML of the results.
+ */
 function test_server() {
     /***********************************************************************************************************************/
     /**
@@ -37,7 +44,7 @@ function test_server() {
     function _testllGen($inLng, ///< The longitude to use
                         $inLat  ///< The latitude to use
                         ) {
-        include __DIR__.'/../../../../TZInfo/config.php';
+        include __CONFIG_FILE_;
         
         $queryString = isset($g_server_secret) ? "secret=$g_server_secret" : "";
         
@@ -53,7 +60,9 @@ function test_server() {
     
     /***********************************************************************************************************************/
     /**
-    \returns: the test strings.
+    This runs the test, and returns the HTML for the results.
+    
+    \returns: the test result, as HTML.
      */
     function _callTestServer(   $inTitle,   ///< The title to display
                                 $inLng,     ///< The longitude to use
@@ -76,7 +85,7 @@ function test_server() {
     $ret = '';
     $count = 0;
     
-    include __DIR__.'/../TestLocations.php';   // This establishes the $test_locations_param_array
+    include __DIR__.'/TestLocations.php';   // This establishes the $test_locations_param_array
     
     foreach ($test_locations_param_array as $test) {
         $orig_longitude = isset($test['params']['lng']) ? $test['params']['lng'] : NULL;
