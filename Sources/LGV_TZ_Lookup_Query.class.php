@@ -33,11 +33,9 @@ require_once __DIR__.'/LGV_TZ_Lookup_Database.class.php';
 
 /***************************************************************************************************************************/
 /**
-    This class is a mainly static class that will process the main data file, and initialize the database.
-
-    It extends the streamer's GeoJSON listener class.
+    This class is a lookup class.
     
-    It will not require any constructor data, and will set itself up.
+    It queries the database, and returns the timezone that corresponds to the provided longitude, latitude pair.
  */
 class LGV_TZ_Lookup_Query {
     /***********************************************************************************************************************/
@@ -64,13 +62,16 @@ class LGV_TZ_Lookup_Query {
     public function get_tz( $in_lng,    ///< The longitude 
                             $in_lat     ///< The latitude
                         ) {
+        // This does a fast lookup, using the domain rect (the "blunt instrument" rect that we created, when we stored the polygon).
         $tzIDs = self::$db_object->get_tz_ids($in_lng, $in_lat);
         
+        // We filter out the "Etc" timezones, crammed at the end.
         $filtered_ids = array_filter($tzIDs, 'LGV_TZ_Lookup_Query::_filter_out_etc');
         
+        // If we only have one, then w00t! We send that back.
         if (1 == count($filtered_ids)) {
             return array_values($filtered_ids)[0]['tzname'];
-        } else {
+        } else {    // Otherwise, we have to look into each polygon, in a bit more detail, and return the first match.
             $idMap = array_map('LGV_TZ_Lookup_Query::_convert_to_ids', $filtered_ids);
             $entities = self::$db_object->get_tz_entities($idMap);
             
