@@ -29,10 +29,7 @@
  
 declare(strict_types = 1);
 
-// Include the parser infrastructure.
-require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/LGV_TZ_Lookup_Database.class.php';
-require_once __DIR__.'/LGV_TZ_Lookup_Entity.class.php';
 
 /***************************************************************************************************************************/
 /**
@@ -76,7 +73,60 @@ class LGV_TZ_Lookup_Query {
         } else {
             $idMap = array_map('LGV_TZ_Lookup_Query::_convert_to_ids', $filtered_ids);
             $entities = self::$db_object->get_tz_entities($idMap);
+            
+            foreach($entities as $entity) {
+                if(self::_wn_PnPoly([$in_lng, $in_lat], $entity['polygon'])) {
+                    return $entity['tzname'];
+                }
+            }
         }
+        
+        return "";
+    }
+    
+    /***********************************************************************************************************************/
+    /**
+        This function is courtesy of San Zhujun, via [this gist](https://gist.github.com/zhujunsan/81d6a2f05d590f618a5ad36f25666fc2).
+        
+        \returns: -1 if to the right, 1, if to the left, and 0, if on the vertex.
+     */
+    private static function _isLeft($polygon_point_0,   ///< The first vertex endpoint.
+                                    $polygon_point_1,   ///< The second vertex endpoint.
+                                    $test_point         ///< The point to test against the vertex.
+                                    ) {
+        return (($polygon_point_1[1] - $polygon_point_0[1]) * ($test_point[0] - $polygon_point_0[0]) - ($test_point[1] - $polygon_point_0[1]) * ($polygon_point_1[0] - $polygon_point_0[0]));
+    }
+
+    /***********************************************************************************************************************/
+    /**
+        This function is courtesy of San Zhujun, via [this gist](https://gist.github.com/zhujunsan/81d6a2f05d590f618a5ad36f25666fc2).
+        
+        It's a basic ["winding number" algortithm](https://en.wikipedia.org/wiki/Winding_number), for testing whether or not a point is inside a polygon.
+        
+        I have modified it to use arrays of long/lat, as opposed to the Point class he defined, in his example.
+        
+        \returns: True, if the point is inside the polygon.
+     */
+    private static function _wn_PnPoly( $point,     ///< The point we are testing.
+                                        $polygon    ///< The polygon we are testing against.
+                                        ) {
+        $wn = 0;
+        $n = count($polygon);
+
+                                                                                            // loop through all edges of the polygon
+        for ($i = 0; $i < $n; $i++) {                                                       // edge from polygon[i] to  polygon[i+1]
+            if ($polygon[$i][0] <= $point[0]) {                                             // start y <= point[0]
+                if ($polygon[($i + 1) % $n][0] > $point[0])                                 // an upward crossing
+                    if (self::_isLeft($polygon[$i], $polygon[($i + 1) % $n], $point) > 0)   // point left of  edge
+                        ++$wn;                                                              // have  a valid up intersect
+            } else {                                                                        // start y > point[0] (no test needed)
+                if ($polygon[($i + 1) % $n][0] <= $point[0])                                // a downward crossing
+                    if (self::_isLeft($polygon[$i], $polygon[($i + 1) % $n], $point) < 0)   // point right of  edge
+                        --$wn;                                                              // have  a valid down intersect
+            }
+        }
+        
+        return 0 != $wn;
     }
     
     /***********************************************************************************************************************/
@@ -92,9 +142,9 @@ class LGV_TZ_Lookup_Query {
     
     /***********************************************************************************************************************/
     /**
-        This is a filter callback that excludes the "Etc" timezones.
+        This is a map callback, to extract the ID numbers.
         
-        \returns: True, if it is not an "Etc/" timezone.
+        \returns: The ID integer of the element.
      */
     private static function _convert_to_ids($in_id  ///< The ID/TZ Name pair to convert.
                                             ) {

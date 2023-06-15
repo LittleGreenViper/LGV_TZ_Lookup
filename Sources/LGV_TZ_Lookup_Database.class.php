@@ -115,11 +115,12 @@ class LGV_TZ_Lookup_Database {
             $params[] = $id;
         }
         
+        $entities = [];
+        
         if (!empty($params)) {
             $ret = $this->pdo_instance->preparedStatement($sql.$idSQL, $params, true);
             
             if (!empty($ret)) {
-                $entities = [];
                 foreach($ret as $row) {
                     $entity = ['tzname' => $row['tzname'], 'polygon' => unpack('VSRID/corder/ltype/Lnum_rings/Lnum_points/d*', $row['polygon'])];
                     unset($entity['polygon']['SRID']);
@@ -132,6 +133,8 @@ class LGV_TZ_Lookup_Database {
                 }
             }
         }
+        
+        return $entities;
     }
     
     /***********************************************************************************************************************/
