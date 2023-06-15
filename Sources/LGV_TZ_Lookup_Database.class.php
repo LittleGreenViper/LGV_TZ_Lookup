@@ -121,6 +121,7 @@ class LGV_TZ_Lookup_Database {
                                 $in_lat     ///< The latitude
                             ) {
         $sql = "SELECT id, tzname FROM timezones WHERE east>=? AND west<=? AND north>=? AND south<=?";
+        
         $params = [$in_lng, $in_lng, $in_lat, $in_lat];
         return $this->pdo_instance->preparedStatement($sql, $params, true);
     }

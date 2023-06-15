@@ -64,7 +64,7 @@ class LGV_TZ_Lookup_Query {
                         ) {
         // This does a fast lookup, using the domain rect (the "blunt instrument" rect that we created, when we stored the polygon).
         $tzIDs = $this->db_object->get_tz_ids($in_lng, $in_lat);
-        
+
         // We filter out the "Etc" timezones, crammed at the end.
         $filtered_ids = array_filter($tzIDs, 'LGV_TZ_Lookup_Query::_filter_out_etc');
         
