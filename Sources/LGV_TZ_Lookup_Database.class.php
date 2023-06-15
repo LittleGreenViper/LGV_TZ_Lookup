@@ -38,6 +38,12 @@ require_once __DIR__.'/LGV_TZ_Lookup_Entity.class.php';
 class LGV_TZ_Lookup_Database {
     /***********************************************************************************************************************/
     /**
+        The SQL that we use to initialize the database.
+     */
+    private static $_init_sql;
+    
+    /***********************************************************************************************************************/
+    /**
         This has our PDO connection to our database.
      */
     var $pdo_instance;
@@ -54,6 +60,29 @@ class LGV_TZ_Lookup_Database {
                                     $inPort = 3306 	        ///< database TCP port (optional, default is 3306)
 								) {
 		$this->pdo_instance = new LGV_TZ_Lookup_PDO($inDatabase, $inUser, $inPassword, $inDriver, $inHost, $inPort);
+		
+		// This is the SQL that we use to create the table. Currently, it is MySQL-only, but should be changeable.
+		self::$_init_sql = 'DROP TABLE IF EXISTS timezones;
+                            CREATE TABLE timezones (
+                              id bigint(20) NOT NULL,
+                              tzname varchar(255) NOT NULL,
+                              east float NOT NULL,
+                              west float NOT NULL,
+                              north float NOT NULL,
+                              south float NOT NULL,
+                              polygon polygon NOT NULL
+                            );
+
+                            ALTER TABLE timezones
+                              ADD PRIMARY KEY (id),
+                              ADD KEY tzname (tzname),
+                              ADD KEY east (east),
+                              ADD KEY west (west),
+                              ADD KEY north (north),
+                              ADD KEY south (south);
+
+                            ALTER TABLE timezones
+                              MODIFY id bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;';
     }
     
     /***********************************************************************************************************************/
@@ -142,6 +171,6 @@ class LGV_TZ_Lookup_Database {
         This clears the database.
      */
     public function reset_database() {
-        $this->pdo_instance->preparedStatement("TRUNCATE timezones");
+        $this->pdo_instance->preparedStatement(self::$_init_sql);
     }
 }
