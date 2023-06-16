@@ -135,6 +135,8 @@ so that it looks like this:
 
 ```
 
+>CAUTION: If you do this, some of the tests won't pass!
+
 ### The Initial Load and Database Setup
 You don't need to "prime" the database. The server will take care of creating the table.
 
@@ -161,9 +163,9 @@ You run the tests, like so:
 
 `https://tz.example.com`_[_`/index.php`_]_`?`_[_`secret=<SERVER SECRET>&`_]_`test`
 
-You will get a simple HTML page, with each of the tests, listed. If the test passes, the title will be green. If it fails, the title will be red.
+You will get a simple HTML page, with each of the tests, listed. If the test passes, the title will be green. If it fails, the title will be red, and there will be a list of links to failures, at the top of the page.
 
-Everything should be green.
+Everything should be green (unless you swapped out the JSON file, in which case, you'll need to look for the failures, and validate the tests).
 
 ## License
 This is an [MIT-Licensed](https://opensource.org/license/mit/) project.
