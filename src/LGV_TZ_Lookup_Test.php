@@ -70,20 +70,29 @@ function test_server() {
                                 $inResult   ///< The expected result
                             ) {
         global $count;
+        global $failures;
         $count++;
         $queryString = _testllGen($inLng, $inLat);
         $result = call_server($queryString, false);
         $style = $result == $inResult ? "pass" : "fail";
+        $failAddendum = "";
+        if ($result != $inResult) {
+            $failure = ['title' => $inTitle, 'id' => "test-$count"];
+            $failures[] = $failure;
+            $failAddendum = ' <em class="fail">(Expected &quot;'.htmlspecialchars($inResult).'&quot;)</em>';
+        }
         $ret = "<strong class=\"$style\" id=\"test-$count\">$inTitle</strong>";
         $ret .= "<ul><li>Longitude: $inLng</li><li>Latitude: $inLat</li>";
-        $ret .= "<li>Result: &quot;$result&quot;</li></ul>";
+        $ret .= "<li>Result: &quot;$result&quot;$failAddendum</li></ul>";
         
         return $ret;
     }
     
+    global $failures;
     global $count;
     $ret = '';
     $count = 0;
+    $failures = [];
     
     include __DIR__.'/TestLocations.php';   // This establishes the $test_locations_param_array
     
@@ -93,6 +102,18 @@ function test_server() {
         
         $ret .= _callTestServer($test['title'], $orig_longitude, $orig_latitude, $test['result']);
     }
-
+    
+    if (!empty($failures)) {
+        $failureText = '<h2 class="fail">'.count($failures).' Test Failures!</h2><ul>';
+        foreach ($failures as $failure) {
+            $failureText .= '<li><a href="#'.$failure['id'].'">'.htmlspecialchars($failure['title']).'</a></li>';
+        }
+        $failureText .= "</ul>";
+        
+        $ret = $failureText.$ret;
+    } else {
+        $ret = '<h2 class="pass">All Tests ('.$count.') Passed!</h2>'.$ret;
+    }
+    
     return $ret;
 };

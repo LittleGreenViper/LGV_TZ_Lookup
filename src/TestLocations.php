@@ -215,7 +215,7 @@ $test_locations_param_array = [
                         'lat' => -10.491315
                     ]
     ],
-    [   'title' =>  'Clipperton Island (NOTE: Returns an &quot;<em>Etc</em>&quot; time zone)',
+    [   'title' =>  'Clipperton Island <em>(NOTE: Returns an &quot;Etc&quot; time zone)</em>',
         'result' => 'Etc/GMT+7',
         'params' => [
                         'lng' => -109.216321,
