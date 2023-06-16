@@ -140,6 +140,9 @@ function call_server(   $inQuery,   ///< This is an ampersand-concatenated list 
                     
                         $lookup = new LGV_TZ_Lookup_Query($db_object);
                         $ret = $lookup->get_tz($lng, $lat);
+                        if (empty($ret)) {
+                            return $ret;
+                        }
                     } else {
                         $ret = 'Malformed Query';
                         header('HTTP/1.1 400 Malformed Query');

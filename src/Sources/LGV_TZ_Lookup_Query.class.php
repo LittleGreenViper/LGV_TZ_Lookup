@@ -81,6 +81,19 @@ class LGV_TZ_Lookup_Query {
                 }
             }
         }
+        // Failing a named TZ, we see if our Etc has something to say.
+        if (1 == count($tzIDs)) {
+            return array_values($tzIDs)[0]['tzname'];
+        } else {    // Otherwise, we have to look into each polygon, in a bit more detail, and return the first match.
+            $idMap = array_map('LGV_TZ_Lookup_Query::_convert_to_ids', $tzIDs);
+            $entities = $this->db_object->get_tz_entities($idMap);
+            
+            foreach($entities as $entity) {
+                if(self::_wn_PnPoly([$in_lng, $in_lat], $entity['polygon'])) {
+                    return $entity['tzname'];
+                }
+            }
+        }
         
         return "";
     }
