@@ -29,7 +29,7 @@ We build a database of polygons (breaking up multipolygons), with what we term a
 
 The "domain rect" is used for a fast "triage" lookup. Its vertices are indexed in the database, so comparisons are zippy. We can quickly find the timezones that may contain our location, and ignore the rest.
 
-In some cases, the domain rect "triage" may return only one result, so we got it in one. In other cases, we can then do a simple ["Winding Number"](https://gist.github.com/zhujunsan/81d6a2f05d590f618a5ad36f25666fc2) lookup of the location, using the un-indexed polygon data for that timezone, and figure out which polygon actually has it. We return the first one.
+In some cases, the domain rect "triage" may return only one result, so we got it in one. In other cases, we can then do a simple ["Winding Number"](https://en.m.wikipedia.org/wiki/Winding_number) lookup of the location, using the un-indexed polygon data for that timezone, and figure out which polygon actually has it. We return the first one.
 
 From a usage standpoint, you simply send in a longitude/latitude pair, as a simple [HTTP GET](https://www.w3schools.com/tags/ref_httpmethods.asp), and you will receive a "raw" string response, with the [TZ](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) name of the timezone that applies to the location.
 
@@ -40,7 +40,7 @@ From a usage standpoint, you simply send in a longitude/latitude pair, as a simp
 The long/lat is sent as a comma-separated pair of floating-point numbers that represent degrees of longitude and latitude.
 
 ## Dependencies
-This is a server project, designed for your classic ["LAMP"](https://en.wikipedia.org/wiki/LAMP_(software_bundle\)) hosting, so you'll need to have a standard PHP/MySQL host.
+This is a server project, designed for your classic ["LAMP"](https://en.wikipedia.org/wiki/LAMP_(software_bundle)) hosting, so you'll need to have a standard PHP/MySQL host.
 
 This project uses [the streaming JSON parser](https://github.com/salsify/jsonstreamingparser), in order to parse [this file](https://github.com/evansiroky/timezone-boundary-builder/releases/download/2023b/timezones-with-oceans.geojson.zip) (a current release, at the time of this writing), which is [a GeoJSON file](https://geojson.org), containing the calculated timezones, and is created by [this project](https://github.com/evansiroky/timezone-boundary-builder).
 
