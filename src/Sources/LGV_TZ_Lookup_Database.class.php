@@ -128,7 +128,7 @@ class LGV_TZ_Lookup_Database {
     
     /***********************************************************************************************************************/
     /**
-        \returns: An array of integers, which are the database IDs of table rows that have the long/lat in their domainRects.
+        \returns: An array of simple arrays ([tzname, polygon]), which are the database entities of table rows that correspond to the IDs passed in.
      */
     public function get_tz_entities( $in_id_list ///< A list of IDs for the rows we want to check.
                             ) {
