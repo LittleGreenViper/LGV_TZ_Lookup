@@ -26,18 +26,18 @@
     \brief This file has a list of long/lat pairs, along with the expected results, when presented to the server.
  */
 $test_locations_param_array = [
-    [   'title' =>  'Aleutians',
-        'result' => 'America/Nome',
-        'params' => [
-                        'lng' => -162.29536,
-                        'lat' => 55.097230
-                    ]
-    ],
     [   'title' =>  'Água Boa, Brazil',
         'result' => 'America/Cuiaba',
         'params' => [
                         'lng' => -51.950479,
                         'lat' => -14.134819
+                    ]
+    ],
+    [   'title' =>  'Aleutians',
+        'result' => 'America/Nome',
+        'params' => [
+                        'lng' => -162.29536,
+                        'lat' => 55.097230
                     ]
     ],
     [   'title' =>  'Alice Springs, Australia',
@@ -47,11 +47,25 @@ $test_locations_param_array = [
                         'lat' => -23.700680
                     ]
     ],
+    [   'title' =>  'American Samoa',
+        'result' => 'Pacific/Pago_Pago',
+        'params' => [
+                        'lng' => -170.671159,
+                        'lat' => -14.273195
+                    ]
+    ],
     [   'title' =>  'Angola (Southeast Corner)',
         'result' => 'Africa/Luanda',
         'params' => [
                         'lng' => 23.342037,
                         'lat' => -17.60014
+                    ]
+    ],
+    [   'title' =>  'Annobón',
+        'result' => 'Africa/Malabo',
+        'params' => [
+                        'lng' => 5.640997,
+                        'lat' => -1.419615 
                     ]
     ],
     [   'title' =>  'Antarctica',
@@ -96,11 +110,60 @@ $test_locations_param_array = [
                         'lat' => -36.848461
                     ]
     ],
+    [   'title' =>  'Azores',
+        'result' => 'Atlantic/Azores',
+        'params' => [
+                        'lng' => -25.473137,
+                        'lat' => 37.808556
+                    ]
+    ],
+    [   'title' =>  'Badajoz, Spain',
+        'result' => 'Europe/Madrid',
+        'params' => [
+                        'lng' => -6.973893,
+                        'lat' => 38.878292
+                    ]
+    ],
+    [   'title' =>  'Bela Vista',
+        'result' => 'Africa/Sao_Tome',
+        'params' => [
+                        'lng' => 7.398135,
+                        'lat' => 1.589948
+                    ]
+    ],
+    [   'title' =>  'Belfast, Ireland',
+        'result' => 'Europe/London',
+        'params' => [
+                        'lng' => -5.921657,
+                        'lat' => 54.598146
+                    ]
+    ],
     [   'title' =>  'Bellingham, Washington',
         'result' => 'America/Los_Angeles',
         'params' => [
                         'lng' => -122.441657,
                         'lat' => 48.763431
+                    ]
+    ],
+    [   'title' =>  'Benton Harbor, Michigan',
+        'result' => 'America/Detroit',
+        'params' => [
+                        'lng' => -86.452084,
+                        'lat' => 42.119871
+                    ]
+    ],
+    [   'title' =>  'Bermuda',
+        'result' => 'Atlantic/Bermuda',
+        'params' => [
+                        'lng' => -64.756165,
+                        'lat' => 32.30382
+                    ]
+    ],
+    [   'title' =>  'Blountstown, Florida',
+        'result' => 'America/Chicago',
+        'params' => [
+                        'lng' => -85.055622,
+                        'lat' => 30.443066
                     ]
     ],
     [   'title' =>  'Brasilia, Brazil',
@@ -194,11 +257,32 @@ $test_locations_param_array = [
                         'lat' => 70.184311
                     ]
     ],
+    [   'title' =>  'Cape Ulvak',
+        'result' => 'America/Goose_Bay',
+        'params' => [
+                        'lng' => -62.633902,
+                        'lat' => 58.477601
+                    ]
+    ],
     [   'title' =>  'Capurita, Bolivia',
         'result' => 'America/La_Paz',
         'params' => [
                         'lng' => -68.923307,
                         'lat' => -16.205201
+                    ]
+    ],
+    [   'title' =>  'Channel-Port aux Basques, Newfoundland',
+        'result' => 'America/St_Johns',
+        'params' => [
+                        'lng' => -59.148697,
+                        'lat' => 47.583752
+                    ]
+    ],
+    [   'title' =>  'Chatham Islands',
+        'result' => 'Pacific/Chatham',
+        'params' => [
+                        'lng' => -176.221343,
+                        'lat' => -44.288154
                     ]
     ],
     [   'title' =>  'Chicago',
@@ -241,6 +325,20 @@ $test_locations_param_array = [
         'params' => [
                         'lng' => 30.545317,
                         'lat' => -2.406189
+                    ]
+    ],
+    [   'title' =>  'Cyprus',
+        'result' => 'Asia/Nicosia',
+        'params' => [
+                        'lng' => 33.145129,
+                        'lat' => 34.982302
+                    ]
+    ],
+    [   'title' =>  'Dallas',
+        'result' => 'America/Chicago',
+        'params' => [
+                        'lng' => -96.796856,
+                        'lat' => 32.776272
                     ]
     ],
     [   'title' =>  'Delhi, India',
@@ -292,6 +390,13 @@ $test_locations_param_array = [
                         'lat' => 53.566414
                     ]
     ],
+    [   'title' =>  'Elvas, Portugal',
+        'result' => 'Europe/Lisbon',
+        'params' => [
+                        'lng' => -7.16812,
+                        'lat' => 38.878292
+                    ]
+    ],
     [   'title' =>  'Entebbe, Uganda (Actually, In the Lake, South of Entebbe)',
         'result' => 'Africa/Kampala',
         'params' => [
@@ -313,6 +418,27 @@ $test_locations_param_array = [
                         'lat' => 19.663983
                     ]
     ],
+    [   'title' =>  'French Polynesia',
+        'result' => 'Pacific/Tahiti',
+        'params' => [
+                        'lng' => -145.583614,
+                        'lat' => -17.365464
+                    ]
+    ],
+    [   'title' =>  'Galway, Ireland',
+        'result' => 'Europe/Dublin',
+        'params' => [
+                        'lng' => -9.04906,
+                        'lat' => 53.274412
+                    ]
+    ],
+    [   'title' =>  'Gary, Indiana',
+        'result' => 'America/Chicago',
+        'params' => [
+                        'lng' => -87.33164,
+                        'lat' => 41.601978
+                    ]
+    ],
     [   'title' =>  'Golema Crcorija, Macedonia',
         'result' => 'Europe/Skopje',
         'params' => [
@@ -327,6 +453,13 @@ $test_locations_param_array = [
                         'lat' => 83.520162
                     ]
     ],
+    [   'title' =>  'Greenland (East Coast)',
+        'result' => 'America/Nuuk',
+        'params' => [
+                        'lng' => -25.051294,
+                        'lat' => 73.554519
+                    ]
+    ],
     [   'title' =>  'Greenwich, United Kingdom',
         'result' => 'Europe/London',
         'params' => [
@@ -334,11 +467,25 @@ $test_locations_param_array = [
                         'lat' => 51.482578
                     ]
     ],
+    [   'title' =>  'Guam',
+        'result' => 'Pacific/Guam',
+        'params' => [
+                        'lng' => 144.757551,
+                        'lat' => 13.450126
+                    ]
+    ],
     [   'title' =>  'Havana, Cuba',
         'result' => 'America/Havana',
         'params' => [
                         'lng' => -82.358963,
                         'lat' => 23.135305
+                    ]
+    ],
+    [   'title' =>  'Helsinki',
+        'result' => 'Europe/Helsinki',
+        'params' => [
+                        'lng' => 24.931838,
+                        'lat' => 60.216934
                     ]
     ],
     [   'title' =>  'Herschel Island, Canada',
@@ -355,6 +502,13 @@ $test_locations_param_array = [
                         'lat' => -42.892064
                     ]
     ],
+    [   'title' =>  'Honolulu',
+        'result' => 'Pacific/Honolulu',
+        'params' => [
+                        'lng' => -157.855676,
+                        'lat' => 21.304547
+                    ]
+    ],
     [   'title' =>  'Hulapai Reservation, Arizona',
         'result' => 'America/Phoenix',
         'params' => [
@@ -367,6 +521,27 @@ $test_locations_param_array = [
         'params' => [
                         'lng' => 25.290954,
                         'lat' => -17.864113
+                    ]
+    ],
+    [   'title' =>  'Îles Gambier',
+        'result' => 'Pacific/Gambier',
+        'params' => [
+                        'lng' => -134.954092,
+                        'lat' => -23.157164
+                    ]
+    ],
+    [   'title' =>  'Îles Marquesas',
+        'result' => 'Pacific/Marquesas',
+        'params' => [
+                        'lng' => -138.986576,
+                        'lat' => -9.774991
+                    ]
+    ],
+    [   'title' =>  'Irkutsk, Russia',
+        'result' => 'Asia/Irkutsk',
+        'params' => [
+                        'lng' => 104.719221,
+                        'lat' => 56.637012
                     ]
     ],
     [   'title' =>  'Israel',
@@ -383,11 +558,39 @@ $test_locations_param_array = [
                         'lat' => 41.033787
                     ]
     ],
+    [   'title' =>  'Izhevsk, Russia',
+        'result' => 'Europe/Samara',
+        'params' => [
+                        'lng' => 53.209417,
+                        'lat' => 56.866557
+                    ]
+    ],
+    [   'title' =>  'Jan Mayen',
+        'result' => 'Europe/Oslo',
+        'params' => [
+                        'lng' => -8.352066,
+                        'lat' => 70.993147
+                    ]
+    ],
+    [   'title' =>  'Jarvis Island <em>(NOTE: Returns an &quot;Etc&quot; time zone)</em>',
+        'result' => 'Etc/GMT+11',
+        'params' => [
+                        'lng' => -159.997361,
+                        'lat' => -0.372281
+                    ]
+    ],
     [   'title' =>  'Jayapura, New Guinea',
         'result' => 'Asia/Jayapura',
         'params' => [
                         'lng' => 140.674007,
                         'lat' => -2.609334
+                    ]
+    ],
+    [   'title' =>  'Jersey, Channel Islands',
+        'result' => 'Europe/Jersey',
+        'params' => [
+                        'lng' => -2.13753,
+                        'lat' => 49.2167
                     ]
     ],
     [   'title' =>  'Jimaní, Dominican Republic',
@@ -446,6 +649,20 @@ $test_locations_param_array = [
                         'lat' => 24.553227
                     ]
     ],
+    [   'title' =>  'Kingston, Jamaica',
+        'result' => 'America/Jamaica',
+        'params' => [
+                        'lng' => -76.792813,
+                        'lat' => 17.971215
+                    ]
+    ],
+    [   'title' =>  'Kiribati',
+        'result' => 'Pacific/Kiritimati',
+        'params' => [
+                        'lng' => -157.435158,
+                        'lat' => 1.87096
+                    ]
+    ],
     [   'title' =>  'Kisu, Uganda',
         'result' => 'Africa/Kampala',
         'params' => [
@@ -467,11 +684,25 @@ $test_locations_param_array = [
                         'lat' => 42.650122
                     ]
     ],
-    [   'title' =>  'Kyustendil, Bulgaria',
-        'result' => 'Europe/Sofia',
+    [   'title' =>  'København (Copenhagen)',
+        'result' => 'Europe/Copenhagen',
         'params' => [
-                        'lng' => 22.373404,
-                        'lat' => 42.314488
+                        'lng' => 12.570072,
+                        'lat' => 55.686724
+                    ]
+    ],
+    [   'title' =>  'Kosovo',
+        'result' => 'Europe/Belgrade',
+        'params' => [
+                        'lng' => 20.933892,
+                        'lat' => 42.650122
+                    ]
+    ],
+    [   'title' =>  'Kuril Islands',
+        'result' => 'Asia/Srednekolymsk',
+        'params' => [
+                        'lng' => 155.832214,
+                        'lat' => 50.384038
                     ]
     ],
     [   'title' =>  'Lakshadweep',
@@ -502,11 +733,32 @@ $test_locations_param_array = [
                         'lat' => -17.847094
                     ]
     ],
+    [   'title' =>  'Los Angeles',
+        'result' => 'America/Los_Angeles',
+        'params' => [
+                        'lng' => -118.242766,
+                        'lat' => 34.053691
+                    ]
+    ],
     [   'title' =>  'Madagascar',
         'result' => 'Asia/Riyadh',
         'params' => [
                         'lng' => 46.441642,
                         'lat' => 18.92496
+                    ]
+    ],
+    [   'title' =>  'Madara, Egypt',
+        'result' => 'Africa/Cairo',
+        'params' => [
+                        'lng' => 27.239941,
+                        'lat' => 31.35427
+                    ]
+    ],
+    [   'title' =>  'Magadan, Russia',
+        'result' => 'Asia/Magadan',
+        'params' => [
+                        'lng' => 150.780632,
+                        'lat' => 59.58117
                     ]
     ],
     [   'title' =>  'Malawi',
@@ -523,6 +775,13 @@ $test_locations_param_array = [
                         'lat' => 4.160202
                     ]
     ],
+    [   'title' =>  'Malta',
+        'result' => 'Europe/Malta',
+        'params' => [
+                        'lng' => 14.447691,
+                        'lat' => 35.888599
+                    ]
+    ],
     [   'title' =>  'Mauritius',
         'result' => 'Indian/Mauritius',
         'params' => [
@@ -530,11 +789,39 @@ $test_locations_param_array = [
                         'lat' => -20.275945
                     ]
     ],
+    [   'title' =>  'Meat Cove, Nova Scotia',
+        'result' => 'America/Glace_Bay',
+        'params' => [
+                        'lng' => -60.565287,
+                        'lat' => 47.027044
+                    ]
+    ],
+    [   'title' =>  'Melchor de Mencos, Guatemala',
+        'result' => 'America/Guatemala',
+        'params' => [
+                        'lng' => -89.154505,
+                        'lat' => 17.064157
+                    ]
+    ],
     [   'title' =>  'Merauke, New Guinea',
         'result' => 'Asia/Jayapura',
         'params' => [
                         'lng' => 140.976131,
                         'lat' => -9.075947
+                    ]
+    ],
+    [   'title' =>  'Michigan City, Indiana',
+        'result' => 'America/Chicago',
+        'params' => [
+                        'lng' => -86.904771,
+                        'lat' => 41.722852
+                    ]
+    ],
+    [   'title' =>  'Minami-Tori-shima',
+        'result' => 'Asia/Tokyo',
+        'params' => [
+                        'lng' => 153.978512,
+                        'lat' => 24.284017
                     ]
     ],
     [   'title' =>  'Miras, Albania',
@@ -579,6 +866,13 @@ $test_locations_param_array = [
                         'lat' => -1.301696
                     ]
     ],
+    [   'title' =>  'Naujaat, Canada',
+        'result' => 'America/Rankin_Inlet',
+        'params' => [
+                        'lng' => -86.232047,
+                        'lat' => 66.52669
+                    ]
+    ],
     [   'title' =>  'New York State',
         'result' => 'America/New_York',
         'params' => [
@@ -591,6 +885,41 @@ $test_locations_param_array = [
         'params' => [
                         'lng' => 166.583440,
                         'lat' => -48.0083
+                    ]
+    ],
+    [   'title' =>  'Niceville, Florida',
+        'result' => 'America/Chicago',
+        'params' => [
+                        'lng' => -86.47737,
+                        'lat' => 30.523166
+                    ]
+    ],
+    [   'title' =>  'Niles, Michigan',
+        'result' => 'America/Detroit',
+        'params' => [
+                        'lng' => -86.255862,
+                        'lat' => 41.825545
+                    ]
+    ],
+    [   'title' =>  'Novosibirsk, Russia',
+        'result' => 'Asia/Novosibirsk',
+        'params' => [
+                        'lng' => 82.922689,
+                        'lat' => 55.028831
+                    ]
+    ],
+    [   'title' =>  'Null Island <em>(NOTE: Returns an &quot;Etc&quot; time zone)</em>',
+        'result' => 'Etc/GMT',
+        'params' => [
+                        'lng' => 0,
+                        'lat' => 0
+                    ]
+    ],
+    [   'title' =>  'Nuuk, Greenland',
+        'result' => 'America/Nuuk',
+        'params' => [
+                        'lng' => -51.785176,
+                        'lat' => 64.199023
                     ]
     ],
     [   'title' =>  'Ollaraya, Peru',
@@ -614,6 +943,27 @@ $test_locations_param_array = [
                         'lat' => 21.000029
                     ]
     ],
+    [   'title' =>  'Omsk, Russia',
+        'result' => 'Asia/Omsk',
+        'params' => [
+                        'lng' => 73.371529,
+                        'lat' => 54.991375
+                    ]
+    ],
+    [   'title' =>  'Omeath, Ireland',
+        'result' => 'Europe/Dublin',
+        'params' => [
+                        'lng' => -6.261241,
+                        'lat' => 54.088695
+                    ]
+    ],
+    [   'title' =>  'Panama City, Florida',
+        'result' => 'America/Chicago',
+        'params' => [
+                        'lng' => -85.663221,
+                        'lat' => 30.157734
+                    ]
+    ],
     [   'title' =>  'Papua New Guinea (Southwest Corner)',
         'result' => 'Pacific/Port_Moresby',
         'params' => [
@@ -621,11 +971,25 @@ $test_locations_param_array = [
                         'lat' => -9.124763
                     ]
     ],
+    [   'title' =>  'Pensacola, Florida',
+        'result' => 'America/Chicago',
+        'params' => [
+                        'lng' => -87.222669,
+                        'lat' => 30.410414
+                    ]
+    ],
     [   'title' =>  'Pepillo Salcedo, Dominican Republic',
         'result' => 'America/Santo_Domingo',
         'params' => [
                         'lng' => -71.746712,
                         'lat' => 19.697603
+                    ]
+    ],
+    [   'title' =>  'Pitcairn Islands',
+        'result' => 'Pacific/Pitcairn',
+        'params' => [
+                        'lng' => -130.101782,
+                        'lat' => -25.065772
                     ]
     ],
     [   'title' =>  'Port Au Prince, Haiti',
@@ -642,6 +1006,20 @@ $test_locations_param_array = [
                         'lat' => -8.715448
                     ]
     ],
+    [   'title' =>  'Prince Edward Island, Canada',
+        'result' => 'America/Halifax',
+        'params' => [
+                        'lng' => -63.595411,
+                        'lat' => 46.503681
+                    ]
+    ],
+    [   'title' =>  'Prince Edward Islands, South Africa',
+        'result' => 'Africa/Johannesburg',
+        'params' => [
+                        'lng' => 37.83243,
+                        'lat' => -46.7455
+                    ]
+    ],
     [   'title' =>  'Prrenjas, Albania',
         'result' => 'Europe/Tirane',
         'params' => [
@@ -656,11 +1034,11 @@ $test_locations_param_array = [
                         'lat' => 70.245011
                     ]
     ],
-    [   'title' =>  'Rural Montana',
-        'result' => 'America/Denver',
+    [   'title' =>  'Qikiqtaaluk, Canada',
+        'result' => 'America/Iqaluit',
         'params' => [
-                        'lng' => -109.353259,
-                        'lat' => 47.219568
+                        'lng' => -78.390141,
+                        'lat' => 77.492724
                     ]
     ],
     [   'title' =>  'Resbalosa, Panama',
@@ -670,11 +1048,32 @@ $test_locations_param_array = [
                         'lat' => 8.039456
                     ]
     ],
+    [   'title' =>  'Resolution Island',
+        'result' => 'America/Iqaluit',
+        'params' => [
+                        'lng' => -65.00855,
+                        'lat' => 61.530029
+                    ]
+    ],
+    [   'title' =>  'Revillagigedo Islands',
+        'result' => 'America/Mazatlan',
+        'params' => [
+                        'lng' => -110.982031,
+                        'lat' => 18.792742
+                    ]
+    ],
     [   'title' =>  'Revoso, Bulgaria',
         'result' => 'Europe/Sofia',
         'params' => [
                         'lng' => 28.017705,
                         'lat' => 41.990881
+                    ]
+    ],
+    [   'title' =>  'Rural Montana',
+        'result' => 'America/Denver',
+        'params' => [
+                        'lng' => -109.353259,
+                        'lat' => 47.219568
                     ]
     ],
     [   'title' =>  'Russian Islands (In Arctic Ocean)',
@@ -684,11 +1083,46 @@ $test_locations_param_array = [
                         'lat' => 80.816891
                     ]
     ],
+    [   'title' =>  'Reykjavik, Iceland',
+        'result' => 'Atlantic/Reykjavik',
+        'params' => [
+                        'lng' => -21.873763,
+                        'lat' => 64.132082
+                    ]
+    ],
+    [   'title' =>  'Riyadh, Saudi Arabia',
+        'result' => 'Asia/Riyadh',
+        'params' => [
+                        'lng' => 46.71601,
+                        'lat' => 24.638916
+                    ]
+    ],
     [   'title' =>  'Samnak Kham, Thailand',
         'result' => 'Asia/Bangkok',
         'params' => [
                         'lng' => 100.384853,
                         'lat' => 6.585328
+                    ]
+    ],
+    [   'title' =>  'Samoa <em>(NOTE: Returns an &quot;Etc&quot; time zone)</em>',
+        'result' => 'Etc/GMT+11',
+        'params' => [
+                        'lng' => -172.43581,
+                        'lat' => 13.598793
+                    ]
+    ],
+    [   'title' =>  'San Diego',
+        'result' => 'America/Los_Angeles',
+        'params' => [
+                        'lng' => -117.163121,
+                        'lat' => 32.718362
+                    ]
+    ],
+    [   'title' =>  'San Ignacio, Belize',
+        'result' => 'America/Belize',
+        'params' => [
+                        'lng' => -89.070632,
+                        'lat' => 17.153497
                     ]
     ],
     [   'title' =>  'San Juan, Puerto Rico',
@@ -698,6 +1132,13 @@ $test_locations_param_array = [
                         'lat' => 18.389789
                     ]
     ],
+    [   'title' =>  'São Tomé and Príncipe',
+        'result' => 'Africa/Sao_Tome',
+        'params' => [
+                        'lng' => 6.62532,
+                        'lat' => 0.239759
+                    ]
+    ],
     [   'title' =>  'Seattle',
         'result' => 'America/Los_Angeles',
         'params' => [
@@ -705,11 +1146,25 @@ $test_locations_param_array = [
                         'lat' => 47.580231
                     ]
     ],
+    [   'title' =>  'Seoul',
+        'result' => 'Asia/Seoul',
+        'params' => [
+                        'lng' => 126.978291,
+                        'lat' => 37.566679
+                    ]
+    ],
     [   'title' =>  'Serbia (Soutwest Corner)',
         'result' => 'Europe/Belgrade',
         'params' => [
                         'lng' => 22.355495,
                         'lat' => 42.319638
+                    ]
+    ],
+    [   'title' =>  'Sermersooq, Greenland',
+        'result' => 'America/Scoresbysund',
+        'params' => [
+                        'lng' => -21.784272,
+                        'lat' => 70.506184
                     ]
     ],
     [   'title' =>  'Seychelles',
@@ -754,6 +1209,13 @@ $test_locations_param_array = [
                         'lat' => -33.979809
                     ]
     ],
+    [   'title' =>  'South Bend, Indiana',
+        'result' => 'America/Indiana/Indianapolis',
+        'params' => [
+                        'lng' => -86.257583,
+                        'lat' => 41.689441
+                    ]
+    ],
     [   'title' =>  'Staten Island (But Not the One You Think)',
         'result' => 'America/Argentina/Ushuaia',
         'params' => [
@@ -789,6 +1251,13 @@ $test_locations_param_array = [
                         'lat' => 78.389278
                     ]
     ],
+    [   'title' =>  'Tallahassee Florida',
+        'result' => 'America/New_York',
+        'params' => [
+                        'lng' => -84.274177,
+                        'lat' => 30.43713
+                    ]
+    ],
     [   'title' =>  'Tempe, Arizona',
         'result' => 'America/Phoenix',
         'params' => [
@@ -796,11 +1265,39 @@ $test_locations_param_array = [
                         'lat' => 33.425512
                     ]
     ],
+    [   'title' =>  'Thule, Greenland',
+        'result' => 'America/Thule',
+        'params' => [
+                        'lng' => -69.222275,
+                        'lat' => 77.468636
+                    ]
+    ],
+    [   'title' =>  'Tijuana, Mexico',
+        'result' => 'America/Tijuana',
+        'params' => [
+                        'lng' => -116.956683,
+                        'lat' => 32.530506
+                    ]
+    ],
     [   'title' =>  'Timmins, Ontario',
         'result' => 'America/Toronto',
         'params' => [
                         'lng' => -81.330414,
                         'lat' => 48.477473
+                    ]
+    ],
+    [   'title' =>  'Tobruk, Libya',
+        'result' => 'Africa/Tripoli',
+        'params' => [
+                        'lng' => 23.948159,
+                        'lat' => 32.096059
+                    ]
+    ],
+    [   'title' =>  'Tokyo',
+        'result' => 'Asia/Tokyo',
+        'params' => [
+                        'lng' => 139.757653,
+                        'lat' => 35.681267
                     ]
     ],
     [   'title' =>  'Tombuktu, Mali',
@@ -824,11 +1321,25 @@ $test_locations_param_array = [
                         'lat' => 69.679990
                     ]
     ],
+    [   'title' =>  'Tureia Island',
+        'result' => 'Pacific/Tahiti',
+        'params' => [
+                        'lng' => -138.791699,
+                        'lat' => -21.844161
+                    ]
+    ],
     [   'title' =>  'US Virgin Islands',
         'result' => 'America/St_Thomas',
         'params' => [
                         'lng' => -64.934509,
                         'lat' => 18.338845
+                    ]
+    ],
+    [   'title' =>  'Valparaiso, Indiana',
+        'result' => 'America/Chicago',
+        'params' => [
+                        'lng' => -87.061404,
+                        'lat' => 41.46798
                     ]
     ],
     [   'title' =>  'Vancouver, Canada',
@@ -845,11 +1356,67 @@ $test_locations_param_array = [
                         'lat' => 48.436490
                     ]
     ],
+    [   'title' =>  'Vladivostok, Russia',
+        'result' => 'Asia/Vladivostok',
+        'params' => [
+                        'lng' => 131.885577,
+                        'lat' => 43.115068
+                    ]
+    ],
+    [   'title' =>  'Warrenpoint, Ireland',
+        'result' => 'Europe/London',
+        'params' => [
+                        'lng' => -6.254489,
+                        'lat' => 54.100993
+                    ]
+    ],
+    [   'title' =>  'Washington DC',
+        'result' => 'America/New_York',
+        'params' => [
+                        'lng' => -77.036543,
+                        'lat' => 38.895037
+                    ]
+    ],
     [   'title' =>  'Wilcannia, Australia',
         'result' => 'Australia/Sydney',
         'params' => [
                         'lng' => 143.37849,
                         'lat' => -31.558849
+                    ]
+    ],
+    [   'title' =>  'Winnipeg',
+        'result' => 'America/Winnipeg',
+        'params' => [
+                        'lng' => -97.138458,
+                        'lat' => 49.895537
+                    ]
+    ],
+    [   'title' =>  'Yakutsk, Russia',
+        'result' => 'Asia/Yakutsk',
+        'params' => [
+                        'lng' => 129.731979,
+                        'lat' => 62.027408
+                    ]
+    ],
+    [   'title' =>  'Yekaterinburg, Russia',
+        'result' => 'Asia/Yekaterinburg',
+        'params' => [
+                        'lng' => 60.60825,
+                        'lat' => 56.839104
+                    ]
+    ],
+    [   'title' =>  'Yuzhno-Sakhalinsk, Russia',
+        'result' => 'Asia/Sakhalin',
+        'params' => [
+                        'lng' => 142.75186,
+                        'lat' => 46.954849
+                    ]
+    ],
+    [   'title' =>  'Zanzibar, Tanzania',
+        'result' => 'Africa/Dar_es_Salaam',
+        'params' => [
+                        'lng' => 39.192454,
+                        'lat' => -6.167184
                     ]
     ],
     [   'title' =>  'Διποταμιά - Καλή Βρύση, Greece',
