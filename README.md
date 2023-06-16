@@ -1,3 +1,5 @@
+![Project Icon](img/icon.png)
+
 # LGV_TZ_Lookup
 Server for Matching Long/Lat to Timezone
 
