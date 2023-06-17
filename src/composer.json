@@ -1,21 +1,5 @@
 {
-    "name": littlegreenviper/lgv_tz_lookup",
-    "type": "project",
-    "description": "Server for Matching Long/Lat to Timezone",
-    "keywords": ["timezone","tz","geocode"],
-    "homepage": "https://github.com/LittleGreenViper/LGV_TZ_Lookup",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Chris Marshall",
-            "email": "chris@littlegreenviper.com",
-            "homepage": "https://littlegreenviper.com",
-            "role": "Developer"
-        }
-    ],
     "require": {
-        "php": ">=8.0.0",
-        "MySQL": ">=5.7.0",
         "salsify/json-streaming-parser": "8.3.*"
     }
 }
