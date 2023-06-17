@@ -1,5 +1,5 @@
 {
-    "name": "littlegreenviper/lgv_tz_lookup",
+    "name": littlegreenviper/lgv_tz_lookup",
     "type": "project",
     "description": "Server for Matching Long/Lat to Timezone",
     "keywords": ["timezone","tz","geocode"],
