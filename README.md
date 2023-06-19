@@ -1,5 +1,10 @@
-![Project Icon](img/icon.png)
-
+<div style="float:right"><a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup">
+<img style="width:32px" src="img/GitHub-Mark-64px.png" />
+</a></div>
+<div style="float:left">
+<img src="img/icon.png" />
+</div>
+<div style="clear:both"></div>
 # LGV_TZ_Lookup
 Server for Matching Long/Lat to Timezone
 
