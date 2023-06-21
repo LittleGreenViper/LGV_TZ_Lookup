@@ -101,6 +101,33 @@ class LGV_TZ_Lookup_Database {
     
     /***********************************************************************************************************************/
     /**
+        This is a sort callback that sorts, so the smaller domain gets put first.
+        
+        \returns: True, if $in_A < $inB
+     */
+    private static function _sort_by_domainSize($in_A,  ///< The first entity
+                                                $in_B   ///< The second entity
+                                                ) {
+        $ret = false;
+        
+        if (isset($in_A["east"]) &&
+            isset($in_A["west"]) &&
+            isset($in_A["north"]) &&
+            isset($in_A["south"]) &&
+            isset($in_B["east"]) &&
+            isset($in_B["west"]) &&
+            isset($in_B["north"]) &&
+            isset($in_B["south"])) {
+                $areaA = abs(floatval($in_A["east"] - $in_A["west"])) * abs(floatval($in_A["south"] - $in_A["north"]));
+                $areaB = abs(floatval($in_B["east"] - $in_B["west"])) * abs(floatval($in_B["south"] - $in_B["north"]));
+                return ($areaA < $areaB) ? -1 : (($areaA < $areaB) ? 1 : 0);
+            }
+            
+        return $ret;
+    }
+    
+    /***********************************************************************************************************************/
+    /**
         This uses our PDO instance to save the entity as a table row.
      */
     public function store_entity(   $inEntity   ///< The entity to be saved into the database.
@@ -120,10 +147,14 @@ class LGV_TZ_Lookup_Database {
     public function get_tz_ids( $in_lng,    ///< The longitude 
                                 $in_lat     ///< The latitude
                             ) {
-        $sql = "SELECT id, tzname FROM timezones WHERE east>=? AND west<=? AND north>=? AND south<=?";
+        $sql = "SELECT id, tzname, east, west, north, south FROM timezones WHERE east>=? AND west<=? AND north>=? AND south<=?";
         
         $params = [$in_lng, $in_lng, $in_lat, $in_lat];
-        return $this->pdo_instance->preparedStatement($sql, $params, true);
+        $ret = $this->pdo_instance->preparedStatement($sql, $params, true);
+        if (1 < count($ret)) {
+            usort($ret, 'LGV_TZ_Lookup_Database::_sort_by_domainSize');
+        }
+        return $ret;
     }
     
     /***********************************************************************************************************************/
