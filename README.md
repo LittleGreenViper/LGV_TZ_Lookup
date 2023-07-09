@@ -5,8 +5,9 @@
 <img src="img/icon.png" />
 </div>
 <div style="clear:both"></div>
+
 # LGV_TZ_Lookup
-Server for Matching Long/Lat to Timezone
+A Server for Matching Long/Lat to Timezone
 
 ## Overview
 This project is a fairly simple PHP project, designed to accept the GeoJSON output of [the Timezone Boundary Builder Project](https://github.com/evansiroky/timezone-boundary-builder), and provide a simple API, for matching longitude/latitude locations with timezones.
