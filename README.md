@@ -169,7 +169,7 @@ We have a set of simple tests that can be run. They send in known coordinates, a
 
 You run the tests, like so:
 
-`https://tz.example.com`_[_`/index.php`_]_`?`_[_`secret=`<SERVER SECRET>`&`_]_`test`
+`https://tz.example.com`_[_`/index.php`_]_`?`_[_`secret=`&lt;SERVER SECRET&gt;`&`_]_`test`
 
 You will get a simple HTML page, with each of the tests, listed. If the test passes, the title will be green. If it fails, the title will be red, and there will be a list of links to failures, at the top of the page.
 
