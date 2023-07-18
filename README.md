@@ -41,7 +41,7 @@ In some cases, the domain rect "triage" may return only one result, so we got it
 
 From a usage standpoint, you simply send in a longitude/latitude pair, as a simple [HTTP GET](https://www.w3schools.com/tags/ref_httpmethods.asp), and you will receive a "raw" string response, with the [TZ](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) name of the timezone that applies to the location.
 
-`http`_[`s`]_`://`_&lt;YOUR SERVER URL TO THE src DIRECTORY>[_`/index.php`_]_`?ll=`_]&lt;LONGITUDE>,&lt;LATITUDE>_
+`http`_[_`s`_]_`://`_&lt;YOUR SERVER URL TO THE src DIRECTORY>[_`/index.php`_]_`?ll=`_]&lt;LONGITUDE>,&lt;LATITUDE>_
 
 `https://tz.example.com?ll=-73.123,44.456`
 
