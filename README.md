@@ -151,7 +151,7 @@ You don't need to "prime" the database. The server will take care of creating th
 However, the initial load can only be done via command-line, so you'll need to SSH into the server, and run the load from there. You use the syntax indicated above:
 
 ```(bash)
-$> php <YOUR src DIRECTORY>/index.php server=<SERVER SECRET> load
+$> php <YOUR src DIRECTORY>/index.php secret=<SERVER SECRET> load
 ```
 
 This can take a while.
