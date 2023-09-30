@@ -60,6 +60,8 @@ class LGV_TZ_Lookup_Database {
                                     $inPort = 3306 	        ///< database TCP port (optional, default is 3306)
 								) {
 		$this->pdo_instance = new LGV_TZ_Lookup_PDO($inDatabase, $inUser, $inPassword, $inDriver, $inHost, $inPort);
+        ini_set('max_execution_time', 1200);
+		set_time_limit(1200);
 		
 		// This is the SQL that we use to create the table. Currently, it is MySQL-only, but should be changeable.
 		self::$_init_sql = 'DROP TABLE IF EXISTS timezones;
@@ -70,7 +72,7 @@ class LGV_TZ_Lookup_Database {
                               west float NOT NULL,
                               north float NOT NULL,
                               south float NOT NULL,
-                              polygon polygon NOT NULL
+                              polygon longblob NOT NULL
                             );
 
                             ALTER TABLE timezones
@@ -83,20 +85,6 @@ class LGV_TZ_Lookup_Database {
 
                             ALTER TABLE timezones
                               MODIFY id bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;';
-    }
-    
-    /***********************************************************************************************************************/
-    /**
-        This is an array map callback. It takes a coordinate pair, in lng, lat form, and creates a space-delimited string from it.
-        
-        \returns: A string, with the two numbers. These are also rounded to five decimal places.
-     */
-    private static function _map_string_from_lng_lat($inLng_lat   ///< This is a 2-element array of float, in the form of lng, lat.
-                                                    ) {
-        $lng = round($inLng_lat[0] * 100000) / 100000;
-        $lat = round($inLng_lat[1] * 100000) / 100000;
-        
-        return sprintf("%g %g", $lng, $lat);
     }
     
     /***********************************************************************************************************************/
@@ -128,13 +116,26 @@ class LGV_TZ_Lookup_Database {
     
     /***********************************************************************************************************************/
     /**
+        This is a simple "brute force" array flattener. It rounds the values to six significant digits, as well.
+     */
+    static function _array_flatten( $inArray    ///< The multi-dimensional array to be squished.
+                                    ) {
+        $resulting_array = array();
+        array_walk_recursive($inArray, function($inValue) use (&$resulting_array) { array_push($resulting_array, round($inValue, 6)); });
+        return $resulting_array;
+    }
+
+    /***********************************************************************************************************************/
+    /**
         This uses our PDO instance to save the entity as a table row.
      */
     public function store_entity(   $inEntity   ///< The entity to be saved into the database.
                                 ) {
-        $polygon_string = 'POLYGON(('.implode(',', array_map('LGV_TZ_Lookup_Database::_map_string_from_lng_lat', $inEntity->polygon)).'))';
-        $sql = "INSERT INTO timezones (tzname, east, west, north, south, polygon) VALUES (?, ?, ?, ?, ?, PolygonFromText(?))";
-        $params = [$inEntity->tzID, $inEntity->domainRect['east'], $inEntity->domainRect['west'], $inEntity->domainRect['north'], $inEntity->domainRect['south'], $polygon_string];
+        $polygon_nested_array = array($inEntity->polygon);
+        $polygon_array = self::_array_flatten($polygon_nested_array);
+        $polygon = implode(array_map(function($inValue) { return pack('d*', $inValue); }, $polygon_array));
+        $sql = "INSERT INTO timezones (tzname, east, west, north, south, polygon) VALUES (?, ?, ?, ?, ?, ?)";
+        $params = [$inEntity->tzID, $inEntity->domainRect['east'], $inEntity->domainRect['west'], $inEntity->domainRect['north'], $inEntity->domainRect['south'], $polygon];
         $this->pdo_instance->preparedStatement($sql, $params);
     }
     
@@ -183,12 +184,7 @@ class LGV_TZ_Lookup_Database {
             
             if (!empty($ret)) {
                 foreach($ret as $row) {
-                    $entity = ['tzname' => $row['tzname'], 'polygon' => unpack('VSRID/corder/ltype/Lnum_rings/Lnum_points/d*', $row['polygon'])];
-                    unset($entity['polygon']['SRID']);
-                    unset($entity['polygon']['order']);
-                    unset($entity['polygon']['type']);
-                    unset($entity['polygon']['num_rings']);
-                    unset($entity['polygon']['num_points']);
+                    $entity = ['tzname' => $row['tzname'], 'polygon' => unpack('d*', $row['polygon'])];
                     $entity['polygon'] = array_chunk(array_values($entity['polygon']), 2);
                     $entities[] = $entity;
                 }
