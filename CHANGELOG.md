@@ -1,3 +1,7 @@
+**1.1.0** *September 30 2023*
+
+- Switched to using PHP to pack the polygon, as MySQL has discontinued their polygon function. It's for the better, anyway. This is a lot faster.
+
 **1.0.2** *June 22 2023*
 
 - No code changes. Added docs directory.
