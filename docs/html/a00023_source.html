@@ -124,136 +124,134 @@ $(document).ready(function(){initNavTree('a00023_source.html',''); initResizable
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                                    $inPort = 3306          </div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                                ) {</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        $this-&gt;pdo_instance = <span class="keyword">new</span> <a class="code hl_class" href="a00047.html">LGV_TZ_Lookup_PDO</a>($inDatabase, $inUser, $inPassword, $inDriver, $inHost, $inPort);</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="comment">// This is the SQL that we use to create the table. Currently, it is MySQL-only, but should be changeable.</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        self::$_init_sql = <span class="stringliteral">&#39;DROP TABLE IF EXISTS timezones;</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="stringliteral">                            CREATE TABLE timezones (</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="stringliteral">                              id bigint(20) NOT NULL,</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="stringliteral">                              tzname varchar(255) NOT NULL,</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="stringliteral">                              east float NOT NULL,</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="stringliteral">                              west float NOT NULL,</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="stringliteral">                              north float NOT NULL,</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="stringliteral">                              south float NOT NULL,</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="stringliteral">                              polygon polygon NOT NULL</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="stringliteral">                            );</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="stringliteral"></span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="stringliteral">                            ALTER TABLE timezones</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="stringliteral">                              ADD PRIMARY KEY (id),</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="stringliteral">                              ADD KEY tzname (tzname),</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="stringliteral">                              ADD KEY east (east),</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="stringliteral">                              ADD KEY west (west),</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="stringliteral">                              ADD KEY north (north),</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="stringliteral">                              ADD KEY south (south);</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="stringliteral"></span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="stringliteral">                            ALTER TABLE timezones</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="stringliteral">                              MODIFY id bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;&#39;</span>;</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    }</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">    /***********************************************************************************************************************/</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="a00035.html#a2c73c2ce2f2942a3a28ee55ed1492de1">   94</a></span>    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a2c73c2ce2f2942a3a28ee55ed1492de1">_map_string_from_lng_lat</a>($inLng_lat   </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>                                                    ) {</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        $lng = round($inLng_lat[0] * 100000) / 100000;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        $lat = round($inLng_lat[1] * 100000) / 100000;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="keywordflow">return</span> sprintf(<span class="stringliteral">&quot;%g %g&quot;</span>, $lng, $lat);</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    }</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">    /***********************************************************************************************************************/</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="a00035.html#a5e0fc8ddc11cf3c8016a1a9f356d4268">  108</a></span>    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a5e0fc8ddc11cf3c8016a1a9f356d4268">_sort_by_domainSize</a>($in_A,  </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                                                $in_B   </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>                                                ) {</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        $ret = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <span class="keywordflow">if</span> (isset($in_A[<span class="stringliteral">&quot;east&quot;</span>]) &amp;&amp;</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>            isset($in_A[<span class="stringliteral">&quot;west&quot;</span>]) &amp;&amp;</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            isset($in_A[<span class="stringliteral">&quot;north&quot;</span>]) &amp;&amp;</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>            isset($in_A[<span class="stringliteral">&quot;south&quot;</span>]) &amp;&amp;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            isset($in_B[<span class="stringliteral">&quot;east&quot;</span>]) &amp;&amp;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>            isset($in_B[<span class="stringliteral">&quot;west&quot;</span>]) &amp;&amp;</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            isset($in_B[<span class="stringliteral">&quot;north&quot;</span>]) &amp;&amp;</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>            isset($in_B[<span class="stringliteral">&quot;south&quot;</span>])) {</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>                $areaA = abs(floatval($in_A[<span class="stringliteral">&quot;east&quot;</span>] - $in_A[<span class="stringliteral">&quot;west&quot;</span>])) * abs(floatval($in_A[<span class="stringliteral">&quot;south&quot;</span>] - $in_A[<span class="stringliteral">&quot;north&quot;</span>]));</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>                $areaB = abs(floatval($in_B[<span class="stringliteral">&quot;east&quot;</span>] - $in_B[<span class="stringliteral">&quot;west&quot;</span>])) * abs(floatval($in_B[<span class="stringliteral">&quot;south&quot;</span>] - $in_B[<span class="stringliteral">&quot;north&quot;</span>]));</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>                <span class="keywordflow">return</span> ($areaA &lt; $areaB) ? -1 : (($areaA &lt; $areaB) ? 1 : 0);</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>            }</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordflow">return</span> $ret;</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    }</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">    /***********************************************************************************************************************/</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno"><a class="line" href="a00035.html#a0f996b035d884e5021695ac7ac36cabd">  133</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a0f996b035d884e5021695ac7ac36cabd">store_entity</a>(   $inEntity   </div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>                                ) {</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        $polygon_string = <span class="stringliteral">&#39;POLYGON((&#39;</span>.implode(<span class="charliteral">&#39;,&#39;</span>, array_map(<span class="stringliteral">&#39;LGV_TZ_Lookup_Database::_map_string_from_lng_lat&#39;</span>, $inEntity-&gt;polygon)).<span class="stringliteral">&#39;))&#39;</span>;</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        $sql = <span class="stringliteral">&quot;INSERT INTO timezones (tzname, east, west, north, south, polygon) VALUES (?, ?, ?, ?, ?, PolygonFromText(?))&quot;</span>;</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        $params = [$inEntity-&gt;tzID, $inEntity-&gt;domainRect[<span class="stringliteral">&#39;east&#39;</span>], $inEntity-&gt;domainRect[<span class="stringliteral">&#39;west&#39;</span>], $inEntity-&gt;domainRect[<span class="stringliteral">&#39;north&#39;</span>], $inEntity-&gt;domainRect[<span class="stringliteral">&#39;south&#39;</span>], $polygon_string];</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        $this-&gt;pdo_instance-&gt;preparedStatement($sql, $params);</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    }</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">    /***********************************************************************************************************************/</span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="a00035.html#ab83c8b34a81496d876cde525c9f13de8">  147</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#ab83c8b34a81496d876cde525c9f13de8">get_tz_ids</a>( $in_lng,    </div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                                $in_lat     </div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>                            ) {</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>        $sql = <span class="stringliteral">&quot;SELECT id, tzname, east, west, north, south FROM timezones WHERE east&gt;=? AND west&lt;=? AND north&gt;=? AND south&lt;=?&quot;</span>;</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        </div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        $params = [$in_lng, $in_lng, $in_lat, $in_lat];</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        $ret = $this-&gt;pdo_instance-&gt;preparedStatement($sql, $params, <span class="keyword">true</span>);</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        <span class="keywordflow">if</span> (1 &lt; count($ret)) {</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>            usort($ret, <span class="stringliteral">&#39;LGV_TZ_Lookup_Database::_sort_by_domainSize&#39;</span>);</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        }</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        <span class="keywordflow">return</span> $ret;</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    }</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    </div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment">    /***********************************************************************************************************************/</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno"><a class="line" href="a00035.html#a881ccb1943215a236be79988f8784df8">  164</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a881ccb1943215a236be79988f8784df8">get_tz_entities</a>( $in_id_list </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>                            ) {</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        $sql = <span class="stringliteral">&quot;SELECT tzname, polygon FROM timezones WHERE&quot;</span>;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        $idSQL = <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        $params = [];</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        </div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        <span class="keywordflow">foreach</span> ($in_id_list as $id) {</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>            <span class="keywordflow">if</span> (!empty($idSQL)) {</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>                $idSQL .= <span class="stringliteral">&quot; OR&quot;</span>;</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>            }</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>            </div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>            $idSQL .= <span class="stringliteral">&quot; id=?&quot;</span>;</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            $params[] = $id;</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        }</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        $entities = [];</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        </div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        <span class="keywordflow">if</span> (!empty($params)) {</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>            $ret = $this-&gt;pdo_instance-&gt;preparedStatement($sql.$idSQL, $params, <span class="keyword">true</span>);</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>            </div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>            <span class="keywordflow">if</span> (!empty($ret)) {</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>                <span class="keywordflow">foreach</span>($ret as $row) {</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>                    $entity = [<span class="stringliteral">&#39;tzname&#39;</span> =&gt; $row[<span class="stringliteral">&#39;tzname&#39;</span>], <span class="stringliteral">&#39;polygon&#39;</span> =&gt; unpack(<span class="stringliteral">&#39;VSRID/corder/ltype/Lnum_rings/Lnum_points/d*&#39;</span>, $row[<span class="stringliteral">&#39;polygon&#39;</span>])];</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>                    unset($entity[<span class="stringliteral">&#39;polygon&#39;</span>][<span class="stringliteral">&#39;SRID&#39;</span>]);</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>                    unset($entity[<span class="stringliteral">&#39;polygon&#39;</span>][<span class="stringliteral">&#39;order&#39;</span>]);</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>                    unset($entity[<span class="stringliteral">&#39;polygon&#39;</span>][<span class="stringliteral">&#39;type&#39;</span>]);</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                    unset($entity[<span class="stringliteral">&#39;polygon&#39;</span>][<span class="stringliteral">&#39;num_rings&#39;</span>]);</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>                    unset($entity[<span class="stringliteral">&#39;polygon&#39;</span>][<span class="stringliteral">&#39;num_points&#39;</span>]);</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>                    $entity[<span class="stringliteral">&#39;polygon&#39;</span>] = array_chunk(array_values($entity[<span class="stringliteral">&#39;polygon&#39;</span>]), 2);</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                    $entities[] = $entity;</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                }</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>            }</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        }</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        </div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        <span class="keywordflow">return</span> $entities;</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    }</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment">    /***********************************************************************************************************************/</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno"><a class="line" href="a00035.html#a014e805dd8d9ae886d2a387b20b451d8">  205</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a014e805dd8d9ae886d2a387b20b451d8">reset_database</a>() {</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        $this-&gt;pdo_instance-&gt;preparedStatement(self::$_init_sql);</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    }</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>}</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        ini_set(<span class="stringliteral">&#39;max_execution_time&#39;</span>, 1200);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        set_time_limit(1200);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="comment">// This is the SQL that we use to create the table. Currently, it is MySQL-only, but should be changeable.</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        self::$_init_sql = <span class="stringliteral">&#39;DROP TABLE IF EXISTS timezones;</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="stringliteral">                            CREATE TABLE timezones (</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="stringliteral">                              id bigint(20) NOT NULL,</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="stringliteral">                              tzname varchar(255) NOT NULL,</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="stringliteral">                              east float NOT NULL,</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="stringliteral">                              west float NOT NULL,</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="stringliteral">                              north float NOT NULL,</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="stringliteral">                              south float NOT NULL,</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="stringliteral">                              polygon longblob NOT NULL</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="stringliteral">                            );</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="stringliteral"></span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="stringliteral">                            ALTER TABLE timezones</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="stringliteral">                              ADD PRIMARY KEY (id),</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="stringliteral">                              ADD KEY tzname (tzname),</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="stringliteral">                              ADD KEY east (east),</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="stringliteral">                              ADD KEY west (west),</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="stringliteral">                              ADD KEY north (north),</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="stringliteral">                              ADD KEY south (south);</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="stringliteral"></span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="stringliteral">                            ALTER TABLE timezones</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="stringliteral">                              MODIFY id bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;&#39;</span>;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    }</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">    /***********************************************************************************************************************/</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="a00035.html#a5e0fc8ddc11cf3c8016a1a9f356d4268">   96</a></span>    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a5e0fc8ddc11cf3c8016a1a9f356d4268">_sort_by_domainSize</a>($in_A,  </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>                                                $in_B   </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>                                                ) {</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        $ret = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordflow">if</span> (isset($in_A[<span class="stringliteral">&quot;east&quot;</span>]) &amp;&amp;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            isset($in_A[<span class="stringliteral">&quot;west&quot;</span>]) &amp;&amp;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            isset($in_A[<span class="stringliteral">&quot;north&quot;</span>]) &amp;&amp;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>            isset($in_A[<span class="stringliteral">&quot;south&quot;</span>]) &amp;&amp;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>            isset($in_B[<span class="stringliteral">&quot;east&quot;</span>]) &amp;&amp;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>            isset($in_B[<span class="stringliteral">&quot;west&quot;</span>]) &amp;&amp;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            isset($in_B[<span class="stringliteral">&quot;north&quot;</span>]) &amp;&amp;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            isset($in_B[<span class="stringliteral">&quot;south&quot;</span>])) {</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                $areaA = abs(floatval($in_A[<span class="stringliteral">&quot;east&quot;</span>] - $in_A[<span class="stringliteral">&quot;west&quot;</span>])) * abs(floatval($in_A[<span class="stringliteral">&quot;south&quot;</span>] - $in_A[<span class="stringliteral">&quot;north&quot;</span>]));</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>                $areaB = abs(floatval($in_B[<span class="stringliteral">&quot;east&quot;</span>] - $in_B[<span class="stringliteral">&quot;west&quot;</span>])) * abs(floatval($in_B[<span class="stringliteral">&quot;south&quot;</span>] - $in_B[<span class="stringliteral">&quot;north&quot;</span>]));</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>                <span class="keywordflow">return</span> ($areaA &lt; $areaB) ? -1 : (($areaA &lt; $areaB) ? 1 : 0);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            }</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        <span class="keywordflow">return</span> $ret;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    }</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">    /***********************************************************************************************************************/</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="a00035.html#a590109b25952d7d06d5d8e97108ad5c0">  121</a></span>    <span class="keyword">static</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a590109b25952d7d06d5d8e97108ad5c0">_array_flatten</a>( $inArray    </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>                                    ) {</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        $resulting_array = array();</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        array_walk_recursive($inArray, <span class="keyword">function</span>($inValue) use (&amp;$resulting_array) { array_push($resulting_array, round($inValue, 6)); });</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        <span class="keywordflow">return</span> $resulting_array;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    }</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">    /***********************************************************************************************************************/</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="a00035.html#a0f996b035d884e5021695ac7ac36cabd">  132</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a0f996b035d884e5021695ac7ac36cabd">store_entity</a>(   $inEntity   </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>                                ) {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        $polygon_nested_array = array($inEntity-&gt;polygon);</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        $polygon_array = <a class="code hl_function" href="a00035.html#a590109b25952d7d06d5d8e97108ad5c0">self::_array_flatten</a>($polygon_nested_array);</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        $polygon = implode(array_map(<span class="keyword">function</span>($inValue) { <span class="keywordflow">return</span> pack(<span class="stringliteral">&#39;d*&#39;</span>, $inValue); }, $polygon_array));</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        $sql = <span class="stringliteral">&quot;INSERT INTO timezones (tzname, east, west, north, south, polygon) VALUES (?, ?, ?, ?, ?, ?)&quot;</span>;</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        $params = [$inEntity-&gt;tzID, $inEntity-&gt;domainRect[<span class="stringliteral">&#39;east&#39;</span>], $inEntity-&gt;domainRect[<span class="stringliteral">&#39;west&#39;</span>], $inEntity-&gt;domainRect[<span class="stringliteral">&#39;north&#39;</span>], $inEntity-&gt;domainRect[<span class="stringliteral">&#39;south&#39;</span>], $polygon];</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        $this-&gt;pdo_instance-&gt;preparedStatement($sql, $params);</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    }</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">    /***********************************************************************************************************************/</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno"><a class="line" href="a00035.html#ab83c8b34a81496d876cde525c9f13de8">  148</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#ab83c8b34a81496d876cde525c9f13de8">get_tz_ids</a>( $in_lng,    </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>                                $in_lat     </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>                            ) {</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        $sql = <span class="stringliteral">&quot;SELECT id, tzname, east, west, north, south FROM timezones WHERE east&gt;=? AND west&lt;=? AND north&gt;=? AND south&lt;=?&quot;</span>;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        </div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        $params = [$in_lng, $in_lng, $in_lat, $in_lat];</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        $ret = $this-&gt;pdo_instance-&gt;preparedStatement($sql, $params, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        <span class="keywordflow">if</span> (1 &lt; count($ret)) {</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>            usort($ret, <span class="stringliteral">&#39;LGV_TZ_Lookup_Database::_sort_by_domainSize&#39;</span>);</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        }</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        <span class="keywordflow">return</span> $ret;</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    }</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment">    /***********************************************************************************************************************/</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno"><a class="line" href="a00035.html#a881ccb1943215a236be79988f8784df8">  165</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a881ccb1943215a236be79988f8784df8">get_tz_entities</a>( $in_id_list </div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>                            ) {</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        $sql = <span class="stringliteral">&quot;SELECT tzname, polygon FROM timezones WHERE&quot;</span>;</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        $idSQL = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        $params = [];</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        </div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        <span class="keywordflow">foreach</span> ($in_id_list as $id) {</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>            <span class="keywordflow">if</span> (!empty($idSQL)) {</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>                $idSQL .= <span class="stringliteral">&quot; OR&quot;</span>;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>            }</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>            </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            $idSQL .= <span class="stringliteral">&quot; id=?&quot;</span>;</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>            $params[] = $id;</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        }</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        </div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        $entities = [];</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        <span class="keywordflow">if</span> (!empty($params)) {</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>            $ret = $this-&gt;pdo_instance-&gt;preparedStatement($sql.$idSQL, $params, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>            </div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>            <span class="keywordflow">if</span> (!empty($ret)) {</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>                <span class="keywordflow">foreach</span>($ret as $row) {</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>                    $entity = [<span class="stringliteral">&#39;tzname&#39;</span> =&gt; $row[<span class="stringliteral">&#39;tzname&#39;</span>], <span class="stringliteral">&#39;polygon&#39;</span> =&gt; unpack(<span class="stringliteral">&#39;d*&#39;</span>, $row[<span class="stringliteral">&#39;polygon&#39;</span>])];</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>                    $entity[<span class="stringliteral">&#39;polygon&#39;</span>] = array_chunk(array_values($entity[<span class="stringliteral">&#39;polygon&#39;</span>]), 2);</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>                    $entities[] = $entity;</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                }</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>            }</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        }</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <span class="keywordflow">return</span> $entities;</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    }</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    </div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">    /***********************************************************************************************************************/</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno"><a class="line" href="a00035.html#a014e805dd8d9ae886d2a387b20b451d8">  201</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="a00035.html#a014e805dd8d9ae886d2a387b20b451d8">reset_database</a>() {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        $this-&gt;pdo_instance-&gt;preparedStatement(self::$_init_sql);</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    }</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>}</div>
 <div class="ttc" id="aa00035_html"><div class="ttname"><a href="a00035.html">LGV_TZ_Lookup_Database</a></div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00038">LGV_TZ_Lookup_Database.class.php:38</a></div></div>
-<div class="ttc" id="aa00035_html_a014e805dd8d9ae886d2a387b20b451d8"><div class="ttname"><a href="a00035.html#a014e805dd8d9ae886d2a387b20b451d8">LGV_TZ_Lookup_Database\reset_database</a></div><div class="ttdeci">reset_database()</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00205">LGV_TZ_Lookup_Database.class.php:205</a></div></div>
-<div class="ttc" id="aa00035_html_a0f996b035d884e5021695ac7ac36cabd"><div class="ttname"><a href="a00035.html#a0f996b035d884e5021695ac7ac36cabd">LGV_TZ_Lookup_Database\store_entity</a></div><div class="ttdeci">store_entity( $inEntity)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00133">LGV_TZ_Lookup_Database.class.php:133</a></div></div>
-<div class="ttc" id="aa00035_html_a2c73c2ce2f2942a3a28ee55ed1492de1"><div class="ttname"><a href="a00035.html#a2c73c2ce2f2942a3a28ee55ed1492de1">LGV_TZ_Lookup_Database\_map_string_from_lng_lat</a></div><div class="ttdeci">static _map_string_from_lng_lat($inLng_lat)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00094">LGV_TZ_Lookup_Database.class.php:94</a></div></div>
+<div class="ttc" id="aa00035_html_a014e805dd8d9ae886d2a387b20b451d8"><div class="ttname"><a href="a00035.html#a014e805dd8d9ae886d2a387b20b451d8">LGV_TZ_Lookup_Database\reset_database</a></div><div class="ttdeci">reset_database()</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00201">LGV_TZ_Lookup_Database.class.php:201</a></div></div>
+<div class="ttc" id="aa00035_html_a0f996b035d884e5021695ac7ac36cabd"><div class="ttname"><a href="a00035.html#a0f996b035d884e5021695ac7ac36cabd">LGV_TZ_Lookup_Database\store_entity</a></div><div class="ttdeci">store_entity( $inEntity)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00132">LGV_TZ_Lookup_Database.class.php:132</a></div></div>
 <div class="ttc" id="aa00035_html_a4f9877727e59ed6a57cf23aa2c71f546"><div class="ttname"><a href="a00035.html#a4f9877727e59ed6a57cf23aa2c71f546">LGV_TZ_Lookup_Database\$_init_sql</a></div><div class="ttdeci">static $_init_sql</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00043">LGV_TZ_Lookup_Database.class.php:43</a></div></div>
-<div class="ttc" id="aa00035_html_a5e0fc8ddc11cf3c8016a1a9f356d4268"><div class="ttname"><a href="a00035.html#a5e0fc8ddc11cf3c8016a1a9f356d4268">LGV_TZ_Lookup_Database\_sort_by_domainSize</a></div><div class="ttdeci">static _sort_by_domainSize($in_A, $in_B)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00108">LGV_TZ_Lookup_Database.class.php:108</a></div></div>
-<div class="ttc" id="aa00035_html_a881ccb1943215a236be79988f8784df8"><div class="ttname"><a href="a00035.html#a881ccb1943215a236be79988f8784df8">LGV_TZ_Lookup_Database\get_tz_entities</a></div><div class="ttdeci">get_tz_entities( $in_id_list)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00164">LGV_TZ_Lookup_Database.class.php:164</a></div></div>
-<div class="ttc" id="aa00035_html_ab83c8b34a81496d876cde525c9f13de8"><div class="ttname"><a href="a00035.html#ab83c8b34a81496d876cde525c9f13de8">LGV_TZ_Lookup_Database\get_tz_ids</a></div><div class="ttdeci">get_tz_ids( $in_lng, $in_lat)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00147">LGV_TZ_Lookup_Database.class.php:147</a></div></div>
+<div class="ttc" id="aa00035_html_a590109b25952d7d06d5d8e97108ad5c0"><div class="ttname"><a href="a00035.html#a590109b25952d7d06d5d8e97108ad5c0">LGV_TZ_Lookup_Database\_array_flatten</a></div><div class="ttdeci">static _array_flatten( $inArray)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00121">LGV_TZ_Lookup_Database.class.php:121</a></div></div>
+<div class="ttc" id="aa00035_html_a5e0fc8ddc11cf3c8016a1a9f356d4268"><div class="ttname"><a href="a00035.html#a5e0fc8ddc11cf3c8016a1a9f356d4268">LGV_TZ_Lookup_Database\_sort_by_domainSize</a></div><div class="ttdeci">static _sort_by_domainSize($in_A, $in_B)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00096">LGV_TZ_Lookup_Database.class.php:96</a></div></div>
+<div class="ttc" id="aa00035_html_a881ccb1943215a236be79988f8784df8"><div class="ttname"><a href="a00035.html#a881ccb1943215a236be79988f8784df8">LGV_TZ_Lookup_Database\get_tz_entities</a></div><div class="ttdeci">get_tz_entities( $in_id_list)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00165">LGV_TZ_Lookup_Database.class.php:165</a></div></div>
+<div class="ttc" id="aa00035_html_ab83c8b34a81496d876cde525c9f13de8"><div class="ttname"><a href="a00035.html#ab83c8b34a81496d876cde525c9f13de8">LGV_TZ_Lookup_Database\get_tz_ids</a></div><div class="ttdeci">get_tz_ids( $in_lng, $in_lat)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00148">LGV_TZ_Lookup_Database.class.php:148</a></div></div>
 <div class="ttc" id="aa00035_html_ade5df5912f58bb8869ea6baf431ae26e"><div class="ttname"><a href="a00035.html#ade5df5912f58bb8869ea6baf431ae26e">LGV_TZ_Lookup_Database\$pdo_instance</a></div><div class="ttdeci">$pdo_instance</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00049">LGV_TZ_Lookup_Database.class.php:49</a></div></div>
 <div class="ttc" id="aa00035_html_ae79d59d40c9e65a64244b5be95c389ce"><div class="ttname"><a href="a00035.html#ae79d59d40c9e65a64244b5be95c389ce">LGV_TZ_Lookup_Database\__construct</a></div><div class="ttdeci">__construct( $inDatabase, $inUser=NULL, $inPassword=NULL, $inDriver='mysql', $inHost='127.0.0.1', $inPort=3306)</div><div class="ttdef"><b>Definition</b> <a href="a00023_source.html#l00055">LGV_TZ_Lookup_Database.class.php:55</a></div></div>
 <div class="ttc" id="aa00047_html"><div class="ttname"><a href="a00047.html">LGV_TZ_Lookup_PDO</a></div><div class="ttdoc">This class provides a genericized interface to the PHP PDO toolkit.</div><div class="ttdef"><b>Definition</b> <a href="a00020_source.html#l00034">LGV_TZ_Lookup_PDO.class.php:34</a></div></div>

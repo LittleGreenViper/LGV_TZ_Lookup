@@ -99,8 +99,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
   <div class="headertitle"><div class="title">LGV_TZ_Lookup </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__2_users_2chrismarshall_2_developer_2_l_g_v_2_l_g_v___t_z___lookup_2_r_e_a_d_m_e"></a> </p><div style="float:right"><a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup"><img src="img/GitHub-Mark-64px.png" alt="" style="width:32px" class="inline"/> </a></div> <div style="float:left"> <img src="img/icon.png" alt="" class="inline"/> </div> <div style="clear:both"></div> <h1>LGV_TZ_Lookup</h1>
-<p>Server for Matching Long/Lat to Timezone</p>
+<div class="textblock"><p><a class="anchor" id="md__2_users_2chrismarshall_2_developer_2_l_g_v_2_l_g_v___t_z___lookup_2_r_e_a_d_m_e"></a> </p><div style="float:right"><a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup"><img src="img/GitHub-Mark-64px.png" alt="" style="width:32px" class="inline"/> </a></div> <div style="float:left"> <img src="img/icon.png" alt="" class="inline"/> </div> <div style="clear:both"></div><h1>LGV_TZ_Lookup</h1>
+<p>A Server for Matching Long/Lat to Timezone</p>
 <h2>Overview</h2>
 <p>This project is a fairly simple PHP project, designed to accept the GeoJSON output of <a href="https://github.com/evansiroky/timezone-boundary-builder">the Timezone Boundary Builder Project</a>, and provide a simple API, for matching longitude/latitude locations with timezones.</p>
 <p>Send in a long/lat, and get back a string, with <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">the standard TZ time zone designator</a> of the timezone that covers that point.</p>
@@ -120,7 +120,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>The "domain rect" is used for a fast "triage" lookup. Its vertices are indexed in the database, so comparisons are zippy. We can quickly find the timezones that may contain our location, and ignore the rest.</p>
 <p>In some cases, the domain rect "triage" may return only one result, so we got it in one. In other cases, we can then do a simple <a href="https://en.m.wikipedia.org/wiki/Winding_number">"Winding Number"</a> lookup of the location, using the un-indexed polygon data for that timezone, and figure out which polygon actually has it. We return the first one.</p>
 <p>From a usage standpoint, you simply send in a longitude/latitude pair, as a simple <a href="https://www.w3schools.com/tags/ref_httpmethods.asp">HTTP GET</a>, and you will receive a "raw" string response, with the <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">TZ</a> name of the timezone that applies to the location.</p>
-<p><code>http</code>_[<em>s</em>]_<code>://</code>_&lt;YOUR SERVER URL TO THE src DIRECTORY&gt;[_<code>/index.php</code>_]_<code>?ll=</code>_]&lt;LONGITUDE&gt;,&lt;LATITUDE&gt;_</p>
+<p><code>http</code>_[_<code>s</code>_]_<code>://</code>_&lt;YOUR SERVER URL TO THE src DIRECTORY&gt;[_<code>/index.php</code>_]_<code>?ll=</code>&lt;LONGITUDE&gt;,&lt;LATITUDE&gt;</p>
 <p><code><a href="https://tz.example.com?ll=-73.123,44.456">https://tz.example.com?ll=-73.123,44.456</a></code></p>
 <p>The long/lat is sent as a comma-separated pair of floating-point numbers that represent degrees of longitude and latitude.</p>
 <h2>Dependencies</h2>
@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>Well...that's not <em>strictly</em> true. You'll need to download the GeoJSON file from <a href="https://github.com/evansiroky/timezone-boundary-builder/releases">the Timezone Boundary Builder Project releases</a>. It's a big file, and may be updated, as timezones change. You can use either of the files (with or without oceans), but the project tests against the oceans variant.</p>
 <h2>Implementation</h2>
 <h3>Initial Installation</h3>
-<p>Once you have a server available, install the entire directory in the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src"><code>src</code> subdirectory</a> in a place of your choosing, accessible via HTTP. You should have a URI that points to the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/main/src/index.php"><code>index.php</code> file</a> in the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src"><code>src</code> directory</a>.</p>
+<p>Once you have a server available, install the contents of the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src"><code>src</code> subdirectory</a> into a place of your choosing, accessible via HTTP. You should have a URI that points to the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/main/src/index.php"><code>index.php</code> file</a> in the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src"><code>src</code> directory</a>.</p>
 <h3>Database Setup</h3>
 <p>You will need to set up a MySQL database, with a user with basic full permissions.</p>
 <h3>Config File</h3>
@@ -185,7 +185,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>You don't need to "prime" the database. The server will take care of creating the table.</p>
 <p>However, the initial load can only be done via command-line, so you'll need to SSH into the server, and run the load from there. You use the syntax indicated above:</p>
 <div class="fragment"><div class="line"> (bash)</div>
-<div class="line">$&gt; php &lt;YOUR src DIRECTORY&gt;/index.php server=&lt;SERVER SECRET&gt; load</div>
+<div class="line">$&gt; php &lt;YOUR src DIRECTORY&gt;/index.php secret=&lt;SERVER SECRET&gt; load</div>
 </div><!-- fragment --><p>This can take a while.</p>
 <p>Upon success, the script emits a simple <code>1</code>. If there was a problem, it emits a <code>0</code>.</p>
 <p>Once that's done. the server is ready to go. You can even delete the JSON file and the vendor directory, if you want, but they will need to be back, before you can load.</p>
@@ -194,7 +194,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <h3>Testing</h3>
 <p>We have a set of simple tests that can be run. They send in known coordinates, and ensure that the server returns the proper response.</p>
 <p>You run the tests, like so:</p>
-<p><code><a href="https://tz.example.com">https://tz.example.com</a></code>_[_<code>/index.php</code>_]_<code>?</code>_[_<code>secret=&lt;SERVER SECRET&gt;&amp;</code>_]_<code>test</code></p>
+<p><code><a href="https://tz.example.com">https://tz.example.com</a></code>_[_<code>/index.php</code>_]_<code>?</code>_[_<code>secret=</code>&lt;SERVER SECRET&gt;<code>&amp;</code>_]_<code>test</code></p>
 <p>You will get a simple HTML page, with each of the tests, listed. If the test passes, the title will be green. If it fails, the title will be red, and there will be a list of links to failures, at the top of the page.</p>
 <p>Everything should be green (unless you swapped out the JSON file, in which case, you'll need to look for the failures, and validate the tests).</p>
 <h2>License</h2>
