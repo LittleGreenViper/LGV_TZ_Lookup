@@ -1,11 +1,7 @@
 <?php
 /***************************************************************************************************************************/
 /**
-    This is a PDO abstraction class, derived from the Badger Hardened Baseline Database Component
-    
-    This defaults to a standard localhost MySQL server (can be other types of servers).
-    
-    © Copyright 2023, [The Great Rift Valley Software Company](https://riftvalleysoftware.com)
+    © Copyright 2023-2026, [The Great Rift Valley Software Company](https://riftvalleysoftware.com)
     
     LICENSE:
     
@@ -30,6 +26,10 @@ defined( 'LGV_DB_CATCHER' ) or die ( 'Cannot Execute Directly' );	// Makes sure 
 /***************************************************************************************************************************/
 /**
     \brief This class provides a genericized interface to the [PHP PDO](http://us.php.net/pdo) toolkit.
+
+    This is a PDO abstraction class, derived from the Badger Hardened Baseline Database Component
+    
+    This defaults to a standard localhost MySQL server (can be other types of servers).
  */
 class LGV_TZ_Lookup_PDO {
 	/// \brief Internal PDO object

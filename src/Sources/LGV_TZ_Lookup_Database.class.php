@@ -1,7 +1,7 @@
 <?php
 /***************************************************************************************************************************/
 /**
-    © Copyright 2023, [Little Green Viper Software Development LLC](https://littlegreenviper.com)
+    © Copyright 2023-2026, [Little Green Viper Software Development LLC](https://littlegreenviper.com)
     
     LICENSE:
     
