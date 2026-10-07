@@ -81,6 +81,10 @@ class LGV_TZ_Lookup_PDO {
 								        $params = array(),      ///< Data for the placeholders. Default is an empty array.
 								        $fetchResponse = false  ///< If true (default is false), then a fetch will be done, and a response returned.
 						            ) {
+        // A read needs no BEGIN/COMMIT round trips. Retain the array-returning public API.
+        if ($fetchResponse) {
+            return iterator_to_array($this->preparedRows($sql, $params), false);
+        }
 		if ( NULL == $this->_pdo ) {
             throw new Exception(__METHOD__ . '()::' . __LINE__ . "\nNo PDO object!");
 		}
@@ -101,25 +105,13 @@ class LGV_TZ_Lookup_PDO {
                 throw new Exception(__METHOD__ . '()::' . __LINE__ . "\n" . print_r($stmt->errorInfo(), true));
             }
             
-            if ( $fetchResponse ) {
-                $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            }
-            
             $stmt->execute($params);
-            
-            $ret = false;
-            
-            if ( $fetchResponse ) {
-                $ret = $stmt->fetchAll();
-            } else {
-                $ret = true;
-            }
         
             if ( $this->_pdo->inTransaction() ) {
                 $this->_pdo->commit();
             }
             
-            return $ret;
+            return true;
 		} catch (PDOException $exception) {
 		    $this->last_insert = NULL;
             $this->_pdo->rollback();
@@ -128,6 +120,50 @@ class LGV_TZ_Lookup_PDO {
 		
         return false;
 	}
+
+    /***********************************************************************************************************************/
+    /**
+        Yield rows one at a time and release the cursor, including when a lookup returns before consuming every row.
+        Polygon reads can disable MySQL buffering to avoid retaining every candidate blob. An unbuffered reader
+        must be closed before another query; the finally block drains its cursor and restores the connection mode.
+     */
+    public function preparedRows($sql, $params = array(), $buffered = true) {
+        if (NULL == $this->_pdo) {
+            throw new Exception(__METHOD__.'(): No PDO object!');
+        }
+        if ('mysql' != $this->driver_type) {
+            $sql = str_ireplace('`', '', $sql);
+        }
+        $stmt = NULL;
+        $bufferAttribute = NULL;
+        $previousBuffering = NULL;
+        try {
+            if ('mysql' == $this->driver_type && !$buffered) {
+                // PHP 8.5 deprecates the PDO alias; the fallback supports the project's earlier PHP versions.
+                $bufferAttribute = class_exists('Pdo\\Mysql') ? \Pdo\Mysql::ATTR_USE_BUFFERED_QUERY : PDO::MYSQL_ATTR_USE_BUFFERED_QUERY;
+                $previousBuffering = $this->_pdo->getAttribute($bufferAttribute);
+                $this->_pdo->setAttribute($bufferAttribute, false);
+            }
+            $stmt = $this->_pdo->prepare($sql);
+            $stmt->execute($params);
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                yield $row;
+                unset($row);
+            }
+        } catch (PDOException $exception) {
+            throw new Exception(__METHOD__.'() '.$exception->getMessage(), 0, $exception);
+        } finally {
+            try {
+                if (NULL !== $stmt && false !== $stmt) {
+                    $stmt->closeCursor();
+                }
+            } finally {
+                if (NULL !== $previousBuffering) {
+                    $this->_pdo->setAttribute($bufferAttribute, $previousBuffering);
+                }
+            }
+        }
+    }
 };
 
 ?>

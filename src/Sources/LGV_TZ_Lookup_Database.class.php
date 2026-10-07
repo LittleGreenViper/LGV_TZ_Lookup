@@ -193,6 +193,20 @@ class LGV_TZ_Lookup_Database {
         
         return $entities;
     }
+
+    /***********************************************************************************************************************/
+    /**
+        Yield the existing binary polygons without unpacking them. Primary-key order makes first-match precedence
+        explicit, matching the existing MySQL primary-key candidate scan.
+     */
+    public function get_tz_polygons($in_id_list) {
+        if (empty($in_id_list)) {
+            return;
+        }
+        $placeholders = implode(',', array_fill(0, count($in_id_list), '?'));
+        $sql = 'SELECT tzname, polygon FROM timezones WHERE id IN ('.$placeholders.') ORDER BY id';
+        yield from $this->pdo_instance->preparedRows($sql, array_values($in_id_list), false);
+    }
     
     /***********************************************************************************************************************/
     /**

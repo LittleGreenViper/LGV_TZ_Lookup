@@ -175,5 +175,45 @@ You will get a simple HTML page, with each of the tests, listed. If the test pas
 
 Everything should be green (unless you swapped out the JSON file, in which case, you'll need to look for the failures, and validate the tests).
 
+### Query Performance
+
+Queries test the existing packed polygon data in blocks of 1,024 points, rather than expanding entire candidate polygons into nested PHP arrays. Polygon rows are read sequentially without MySQL result buffering, and their cursor is closed when a match is found. Named-zone precedence and the existing single-candidate shortcut are retained. Reads also avoid unnecessary transaction round trips, and ocean fallback does not fetch named polygons again.
+
+The database schema and polygon encoding are unchanged, so existing installations do not need a database reload for this query update. Loading the boundary file still uses the existing loader.
+
+On October 7, 2026, a local PHP 8.5.10/MySQL 26.7.0 benchmark used the supplied boundary file, all 200 existing test locations, and 2,000 deterministic random locations. Each version performed 6,600 lookups, with a new database connection for each lookup:
+
+| Measurement | Original (`0e7894a`) | Optimized |
+| --- | ---: | ---: |
+| Average lookup, including connection | 2.394 ms | 0.882 ms |
+| 95th-percentile lookup | 15.657 ms | 5.532 ms |
+| Peak additional PHP memory per lookup | 138.750 MiB | 7.724 MiB |
+| Peak total PHP memory used | 142.252 MiB | 11.385 MiB |
+
+All 200 expected locations passed and all 2,200 results matched the original implementation. The optimized run completed with `memory_limit=16M`; the original was measured with `memory_limit=1G`. These are local CLI measurements, excluding HTTP/network request overhead and boundary-file loading. Timing depends on the host, database configuration, and locations queried. Raw measurements and the boundary-file checksum are in [`tests/benchmarks/query-2026-10-07.json`](tests/benchmarks/query-2026-10-07.json).
+
+Run geometry, lookup-precedence, and PDO regression checks without a MySQL server:
+
+```bash
+php tests/regression.php
+```
+
+To reproduce the database-backed comparison, create an isolated local database. The benchmark accepts only MySQL database names beginning with `lgv_tz_benchmark_`. **`--build` replaces the `timezones` table in that benchmark database.** It does not read the server's production configuration.
+
+```bash
+mysql -u root -e 'CREATE DATABASE lgv_tz_benchmark_local;'
+php -d memory_limit=1G tools/benchmark.php --mysql=lgv_tz_benchmark_local --build
+php tests/regression.php --mysql=lgv_tz_benchmark_local
+
+task_baseline_dir=$(mktemp -d)
+git archive 0e7894a src/Sources | tar -x -C "$task_baseline_dir"
+php -d memory_limit=1G tools/benchmark.php --mysql=lgv_tz_benchmark_local --source="$task_baseline_dir/src" --runs=3 --random=2000 --reconnect --results=/tmp/lgv-tz-baseline-results.json
+php -d memory_limit=16M tools/benchmark.php --mysql=lgv_tz_benchmark_local --runs=3 --random=2000 --reconnect --expect=/tmp/lgv-tz-baseline-results.json
+```
+
+MySQL benchmark connections default to local `root` with no password, as installed by Homebrew. Override these defaults with `LGV_TZ_BENCH_USER`, `LGV_TZ_BENCH_PASSWORD`, `LGV_TZ_BENCH_HOST`, and `LGV_TZ_BENCH_PORT` environment variables when needed. Omit `--reconnect` to measure queries using one connection. `--expect` verifies every location against saved baseline results, and repeated runs must return consistent results.
+
+If MySQL is unavailable, `--fixture=/tmp/lgv-tz.sqlite --build` creates an isolated SQLite fixture from the same boundary file; use that `--fixture` argument on subsequent benchmark runs. SQLite results help compare PHP processing, but do not measure production MySQL behavior. Per-lookup peak-memory accounting requires PHP 8.2 or later.
+
 ## License
 This is an [MIT-Licensed](https://opensource.org/license/mit/) project.

@@ -65,103 +65,85 @@ class LGV_TZ_Lookup_Query {
         // This does a fast lookup, using the domain rect (the "blunt instrument" rect that we created, when we stored the polygon).
         $tzIDs = $this->db_object->get_tz_ids($in_lng, $in_lat);
 
-        // We filter out the "Etc" timezones, crammed at the end.
-        $filtered_ids = array_filter($tzIDs, 'LGV_TZ_Lookup_Query::_filter_out_etc');
-        
-        // If we only have one, then w00t! We send that back.
-        if (1 == count($filtered_ids)) {
-            return array_values($filtered_ids)[0]['tzname'];
-        } else {    // Otherwise, we have to look into each polygon, in a bit more detail, and return the first match.
-            $idMap = array_map('LGV_TZ_Lookup_Query::_convert_to_ids', $filtered_ids);
-            $entities = $this->db_object->get_tz_entities($idMap);
-            
-            foreach($entities as $entity) {
-                if(self::_wn_PnPoly([$in_lng, $in_lat], $entity['polygon'])) {
-                    return $entity['tzname'];
-                }
+        $named = [];
+        $ocean = [];
+        foreach ($tzIDs as $candidate) {
+            if (str_starts_with($candidate['tzname'], 'Etc/')) {
+                $ocean[] = $candidate;
+            } else {
+                $named[] = $candidate;
             }
         }
-        // Failing a named TZ, we see if our Etc has something to say.
+
+        // Preserve the existing single-candidate shortcut and named-zone precedence.
+        if (1 == count($named)) {
+            return $named[0]['tzname'];
+        }
+        $timezone = $this->_find_in_polygons($named, $in_lng, $in_lat);
+        if ('' !== $timezone) {
+            return $timezone;
+        }
         if (1 == count($tzIDs)) {
-            return array_values($tzIDs)[0]['tzname'];
-        } else {    // Otherwise, we have to look into each polygon, in a bit more detail, and return the first match.
-            $idMap = array_map('LGV_TZ_Lookup_Query::_convert_to_ids', $tzIDs);
-            $entities = $this->db_object->get_tz_entities($idMap);
-            
-            foreach($entities as $entity) {
-                if(self::_wn_PnPoly([$in_lng, $in_lat], $entity['polygon'])) {
-                    return $entity['tzname'];
+            return $tzIDs[0]['tzname'];
+        }
+
+        // Named polygons have already failed; only fetch the ocean polygons now.
+        return $this->_find_in_polygons($ocean, $in_lng, $in_lat);
+    }
+
+    /***********************************************************************************************************************/
+    /**
+        Fetch compact polygons and stop at the first match, without expanding all candidates into PHP point arrays.
+     */
+    private function _find_in_polygons($candidates, $longitude, $latitude) {
+        if (empty($candidates)) {
+            return '';
+        }
+        $ids = array_column($candidates, 'id');
+        foreach ($this->db_object->get_tz_polygons($ids) as $entity) {
+            if (self::_wn_PackedPoly($longitude, $latitude, $entity['polygon'])) {
+                return $entity['tzname'];
+            }
+            unset($entity);
+        }
+        return '';
+    }
+
+    /***********************************************************************************************************************/
+    /**
+        The winding-number algorithm courtesy of San Zhujun (https://gist.github.com/zhujunsan/81d6a2f05d590f618a5ad36f25666fc2),
+        operating on the existing packed native-double format with the same edge/vertex comparisons.
+        Decode 1,024 points at a time: per-point unpack calls are expensive, while unpacking an entire large polygon
+        creates a large PHP hash table. Carry the preceding point across blocks, including the closing edge.
+     */
+    private static function _wn_PackedPoly($longitude, $latitude, $polygon) {
+        $bytes = strlen($polygon);
+        if ($bytes < 32) {
+            return false;
+        }
+        $last = unpack('dx/dy', $polygon, $bytes - 16);
+        $previousX = $last['x'];
+        $previousY = $last['y'];
+        $winding = 0;
+        for ($offset = 0; $offset < $bytes; $offset += 16384) {
+            $count = min(2048, intdiv($bytes - $offset, 8));
+            $coordinates = unpack('d'.$count, $polygon, $offset);
+            for ($i = 1; $i < $count; $i += 2) {
+                $x = $coordinates[$i];
+                $y = $coordinates[$i + 1];
+                if ($previousX <= $longitude) {
+                    if ($x > $longitude &&
+                        ($y - $previousY) * ($longitude - $previousX) - ($latitude - $previousY) * ($x - $previousX) > 0) {
+                        ++$winding;
+                    }
+                } elseif ($x <= $longitude &&
+                    ($y - $previousY) * ($longitude - $previousX) - ($latitude - $previousY) * ($x - $previousX) < 0) {
+                    --$winding;
                 }
+                $previousX = $x;
+                $previousY = $y;
             }
         }
-        
-        return "";
-    }
-    
-    /***********************************************************************************************************************/
-    /**
-        This function is courtesy of San Zhujun, via [this gist](https://gist.github.com/zhujunsan/81d6a2f05d590f618a5ad36f25666fc2).
-        
-        \returns: -1 if to the right, 1, if to the left, and 0, if on the vertex.
-     */
-    private static function _isLeft($polygon_point_0,   ///< The first vertex endpoint.
-                                    $polygon_point_1,   ///< The second vertex endpoint.
-                                    $test_point         ///< The point to test against the vertex.
-                                    ) {
-        return (($polygon_point_1[1] - $polygon_point_0[1]) * ($test_point[0] - $polygon_point_0[0]) - ($test_point[1] - $polygon_point_0[1]) * ($polygon_point_1[0] - $polygon_point_0[0]));
-    }
-
-    /***********************************************************************************************************************/
-    /**
-        This function is courtesy of San Zhujun, via [this gist](https://gist.github.com/zhujunsan/81d6a2f05d590f618a5ad36f25666fc2).
-        
-        It's a basic ["winding number" algortithm](https://en.wikipedia.org/wiki/Winding_number), for testing whether or not a point is inside a polygon.
-        
-        I have modified it to use arrays of long/lat, as opposed to the Point class he defined, in his example.
-        
-        \returns: True, if the point is inside the polygon.
-     */
-    private static function _wn_PnPoly( $point,     ///< The point we are testing.
-                                        $polygon    ///< The polygon we are testing against.
-                                        ) {
-        $wn = 0;
-        $n = count($polygon);
-
-                                                                                            // loop through all edges of the polygon
-        for ($i = 0; $i < $n; $i++) {                                                       // edge from polygon[i] to  polygon[i+1]
-            if ($polygon[$i][0] <= $point[0]) {                                             // start y <= point[0]
-                if ($polygon[($i + 1) % $n][0] > $point[0])                                 // an upward crossing
-                    if (self::_isLeft($polygon[$i], $polygon[($i + 1) % $n], $point) > 0)   // point left of  edge
-                        ++$wn;                                                              // have  a valid up intersect
-            } else {                                                                        // start y > point[0] (no test needed)
-                if ($polygon[($i + 1) % $n][0] <= $point[0])                                // a downward crossing
-                    if (self::_isLeft($polygon[$i], $polygon[($i + 1) % $n], $point) < 0)   // point right of  edge
-                        --$wn;                                                              // have  a valid down intersect
-            }
-        }
-        
-        return 0 != $wn;
-    }
-    
-    /***********************************************************************************************************************/
-    /**
-        This is a filter callback that excludes the "Etc" timezones.
-        
-        \returns: True, if it is not an "Etc/" timezone.
-     */
-    private static function _filter_out_etc($in_id  ///< The ID/TZ Name pair to check.
-                                            ) {
-        return !str_starts_with($in_id['tzname'], "Etc/");
-    }
-    
-    /***********************************************************************************************************************/
-    /**
-        This is a map callback, to extract the ID numbers.
-        
-        \returns: The ID integer of the element.
-     */
-    private static function _convert_to_ids($in_id  ///< The ID/TZ Name pair to convert.
-                                            ) {
-        return intval($in_id['id']);
+        return 0 != $winding;
     }
 }
