@@ -1,4 +1,8 @@
-**1.1.1** *February 21 2023*
+**1.2.0** *October 7, 2026*
+
+- Used an LLM to optimize the project for lookup performance and memory footprint.
+
+**1.1.1** *February 21 2026*
 
 - Changed "Jerusalem" in the tests, to "Hebron."
 
