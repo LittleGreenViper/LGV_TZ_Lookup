@@ -50,13 +50,13 @@ From a usage standpoint, you simply send in a longitude/latitude pair, as a simp
 The long/lat is sent as a comma-separated pair of floating-point numbers that represent degrees of longitude and latitude.
 
 ## Dependencies
-Lookup requires PHP 8.0 or later, the PDO and PDO MySQL extensions (`ext-pdo` and `ext-pdo_mysql`), and a populated MySQL boundary database. The standalone server is designed for your classic ["LAMP"](https://en.wikipedia.org/wiki/LAMP_(software_bundle)) hosting.
+Lookup requires PHP 8.0 or later, PDO, and either the PDO MySQL extension (`ext-pdo_mysql`) or PDO PostgreSQL extension (`ext-pdo_pgsql`), with a populated boundary database. The standalone server can use either database.
 
 This project uses [the streaming JSON parser](https://github.com/salsify/jsonstreamingparser), in order to parse [this file](https://github.com/evansiroky/timezone-boundary-builder/releases/download/2023b/timezones-with-oceans.geojson.zip) (a current release, at the time of this writing), which is [a GeoJSON file](https://geojson.org), containing the calculated timezones, and is created by [this project](https://github.com/evansiroky/timezone-boundary-builder).
 
 Otherwise, it is a very basic [PHP](https://php.net) project (tested against [PHP 8.2](https://www.php.net/releases/8.2/en.php), at the time of this writing).
 
-The initial release is built for [MySQL](https://www.mysql.com) (tested against [MySQL 5.7](https://downloads.mysql.com/archives/community/)), but uses [PHP PDO](https://www.php.net/manual/en/book.pdo.php), and has [an absurdly simple database schema](https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/5cb4aafac824b330c9181a2186ff3c89aac784f6/src/Sources/LGV_TZ_Lookup_Database.class.php#L65), so it can be expanded to other databases fairly easily.
+The initial release was built for [MySQL](https://www.mysql.com). The current code also supports [PostgreSQL](https://www.postgresql.org), through [PHP PDO](https://www.php.net/manual/en/book.pdo.php). Both use the same simple table and packed polygon format; PostgreSQL does not require PostGIS.
 
 The [streaming JSON parser](https://github.com/salsify/jsonstreamingparser) is required only for boundary-file loading. It is an optional dependency of the Composer library; lookup installations do not install it.
 
@@ -69,11 +69,11 @@ The package name is `littlegreenviper/lgv_tz_lookup`. Its root `composer.json` r
 
 ### Install From GitHub
 
-Release `1.3.0` includes the Composer library. Run these commands in **your application's directory**:
+Version `1.4.0` includes the Composer library, PostgreSQL support, and the server installer. Once its tag is published, run these commands in **your application's directory**:
 
 ```bash
 composer config repositories.lgv-tz-lookup vcs https://github.com/LittleGreenViper/LGV_TZ_Lookup.git
-composer require littlegreenviper/lgv_tz_lookup:^1.3
+composer require littlegreenviper/lgv_tz_lookup:^1.4
 ```
 
 This uses a [Composer VCS repository](https://getcomposer.org/doc/05-repositories.md#vcs), so Packagist registration is not required. Tags `1.2.0` and earlier predate the Composer library manifest. Once the package is registered on Packagist, applications can omit the repository configuration.
@@ -109,9 +109,34 @@ echo $lookup->get_tz(-77.036543, 38.895037); // America/New_York (Washington, DC
 
 Pass longitude first, then latitude, as numeric degrees within `[-180, 180]` and `[-90, 90]`. The result is a time zone name, or an empty string when no match is found. You can reuse the database and lookup objects for multiple coordinates. Pass connection settings from your application's configuration; the standalone server's separate config file and HTTP secret are not used by this API. Creating a library database connection preserves your application's execution time limit.
 
+### Using PostgreSQL
+
+Use `pgsql` as the driver, and `5432` as the port. For example:
+
+```php
+$database = new LGV_TZ_Lookup_Database(
+    'tz_database',
+    'tz_reader',
+    'your-db-password',
+    'pgsql',
+    '127.0.0.1',
+    5432
+);
+$lookup = new LGV_TZ_Lookup_Query($database);
+echo $lookup->get_tz(-77.036543, 38.895037);
+```
+
+If you omit the port, it defaults to `3306` for MySQL, or `5432` for PostgreSQL. Install the PHP extension for the database you use. Composer suggests both extensions; a PostgreSQL application does not need `ext-pdo_mysql`.
+
+The loader creates PostgreSQL's `timezones` table, identity column, and indexes, and stores the packed polygons in `BYTEA` columns. Load the same GeoJSON boundary file into a new PostgreSQL database. A MySQL SQL dump cannot be imported directly into PostgreSQL.
+
+> NOTE: PostgreSQL support is new in `1.4.0`; tag `1.3.0` supports MySQL. Until the `1.4.0` tag is published, use the local Composer path repository above, or the local demo command below.
+
+PostgreSQL polygon reads use [single-row fetching](https://www.php.net/manual/en/pdo.constants.php) on PHP 8.5 and later. Earlier PHP versions use a server cursor. Both keep polygon fetching bounded, and return the same binary strings to the lookup code. A lookup that finishes early releases its reader without committing or cancelling an application's transaction.
+
 ### Optional Boundary Loading
 
-The library's runtime dependencies are PHP, PDO, and PDO MySQL. Applications that also need the loader can add its parser explicitly:
+The library's runtime dependencies are PHP, PDO, and the driver for your database. Applications that also need the loader can add its parser explicitly:
 
 ```bash
 composer require salsify/json-streaming-parser:"8.3.*"
@@ -121,9 +146,55 @@ composer require salsify/json-streaming-parser:"8.3.*"
 
 For development in a repository checkout, running `composer install` at the repository root installs the optional parser as a development dependency. Run `composer test` for regression checks and `composer test:composer` for the autoloading and optional-loader checks. When this library is installed into another application, its development dependencies are not installed.
 
+## One-Command Server Deployment
+
+From a checkout, run:
+
+```bash
+./deploy.sh
+```
+
+[deploy.sh](deploy.sh) is the shell entrypoint; [tools/deploy.php](tools/deploy.php) performs the installation and recovery.
+
+The installer asks for the database driver, host, port, name, user, and password. Password input is hidden. You can use an existing database with no `timezones` table, or let the installer create a new database if the user has permission.
+
+It then asks for your existing web document root, a service subdirectory, a private application directory, and the group that runs PHP. For example, you might use `/var/www/html` as the web root, `timezone` as the service directory, `/var/www/lgv-tz-server` for the private application, and `www-data` for the PHP group. The private directory must be outside the web root, and both installation directories must be new.
+
+By default, it creates a random 256-bit server secret. The final output gives you that secret and an example request. It also saves the secret in the private `config.php`, with the database settings. You can answer `n` to the secret prompt, or start with:
+
+```bash
+./deploy.sh --no-secret
+```
+
+The installer uses Composer to install a copy of the checkout, downloads the latest full timezone boundaries with oceans, loads them, and runs all 200 known-location tests. Only after those tests pass does it publish `index.php` in your selected service directory. The existing PHP-enabled web server can then serve requests such as:
+
+```text
+https://your-server/timezone/?ll=-77.036543,38.895037&secret=<GENERATED SECRET>
+```
+
+If the secret is disabled, omit that query argument. A missing or incorrect secret receives HTTP 403. The final report includes polygon count, test results, mean lookup latency, installation time, and PHP peak memory.
+
+The compressed and extracted boundaries are deleted after loading. **The installed database is retained.** An interrupted or failed installation removes its temporary files and rolls back its own tables or newly created database. A random ownership marker prevents cleanup from adopting unrelated tables or directories. If cleanup cannot reach the database, it retains a private recovery directory and prints its location. Retry with:
+
+```bash
+php tools/deploy.php cleanup '<RECOVERY DIRECTORY>'
+```
+
+You'll need PHP 8.0 or later with PDO and the selected database driver, `curl`, `zip`, `mbstring`, `ctype`, and `posix`; `proc_open` and the Unix `stty` command must be available. The web server's PHP must also have the selected PDO driver. The installer works with your existing PHP/database services; it does not install or reconfigure them. Choose the correct PHP group so the web worker can read the private configuration and Composer code.
+
+`LGV_TZ_DEPLOY_PHP` selects the CLI PHP executable; `LGV_TZ_DEPLOY_MEMORY_LIMIT` defaults to `1G`; `TMPDIR` selects the temporary storage directory. Prompts still read from your terminal when standard input is a pipe.
+
+Once these installer files are published on GitHub, a server without a checkout can use this single command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/LittleGreenViper/LGV_TZ_Lookup/main/deploy.sh | sh
+```
+
+That form also needs command-line `curl` and `tar`. It fetches the installer from `main`, then performs the same prompted installation. To disable the secret, end the command with `sh -s -- --no-secret`.
+
 ## Turnkey Command-line Demo
 
-If you'd like to try the Composer package, we have a simple command-line demo. You'll need PHP and a running MySQL server. The demo takes care of fetching Composer, installing the package, downloading the boundary data, loading a test database, and running the tests.
+If you'd like to try the Composer package, we have a simple command-line demo. You'll need PHP and a running MySQL or PostgreSQL server. The demo takes care of fetching Composer, installing the package, downloading the boundary data, loading a test database, and running the tests.
 
 You run it from the repository root, like so:
 
@@ -132,6 +203,16 @@ You run it from the repository root, like so:
 ```
 
 That's the whole command. There are no command-line arguments, and you don't need to set up the HTTP server first.
+
+For PostgreSQL, using the current checkout through Composer, run:
+
+```bash
+LGV_TZ_DEMO_DRIVER=pgsql LGV_TZ_DEMO_PACKAGE_PATH=. ./demo/run.sh
+```
+
+On your initial Homebrew PostgreSQL setup, the demo uses your shell username, port `5432`, and an empty password. It connects to the existing `postgres` database for administration, and creates a separate database for the test. The user needs `CREATEDB` permission. Override the connection settings below if your installation differs.
+
+`LGV_TZ_DEMO_PACKAGE_PATH` installs a copy of that checkout into the temporary Composer application. This tests local changes through Composer before they are released. If you omit it, the demo installs the GitHub release selected by `LGV_TZ_DEMO_PACKAGE_VERSION`.
 
 > NOTE: This is a temporary installation. The demo creates its own database and working directory, and removes them when it finishes. Your existing server configuration, databases, and downloaded boundary file are left alone.
 
@@ -150,11 +231,11 @@ Here's what it does:
 
 The boundary file is the [GeoJSON](https://geojson.org) variant, with oceans included. That's the format the loader uses. We look up the latest published release on each run, so you don't need to edit a download URL when the boundaries are updated.
 
-These are pretty big files. On October 9, 2026, the archive was about 53 MiB, and the extracted JSON was about 175 MiB. You'll need temporary disk space for both, as well as space for the MySQL table. Loading can take a while; progress messages tell you which part of the run is underway.
+These are pretty big files. On October 9, 2026, the archive was about 53 MiB, and the extracted JSON was about 175 MiB. You'll need temporary disk space for both, as well as space for the database table. Loading can take a while; progress messages tell you which part of the run is underway.
 
 ### What Gets Tested?
 
-First, we check what was loaded. Every stored polygon's name, domain rect, point count, and packed exterior-ring data are compared with the decoded GeoJSON. MySQL calculates the polygon hashes, so we can check the contents without bringing all of the large blobs back into PHP.
+First, we check what was loaded. Every stored polygon's name, domain rect, point count, and packed exterior-ring data are compared with the decoded GeoJSON. The database server calculates the polygon hashes, so we can check the contents without bringing all of the large blobs back into PHP.
 
 Next, we run the package's known-location tests. These are the manually selected tests described below, many of which are near places where timezones abut.
 
@@ -200,12 +281,12 @@ After the test summaries, you'll get a metrics report:
 | Data sizes | Compressed ZIP size, extracted GeoJSON size, and the stored polygon payload, in MiB. The payload size excludes database indexes and server overhead. |
 | Lookup latency | Mean, median, 95th percentile, and slowest API call, in milliseconds. The known locations and generated large-shape tests have separate summaries. |
 | Lookup throughput | Calls per second, using only the accumulated time spent in the lookup API. Downloading, loading, and reference calculations are outside this figure. |
-| PHP memory | Loading/reference peaks, and additional memory needed by an individual lookup. MySQL and the separate Composer process are outside these measurements. |
+| PHP memory | Loading/reference peaks, and additional memory needed by an individual lookup. The database server, native client buffers, and the separate Composer process are outside these measurements. |
 | Polygon work | Rows and bytes actually evaluated across lookup calls. A polygon read more than once is counted each time. |
 | Large-polygon coverage | How many selected polygons were decoded, with their IDs, timezone names, point counts, and packed sizes. |
 | Boundary crossings | How many sampled pairs fall in different timezones, including named-to-named crossings. |
 
-The lookup calls reuse one database connection. These timings describe the PHP/MySQL lookup API; an HTTP request or a fresh connection will add its own time.
+The lookup calls reuse one database connection. These timings describe the PHP/database lookup API; an HTTP request or a fresh connection will add its own time.
 
 Loading memory includes the compact source geometry retained for independent checks. We free that reference before measuring lookup memory. PHP 8.2 and later can reset the memory peak between phases and calls; older versions report lifetime peaks instead. Actual times and memory use will depend on the host, the selected polygons, and the boundary release.
 
@@ -217,7 +298,7 @@ To save a run's output, while preserving its exit status, you can redirect it to
 
 ### Initial Setup
 
-The script uses POSIX `sh` and PHP, with no Homebrew-specific paths or GNU-only commands. It requires PHP 8.0 or later with `pdo_mysql`, `curl`, `zip`, `mbstring`, and `ctype` enabled, and `proc_open` available. MySQL must be running, and the configured user must be able to create and drop a temporary database, create its tables, and insert and read rows. A web server, the MySQL command-line client, and an existing project configuration file are not needed.
+The script uses POSIX `sh` and PHP, with no Homebrew-specific paths or GNU-only commands. It requires PHP 8.0 or later with `pdo_mysql` or `pdo_pgsql`, plus `curl`, `zip`, `mbstring`, and `ctype` enabled, and `proc_open` available. The selected database server must be running, and the configured user must be able to create and drop a temporary database, create its tables, and insert and read rows. A web server, a database command-line client, and an existing project configuration file are not needed.
 
 On macOS, Homebrew PHP provides these extensions. If needed, install and start the services with:
 
@@ -245,11 +326,14 @@ These are the available settings:
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `LGV_TZ_DEMO_HOST` | `localhost` | MySQL host. |
-| `LGV_TZ_DEMO_PORT` | `3306` | MySQL port for TCP connections; use a host such as `127.0.0.1` to force TCP instead of the `localhost` socket. |
-| `LGV_TZ_DEMO_USER` | `root` | User with permissions for the temporary database. |
-| `LGV_TZ_DEMO_PASSWORD` | Empty | MySQL password. |
-| `LGV_TZ_DEMO_PACKAGE_VERSION` | `^1.3` | Composer library version constraint. |
+| `LGV_TZ_DEMO_DRIVER` | `mysql` | Database backend: `mysql` or `pgsql`. |
+| `LGV_TZ_DEMO_HOST` | `localhost` | Database host. |
+| `LGV_TZ_DEMO_PORT` | `3306` / `5432` | Port for MySQL / PostgreSQL. For MySQL, use `127.0.0.1` to select TCP. |
+| `LGV_TZ_DEMO_USER` | `root` / Shell username | MySQL / PostgreSQL user with permissions for the temporary database. |
+| `LGV_TZ_DEMO_PASSWORD` | Empty | Database password. |
+| `LGV_TZ_DEMO_ADMIN_DATABASE` | `postgres` | Existing PostgreSQL database used for CREATE/DROP administration. |
+| `LGV_TZ_DEMO_PACKAGE_VERSION` | `^1.4` | Composer library version constraint for GitHub installs. |
+| `LGV_TZ_DEMO_PACKAGE_PATH` | Unset | Install a local checkout through Composer instead of a release. |
 | `LGV_TZ_DEMO_LARGEST_SHAPES` | `10` | Number of largest polygons to probe (1-100). |
 | `LGV_TZ_DEMO_MEMORY_LIMIT` | `1G` | PHP memory limit for loading the large GeoJSON file. |
 | `LGV_TZ_DEMO_PHP` | `php` | PHP executable name or absolute path. |
@@ -264,7 +348,7 @@ LGV_TZ_DEMO_LARGEST_SHAPES=20 ./demo/run.sh
 This selects a particular released package version:
 
 ```bash
-LGV_TZ_DEMO_PACKAGE_VERSION=1.3.0 ./demo/run.sh
+LGV_TZ_DEMO_PACKAGE_VERSION=1.4.0 ./demo/run.sh
 ```
 
 The boundary download still uses the latest published release. Selecting a package version does not select an older shapefile.
@@ -275,7 +359,7 @@ The ZIP and extracted JSON are deleted as soon as loading finishes, including a 
 
 This cleanup also runs after Ctrl+C, an ordinary worker error, or a PHP loader memory-limit failure. Those paths were tested on macOS. The script uses POSIX `sh` and PHP for Linux/Unix portability; the complete run has been verified on the Homebrew setup.
 
-If MySQL becomes unavailable during cleanup, the large downloads are still deleted, and the working directory is retained with `database.json`. The error message prints that directory. Once MySQL is available again, you can retry cleanup with the same connection settings:
+If the database server becomes unavailable during cleanup, the large downloads are still deleted, and the working directory is retained with `database.json`. The error message prints that directory. Once the database server is available again, you can retry cleanup with the same connection settings:
 
 ```bash
 saved_demo_directory='<WORKING DIRECTORY PRINTED BY THE DEMO>'
@@ -300,7 +384,7 @@ composer install
 composer test:demo
 ```
 
-Those checks cover holes, ocean fallback, boundary offsets, decoder block transitions, and cleanup guards. They do not download the shapefile or need a running MySQL server. Run `./demo/run.sh` for the complete Composer/database system test.
+Those checks cover holes, ocean fallback, boundary offsets, decoder block transitions, and cleanup guards. They do not download the shapefile or need a running database server. Run `./demo/run.sh` for the complete Composer/database system test.
 
 ## Standalone Server Implementation
 
@@ -308,7 +392,7 @@ Those checks cover holes, ocean fallback, boundary offsets, decoder block transi
 Once you have a server available, install the contents of the [`src` subdirectory](https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src) into a place of your choosing, accessible via HTTP. You should have a URI that points to the [`index.php` file](https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/main/src/index.php) in the [`src` directory](https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src).
 
 ### Database Setup
-You will need to set up a MySQL database, with a user with basic full permissions.
+You will need a MySQL or PostgreSQL database, with a user able to create the table and indexes, and insert/read rows. Set `$g_dbType` to `mysql` or `pgsql`, and `$g_dbPort` to `3306` or `5432`, respectively.
 
 ### Config File
 A requirement for the server is a configuration file. It should generally be placed outside the HTTP-accesible directory tree, and you will need to modify the line in the [`index.php`](https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/f9914c89e8484522732100ea82f8b1cab8c667f6/src/index.php#L51) file that looks like this:
@@ -433,7 +517,7 @@ On October 7, 2026, a local PHP 8.5.10/MySQL 26.7.0 benchmark used the supplied 
 
 All 200 expected locations passed and all 2,200 results matched the original implementation. The optimized run completed with `memory_limit=16M`; the original was measured with `memory_limit=1G`. These are local CLI measurements, excluding HTTP/network request overhead and boundary-file loading. Timing depends on the host, database configuration, and locations queried. Raw measurements and the boundary-file checksum are in [`tests/benchmarks/query-2026-10-07.json`](tests/benchmarks/query-2026-10-07.json).
 
-Run geometry, lookup-precedence, and PDO regression checks without a MySQL server:
+Run geometry, lookup-precedence, and PDO regression checks without a database server:
 
 ```bash
 php tests/regression.php
@@ -455,6 +539,30 @@ php -d memory_limit=16M tools/benchmark.php --mysql=lgv_tz_benchmark_local --run
 MySQL benchmark connections default to local `root` with no password, as installed by Homebrew. Override these defaults with `LGV_TZ_BENCH_USER`, `LGV_TZ_BENCH_PASSWORD`, `LGV_TZ_BENCH_HOST`, and `LGV_TZ_BENCH_PORT` environment variables when needed. Omit `--reconnect` to measure queries using one connection. `--expect` verifies every location against saved baseline results, and repeated runs must return consistent results.
 
 If MySQL is unavailable, `--fixture=/tmp/lgv-tz.sqlite --build` creates an isolated SQLite fixture from the same boundary file; use that `--fixture` argument on subsequent benchmark runs. SQLite results help compare PHP processing, but do not measure production MySQL behavior. Per-lookup peak-memory accounting requires PHP 8.2 or later.
+
+### Database Integration Tests
+
+The focused tests create and remove their own databases. After installing development dependencies, run:
+
+```bash
+composer test:mysql
+composer test:postgres
+```
+
+Run `composer test:deploy:mysql` and `composer test:deploy:postgres` to check installer rollback, preservation of unrelated data, and ownership refusals. These use small temporary fixtures and do not download boundaries.
+
+They cover loading and schema reset, binary values (including zero bytes), ocean/named-zone precedence, polygons crossing decoding blocks, early reader cleanup, error recovery, and caller-owned transactions. A 24 MiB binary fixture checks bounded PHP memory; PostgreSQL tests also check the native result-buffer size when the driver exposes it. Override connection defaults with `LGV_TZ_TEST_HOST`, `LGV_TZ_TEST_PORT`, `LGV_TZ_TEST_USER`, `LGV_TZ_TEST_PASSWORD`, and `LGV_TZ_TEST_ADMIN_DATABASE`.
+
+The benchmark tool also accepts `--pgsql=lgv_tz_benchmark_NAME`. PostgreSQL connections default to your shell username and port `5432`, with the same `LGV_TZ_BENCH_*` overrides. Create an isolated database first; `--build` replaces its `timezones` table, just as with MySQL.
+
+On October 9, 2026, PHP 8.5.10 with MySQL 26.7.0 and PostgreSQL 18.6 returned identical results for 200 known locations and 2,000 seeded random points, using boundary release `2026d`. Both ran within a `16M` PHP memory limit, reusing one connection per backend:
+
+| Database | Mean Lookup | Peak Extra PHP Memory |
+| --- | ---: | ---: |
+| MySQL | 1.018 ms | 8.428 MiB |
+| PostgreSQL | 0.821 ms | 8.414 MiB |
+
+These are one local run, and are different from the fresh-connection benchmark above. PHP counters exclude native database-client buffers. The complete demo also passed all 490 checks and validated all 1,355 stored polygons on each backend. [Recorded measurements](tests/benchmarks/postgres-2026-10-09.json) include the boundary checksum and test setup.
 
 ## Generating the HTML Documentation
 

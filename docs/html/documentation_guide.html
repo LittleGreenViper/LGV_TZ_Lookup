@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -120,6 +120,10 @@ Where Should I Start?</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Install the library and make a lookup  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#composer-library" title="Composer Library">Composer Library</a> and <a class="el" href="class_l_g_v___t_z___lookup___query.html">LGV_TZ_Lookup_Query</a>.  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Use PostgreSQL  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#using-postgresql" title="Using PostgreSQL">Using PostgreSQL</a>.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Install a service on a server  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#one-command-server-deployment" title="One-Command Server Deployment">One-Command Deployment</a>.  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Download current data and run a complete test  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#turnkey-command-line-demo" title="Turnkey Command-line Demo">Command-line Demo</a>.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Run the HTTP service  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#standalone-server-implementation" title="Standalone Server Implementation">Standalone Server</a>.  </td></tr>
@@ -178,12 +182,12 @@ Demo Command</h2>
 #   Usage: ./demo/run.sh
 #
 #   The script uses POSIX sh, and takes no command-line arguments. Connection settings and test options come from
-#   the LGV_TZ_DEMO_* environment variables documented in README.md. PHP and a running MySQL server are required.
+#   the LGV_TZ_DEMO_* environment variables documented in README.md. PHP and a running MySQL or PostgreSQL server are required.
 #   The PHP worker obtains its own Composer executable and installs the package into a private temporary directory.
 #
 #   The exit trap runs cleanup in a separate PHP process, so it also works after a loader memory-limit failure.
 #   A successful cleanup drops this run's database and removes the directory. If database cleanup fails, the record
-#   is retained for recovery. Large boundary files are removed by the cleanup worker before it contacts MySQL.
+#   is retained for recovery. Large boundary files are removed by the cleanup worker before it contacts the database server.
 #
 #   Exit status: 0 means all tests and cleanup succeeded. Nonzero means a test, setup, interruption, or cleanup failed.
 #
@@ -192,7 +196,7 @@ set -eu
 umask 077
 
 if [ "$#" -ne 0 ]; then
-    printf 'Usage: %s\nConfigure MySQL with LGV_TZ_DEMO_HOST, PORT, USER, and PASSWORD environment variables.\n' "$0" &gt;&amp;2
+    printf 'Usage: %s\nConfigure LGV_TZ_DEMO_DRIVER (mysql or pgsql), HOST, PORT, USER, and PASSWORD environment variables.\n' "$0" &gt;&amp;2
     exit 2
 fi
 
@@ -230,6 +234,54 @@ trap 'exit 130' 2
 trap 'exit 143' 15
 
 "$php_command" -d "memory_limit=${LGV_TZ_DEMO_MEMORY_LIMIT:-1G}" "$demo_directory/demo.php" run "$work_directory"
+</pre><h2 class="doxsection"><a class="anchor" id="deployment-command"></a>
+Deployment Command</h2>
+<p>The one-command installer uses the shared preparation helpers, and has its own database rollback and endpoint publication steps.</p>
+<pre class="fragment">#!/bin/sh
+############################################################################################################################
+#
+#   One-command server installation. Run ./deploy.sh, optionally with --no-secret. Settings are requested through
+#   the terminal; credentials are never shell arguments. A downloaded standalone script bootstraps the same project
+#   from GitHub. The worker installs dependencies, loads boundaries, tests lookups, then publishes the endpoint.
+#
+############################################################################################################################
+set -eu
+umask 077
+php_command=${LGV_TZ_DEPLOY_PHP:-php}
+command -v "$php_command" &gt;/dev/null 2&gt;&amp;1 || { printf 'PHP 8.0 or later is required.\n' &gt;&amp;2; exit 2; }
+case "${1:-}" in
+    '') test "$#" -eq 0 ;;
+    --no-secret) test "$#" -eq 1 ;;
+    *) printf 'Usage: %s [--no-secret]\n' "$0" &gt;&amp;2; exit 2 ;;
+esac
+work_directory=$(mktemp -d "${TMPDIR:-/tmp}/lgv-tz-deploy.XXXXXXXX")
+project_directory=$(CDPATH= cd -P "$(dirname "$0")" &amp;&amp; pwd)
+worker="$project_directory/tools/deploy.php"
+cleanup() {
+    result=$?
+    trap - 0 1 2 15
+    if [ ! -f "$worker" ] || "$php_command" "$worker" cleanup "$work_directory"; then
+        rm -rf "$work_directory" || result=1
+    else
+        printf 'Installation recovery information remains in %s\n' "$work_directory" &gt;&amp;2
+        result=1
+    fi
+    exit "$result"
+}
+trap cleanup 0
+trap 'exit 129' 1
+trap 'exit 130' 2
+trap 'exit 143' 15
+if [ ! -f "$worker" ]; then
+    command -v curl &gt;/dev/null 2&gt;&amp;1 || { printf 'curl is required to download the installer.\n' &gt;&amp;2; exit 2; }
+    printf 'Downloading the LGV_TZ_Lookup installer...\n'
+    curl -fsSL --proto '=https' --proto-redir '=https' https://codeload.github.com/LittleGreenViper/LGV_TZ_Lookup/tar.gz/refs/heads/main -o "$work_directory/source.tar.gz"
+    tar -xzf "$work_directory/source.tar.gz" -C "$work_directory"
+    project_directory="$work_directory/LGV_TZ_Lookup-main"
+    worker="$project_directory/tools/deploy.php"
+    test -f "$worker" || { printf 'This installer has not been published on main yet.\n' &gt;&amp;2; exit 1; }
+fi
+"$php_command" -d "memory_limit=${LGV_TZ_DEPLOY_MEMORY_LIMIT:-1G}" "$worker" run "$work_directory" "${1:-}"
 </pre><h2 class="doxsection"><a class="anchor" id="doxygen-configuration"></a>
 Doxygen Configuration</h2>
 <p>These are the project settings used by the root build script. Paths are relative to the docs directory.</p>
@@ -248,6 +300,7 @@ Doxygen Configuration</h2>
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = LGV_TZ_Lookup
+PROJECT_NUMBER         = 1.4.0
 PROJECT_BRIEF          = "Time zone lookup for PHP applications and HTTP clients"
 PROJECT_LOGO           = ../img/icon.png
 OUTPUT_DIRECTORY       = .
@@ -336,7 +389,7 @@ HTML_COLORSTYLE        = AUTO_LIGHT
 HTML_DYNAMIC_MENUS     = YES
 HTML_DYNAMIC_SECTIONS  = YES
 HTML_EXTRA_STYLESHEET  = style.css
-HTML_EXTRA_FILES       = .nojekyll ../tests/benchmarks/query-2026-10-07.json
+HTML_EXTRA_FILES       = .nojekyll ../tests/benchmarks/query-2026-10-07.json ../tests/benchmarks/postgres-2026-10-09.json
 LAYOUT_FILE            = layout.xml
 DISABLE_INDEX          = NO
 GENERATE_TREEVIEW      = YES

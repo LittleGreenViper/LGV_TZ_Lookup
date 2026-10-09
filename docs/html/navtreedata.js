@@ -35,8 +35,10 @@ var NAVTREE =
       [ "Composer Library", "index.html#composer-library", [
         [ "Install From GitHub", "index.html#install-from-github", null ],
         [ "Look Up a Time Zone", "index.html#look-up-a-time-zone", null ],
+        [ "Using PostgreSQL", "index.html#using-postgresql", null ],
         [ "Optional Boundary Loading", "index.html#optional-boundary-loading", null ]
       ] ],
+      [ "One-Command Server Deployment", "index.html#one-command-server-deployment", null ],
       [ "Turnkey Command-line Demo", "index.html#turnkey-command-line-demo", [
         [ "What Happens During a Run?", "index.html#what-happens-during-a-run", null ],
         [ "What Gets Tested?", "index.html#what-gets-tested", null ],
@@ -58,13 +60,16 @@ var NAVTREE =
         [ "The Data File", "index.html#the-data-file", null ],
         [ "The Initial Load and Database Setup", "index.html#the-initial-load-and-database-setup", null ],
         [ "Testing", "index.html#testing", null ],
-        [ "Query Performance", "index.html#query-performance", null ]
+        [ "Query Performance", "index.html#query-performance", null ],
+        [ "Database Integration Tests", "index.html#database-integration-tests", null ]
       ] ],
       [ "Generating the HTML Documentation", "index.html#generating-the-html-documentation", null ],
       [ "License", "index.html#license", null ]
     ] ],
     [ "Guides", "index.html", [
       [ "Composer Library", "index.html#composer-library", null ],
+      [ "PostgreSQL", "index.html#using-postgresql", null ],
+      [ "Server Deployment", "index.html#one-command-server-deployment", null ],
       [ "Command-line Demo", "index.html#turnkey-command-line-demo", null ],
       [ "Standalone Server", "index.html#standalone-server-implementation", null ],
       [ "Performance", "index.html#query-performance", null ],
@@ -98,7 +103,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_l_g_v___t_z___lookup___database_8class_8php.html",
-"src_2index_8php.html"
+"index.html#what-gets-cleaned-up"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

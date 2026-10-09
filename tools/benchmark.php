@@ -5,27 +5,30 @@ declare(strict_types=1);
 // php -d memory_limit=1G tools/benchmark.php --fixture=/tmp/tz.sqlite --build
 // php -d memory_limit=1G tools/benchmark.php --fixture=/tmp/tz.sqlite --runs=3
 // php tools/benchmark.php --mysql=lgv_tz_benchmark_local --runs=3 --random=2000 --reconnect
-$options = getopt('', ['fixture:', 'mysql:', 'source:', 'build', 'runs:', 'random:', 'results:', 'expect:', 'reconnect']);
-if (empty($options['fixture']) && empty($options['mysql'])) {
-    fwrite(STDERR, "Required: --fixture=/path/to/isolated.sqlite or --mysql=lgv_tz_benchmark_NAME\n");
+// php tools/benchmark.php --pgsql=lgv_tz_benchmark_local --runs=3 --random=2000
+$options = getopt('', ['fixture:', 'mysql:', 'pgsql:', 'source:', 'build', 'runs:', 'random:', 'results:', 'expect:', 'reconnect']);
+if (count(array_intersect(['fixture', 'mysql', 'pgsql'], array_keys($options))) !== 1) {
+    fwrite(STDERR, "Select one backend: --fixture=/path/to/isolated.sqlite, --mysql=lgv_tz_benchmark_NAME, or --pgsql=lgv_tz_benchmark_NAME\n");
     exit(2);
 }
 $source = $options['source'] ?? dirname(__DIR__).'/src';
 require_once $source.'/Sources/LGV_TZ_Lookup_Query.class.php';
 require_once dirname(__DIR__).'/tests/support/SQLiteDatabase.php';
 
-if (empty($options['mysql']) && !isset($options['build']) && !is_file($options['fixture'])) {
+if (isset($options['fixture']) && !isset($options['build']) && !is_file($options['fixture'])) {
     fwrite(STDERR, "Build the isolated fixture first with --build.\n");
     exit(2);
 }
 $createDatabase = static function() use ($options) {
-    if (isset($options['mysql'])) {
-        if (!preg_match('/^lgv_tz_benchmark_[a-zA-Z0-9_]+$/D', $options['mysql'])) {
+    if (isset($options['mysql']) || isset($options['pgsql'])) {
+        $driver = isset($options['pgsql']) ? 'pgsql' : 'mysql';
+        if (!preg_match('/^lgv_tz_benchmark_[a-zA-Z0-9_]+$/D', $options[$driver])) {
             throw new InvalidArgumentException('Use a separate database named lgv_tz_benchmark_NAME.');
         }
-        return new LGV_TZ_Lookup_Database($options['mysql'], getenv('LGV_TZ_BENCH_USER') ?: 'root',
-            getenv('LGV_TZ_BENCH_PASSWORD') ?: '', 'mysql', getenv('LGV_TZ_BENCH_HOST') ?: 'localhost',
-            (int)(getenv('LGV_TZ_BENCH_PORT') ?: 3306));
+        return new LGV_TZ_Lookup_Database($options[$driver],
+            getenv('LGV_TZ_BENCH_USER') ?: ($driver === 'pgsql' ? (getenv('USER') ?: get_current_user()) : 'root'),
+            getenv('LGV_TZ_BENCH_PASSWORD') ?: '', $driver, getenv('LGV_TZ_BENCH_HOST') ?: 'localhost',
+            (int)(getenv('LGV_TZ_BENCH_PORT') ?: ($driver === 'pgsql' ? 5432 : 3306)));
     }
     return new SQLiteDatabase($options['fixture']);
 };
@@ -118,7 +121,7 @@ if (isset($options['results'])) {
     file_put_contents($options['results'], json_encode($results, JSON_PRETTY_PRINT)."\n");
 }
 echo json_encode([
-    'mode' => 'query', 'backend' => isset($options['mysql']) ? 'mysql' : 'sqlite',
+    'mode' => 'query', 'backend' => isset($options['pgsql']) ? 'pgsql' : (isset($options['mysql']) ? 'mysql' : 'sqlite'),
     'reconnect' => isset($options['reconnect']),
     'cases' => count($cases), 'lookups' => count($times), 'seconds' => $seconds,
     'mean_ms' => array_sum($times) / count($times), 'median_ms' => $times[(int)floor(count($times) * .5)],

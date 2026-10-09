@@ -36,6 +36,7 @@
 */
 
 declare(strict_types=1);
+require_once dirname(__DIR__).'/tools/Setup.php';
 
 /***************************************************************************************************************************/
 /** \brief This is the package installed into the temporary Composer application. */
@@ -102,7 +103,7 @@ function demoLatency(array $values   ///< Individual lookup durations, in millis
     \brief This prints the collected durations, data sizes, memory measurements, and test coverage.
 
     Lookup timings cover calls to the package API, using an existing connection. They exclude downloading, loading,
-    and reference-geometry calculations. PHP memory measurements describe this worker, and do not include MySQL
+    and reference-geometry calculations. PHP memory measurements describe this worker, and do not include the database server
     or the separate Composer process. Large-polygon audit counters show which geometry was actually evaluated.
 */
 function demoPrintMetrics(): void {
@@ -145,7 +146,7 @@ function demoPrintMetrics(): void {
     if (isset($demoMetrics['lookup_ms']) && !empty($demoMetrics['lookup_ms'])) {
         echo "  Reference geometry is freed before measuring package lookup memory.\n";
     }
-    echo "  PHP memory describes this worker; MySQL and Composer run separately.\n\n";
+    echo "  PHP memory describes this worker; the database server and Composer run separately.\n\n";
 }
 
 /***************************************************************************************************************************/
@@ -166,24 +167,45 @@ function demoEnvironment(string $name,    ///< The setting name, without the LGV
 
 /***************************************************************************************************************************/
 /**
-    \brief This opens the administrative MySQL connection used to create, inspect, and drop the demo database.
-
-    Connection settings come from the HOST, PORT, USER, and PASSWORD environment settings. We do not select an
-    existing application database. The demo creates its own database after this connection succeeds.
-
-    \returns: An initialized PDO connection, configured to throw database exceptions.
-    \throws RuntimeException if the configured port is outside the valid TCP port range.
-    \throws PDOException if the connection cannot be opened.
+    \brief This validates the selected database driver.
+    \returns: "mysql" (the default) or "pgsql".
+    \throws RuntimeException if another driver is requested.
 */
-function demoConnection(): PDO {
-    $port = filter_var(demoEnvironment('PORT', '3306'), FILTER_VALIDATE_INT, [
+function demoDriver(): string {
+    $driver = strtolower(demoEnvironment('DRIVER', 'mysql'));
+    if (!in_array($driver, ['mysql', 'pgsql'], true)) {
+        throw new RuntimeException('LGV_TZ_DEMO_DRIVER must be mysql or pgsql.');
+    }
+    return $driver;
+}
+
+/***************************************************************************************************************************/
+/**
+    \brief This opens an administrative or test-database connection for the selected backend.
+    Connection settings come from DRIVER, HOST, PORT, USER, PASSWORD, and ADMIN_DATABASE. PostgreSQL administration
+    connects to the existing "postgres" database by default; loaded data always goes into a separate temporary database.
+    \returns: A PDO connection with exception reporting enabled.
+    \throws RuntimeException if the configured port is invalid.
+    \throws PDOException if the connection fails.
+*/
+function demoConnection(?string $database = null, ///< Test database, or NULL for the administrative database.
+                        ?string $driver = null   ///< Recorded cleanup driver, or NULL for the environment setting.
+                        ): PDO {
+    $driver = $driver ?? demoDriver();
+    $port = filter_var(demoEnvironment('PORT', $driver === 'pgsql' ? '5432' : '3306'), FILTER_VALIDATE_INT, [
         'options' => ['min_range' => 1, 'max_range' => 65535],
     ]);
     if (false === $port) {
         throw new RuntimeException('LGV_TZ_DEMO_PORT must be between 1 and 65535.');
     }
-    return new PDO('mysql:host='.demoEnvironment('HOST', 'localhost').';port='.$port.';charset=utf8mb4',
-        demoEnvironment('USER', 'root'), demoEnvironment('PASSWORD', ''), [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    $dsn = $driver.':host='.demoEnvironment('HOST', 'localhost').';port='.$port;
+    if ($driver === 'pgsql') {
+        $dsn .= ';dbname='.($database ?? demoEnvironment('ADMIN_DATABASE', 'postgres')).';options=--client_encoding=UTF8';
+    } else {
+        $dsn .= ';charset=utf8mb4'.($database === null ? '' : ';dbname='.$database);
+    }
+    return new PDO($dsn, demoEnvironment('USER', $driver === 'pgsql' ? (getenv('USER') ?: get_current_user()) : 'root'),
+        demoEnvironment('PASSWORD', ''), [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 }
 
 /***************************************************************************************************************************/
@@ -198,30 +220,7 @@ function demoConnection(): PDO {
 function demoDownload(string $url,           ///< The HTTPS resource to download.
                     string $destination     ///< The local filename to create in the demo's working directory.
                     ): void {
-    $output = fopen($destination, 'wb');
-    if (false === $output) {
-        throw new RuntimeException('Could not write '.$destination);
-    }
-    $request = curl_init($url);
-    try {
-        curl_setopt_array($request, [
-            CURLOPT_FILE => $output,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS => 5,
-            CURLOPT_CONNECTTIMEOUT => 30,
-            CURLOPT_TIMEOUT => 1800,
-            CURLOPT_FAILONERROR => true,
-            CURLOPT_USERAGENT => 'LGV-TZ-Lookup-Composer-Demo',
-            CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
-            CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS,
-        ]);
-        if (!curl_exec($request)) {
-            throw new RuntimeException('Download failed: '.curl_error($request).' ('.$url.')');
-        }
-    } finally {
-        fclose($output);
-        unset($request);
-    }
+    LGV_TZ_Lookup_Setup::download($url, $destination);
 }
 
 /***************************************************************************************************************************/
@@ -236,42 +235,7 @@ function demoDownload(string $url,           ///< The HTTPS resource to download
 function demoExtract(string $archive,        ///< The downloaded boundary ZIP file.
                     string $destination     ///< The local GeoJSON filename to create.
                     ): void {
-    $zip = new ZipArchive();
-    if (true !== $zip->open($archive)) {
-        throw new RuntimeException('Could not open the boundary archive.');
-    }
-    try {
-        $entries = [];
-        for ($i = 0; $i < $zip->numFiles; ++$i) {
-            $name = $zip->getNameIndex($i);
-            if (preg_match('/\.(?:json|geojson)$/i', $name)) {
-                $entries[] = $name;
-            }
-        }
-        if (count($entries) !== 1) {
-            throw new RuntimeException('Expected one GeoJSON file in the boundary archive.');
-        }
-        // Stream into our own filename instead of extracting arbitrary archive paths or reading the file into memory.
-        $input = $zip->getStream($entries[0]);
-        $output = fopen($destination, 'wb');
-        if (false === $input || false === $output) {
-            if (is_resource($input)) { fclose($input); }
-            if (is_resource($output)) { fclose($output); }
-            throw new RuntimeException('Could not extract the boundary file.');
-        }
-        try {
-            $bytes = stream_copy_to_stream($input, $output);
-            $entry = $zip->statName($entries[0]);
-            if (false === $bytes || $bytes === 0 || $bytes !== $entry['size']) {
-                throw new RuntimeException('The extracted boundary file is empty or incomplete.');
-            }
-        } finally {
-            fclose($input);
-            fclose($output);
-        }
-    } finally {
-        $zip->close();
-    }
+    LGV_TZ_Lookup_Setup::extract($archive, $destination);
 }
 
 /***************************************************************************************************************************/
@@ -286,43 +250,7 @@ function demoExtract(string $archive,        ///< The downloaded boundary ZIP fi
 */
 function demoInstall(string $directory  ///< The demo's temporary application directory.
                     ): void {
-    echo "Installing a temporary Composer application...\n";
-    $composer = $directory.'/composer.phar';
-    demoDownload('https://getcomposer.org/download/latest-stable/composer.phar', $composer);
-    demoDownload('https://getcomposer.org/download/latest-stable/composer.phar.sha256sum', $directory.'/composer.sha256');
-    $checksum = preg_split('/\s+/', trim(file_get_contents($directory.'/composer.sha256')))[0];
-    if (!hash_equals($checksum, hash_file('sha256', $composer))) {
-        throw new RuntimeException('Composer download checksum did not match.');
-    }
-    file_put_contents($directory.'/composer.json', json_encode([
-        'name' => 'littlegreenviper/tz-lookup-demo',
-        'repositories' => [['type' => 'vcs', 'url' => 'https://github.com/LittleGreenViper/LGV_TZ_Lookup.git']],
-        'require' => [DEMO_PACKAGE => demoEnvironment('PACKAGE_VERSION', '^1.3'), 'salsify/json-streaming-parser' => '8.3.*'],
-    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR).PHP_EOL);
-    putenv('COMPOSER_HOME='.$directory.'/composer-home');
-    putenv('COMPOSER_CACHE_DIR='.$directory.'/composer-cache');
-    putenv('COMPOSER_ROOT_VERSION=1.0.0');
-    $process = proc_open([
-        PHP_BINARY, $composer, 'install', '--working-dir='.$directory, '--no-dev', '--no-interaction',
-        '--no-scripts', '--no-plugins', '--prefer-dist', '--no-progress', '--no-ansi', '--quiet',
-    ], [0 => ['file', '/dev/null', 'r'], 1 => STDOUT, 2 => STDERR], $pipes);
-    if (false === $process) {
-        throw new RuntimeException('Could not start Composer.');
-    }
-    try {
-        $status = proc_close($process);
-        $process = null;
-        if ($status !== 0) {
-            throw new RuntimeException('Composer installation failed (exit '.$status.').');
-        }
-    } finally {
-        if (is_resource($process)) {
-            proc_terminate($process);
-            proc_close($process);
-        }
-    }
-    require $directory.'/vendor/autoload.php';
-    echo 'Installed '.DEMO_PACKAGE.' '.Composer\InstalledVersions::getPrettyVersion(DEMO_PACKAGE).".\n";
+    LGV_TZ_Lookup_Setup::install($directory, demoDriver(), demoEnvironment('PACKAGE_PATH', ''), demoEnvironment('PACKAGE_VERSION', '^1.4'));
 }
 
 /***************************************************************************************************************************/
@@ -347,29 +275,35 @@ function demoRemoveDownloads(string $directory   ///< The working directory cont
     \brief This removes the downloads and drops the database owned by this demo run.
 
     The database name comes from database.json, and must match the generated demo naming pattern. We delete large
-    files before connecting to MySQL, so they are removed even when the server is unavailable. If dropping the
+    files before connecting to the database server, so they are removed even when the server is unavailable. If dropping the
     database fails, its cleanup record remains for recovery. The shell removes the working directory only on success.
 
     \returns: True, if cleanup succeeded, or no database had been created.
     \throws RuntimeException if a cleanup record is unexpected, or a file cannot be removed.
-    \throws PDOException if MySQL cleanup fails.
+    \throws PDOException if database cleanup fails.
 */
 function demoCleanup(string $directory  ///< The working directory owned by this demo run.
                     ): bool {
     $start = hrtime(true);
-    // Delete the large files even if MySQL is temporarily unavailable during cleanup.
+    // Delete the large files even if the database server is temporarily unavailable during cleanup.
     demoRemoveDownloads($directory);
     $state = $directory.'/database.json';
     if (!is_file($state)) {
         printf("Cleanup: no temporary database to remove (%.3f s).\n", (hrtime(true) - $start) / 1e9);
         return true;
     }
-    $database = json_decode(file_get_contents($state), true, 512, JSON_THROW_ON_ERROR)['database'];
+    $record = json_decode(file_get_contents($state), true, 512, JSON_THROW_ON_ERROR);
+    $database = $record['database'];
     if (!preg_match('/^lgv_tz_demo_[a-f0-9]{24}$/D', $database)) {
         throw new RuntimeException('Unexpected demo database name; refusing to drop it.');
     }
     echo 'Removing temporary database '.$database."...\n";
-    demoConnection()->exec('DROP DATABASE IF EXISTS `'.$database.'`');
+    $driver = $record['driver'] ?? 'mysql';
+    if (!in_array($driver, ['mysql', 'pgsql'], true)) {
+        throw new RuntimeException('Unexpected recorded database driver; refusing to drop it.');
+    }
+    $quote = $driver === 'pgsql' ? '"' : '`';
+    demoConnection(null, $driver)->exec('DROP DATABASE IF EXISTS '.$quote.$database.$quote);
     if (!unlink($state)) {
         throw new RuntimeException('Could not remove the database cleanup record.');
     }
@@ -393,14 +327,16 @@ function demoCreateDatabase(PDO $admin,          ///< An administrative connecti
                             string $directory   ///< The working directory in which database.json is saved.
                             ): string {
     $name = 'lgv_tz_demo_'.bin2hex(random_bytes(12));
+    $driver = $admin->getAttribute(PDO::ATTR_DRIVER_NAME);
+    $quote = $driver === 'pgsql' ? '"' : '`';
     // Do not deliver an interruption between creating the database and saving its cleanup record.
     $previousMask = [];
     $blocked = function_exists('pcntl_sigprocmask') && pcntl_sigprocmask(SIG_BLOCK, [SIGHUP, SIGINT, SIGTERM], $previousMask);
     try {
         // CREATE without IF NOT EXISTS ensures this run can never adopt or reset an existing database.
-        $admin->exec('CREATE DATABASE `'.$name.'`');
-        if (false === file_put_contents($directory.'/database.json', json_encode(['database' => $name], JSON_THROW_ON_ERROR))) {
-            $admin->exec('DROP DATABASE `'.$name.'`');
+        $admin->exec('CREATE DATABASE '.$quote.$name.$quote);
+        if (false === file_put_contents($directory.'/database.json', json_encode(['database' => $name, 'driver' => $driver], JSON_THROW_ON_ERROR))) {
+            $admin->exec('DROP DATABASE '.$quote.$name.$quote);
             throw new RuntimeException('Could not record the temporary database for cleanup.');
         }
     } finally {
@@ -413,7 +349,7 @@ function demoCreateDatabase(PDO $admin,          ///< An administrative connecti
 /**
     \brief This performs the complete Composer installation, data load, system test, and metrics run.
 
-    We first check PHP and MySQL, then install the package and obtain the latest boundary release. The package
+    We first check PHP and the database server, then install the package and obtain the latest boundary release. The package
     performs the actual load while a listener retains independent source geometry for storage and lookup checks.
     The large files are deleted after loading, and the reference geometry is freed before lookup measurements.
 
@@ -430,7 +366,8 @@ function demoRun(string $directory  ///< The private working directory created b
     if (PHP_VERSION_ID < 80000) {
         throw new RuntimeException('PHP 8.0 or later is required.');
     }
-    foreach (['pdo_mysql', 'curl', 'zip', 'mbstring', 'ctype'] as $extension) {
+    $driver = demoDriver();
+    foreach (['pdo_'.$driver, 'curl', 'zip', 'mbstring', 'ctype'] as $extension) {
         if (!extension_loaded($extension)) {
             throw new RuntimeException('The PHP '.$extension.' extension is required.');
         }
@@ -440,6 +377,7 @@ function demoRun(string $directory  ///< The private working directory created b
     }
     // Check credentials before downloading anything. The connection must be able to create and drop a database.
     $admin = demoConnection();
+    printf("Database: %s %s.\n", $driver, $admin->getAttribute(PDO::ATTR_SERVER_VERSION));
     $name = demoCreateDatabase($admin, $directory);
     $start = hrtime(true);
     demoInstall($directory);
@@ -477,8 +415,10 @@ function demoRun(string $directory  ///< The private working directory created b
 
     echo 'Loading boundaries into temporary database '.$name."...\n";
     require_once __DIR__.'/SystemTests.php';
-    $database = new DemoTrackedDatabase($name, demoEnvironment('USER', 'root'), demoEnvironment('PASSWORD', ''),
-        'mysql', demoEnvironment('HOST', 'localhost'), (int)demoEnvironment('PORT', '3306'));
+    $database = new DemoTrackedDatabase($name,
+        demoEnvironment('USER', $driver === 'pgsql' ? (getenv('USER') ?: get_current_user()) : 'root'),
+        demoEnvironment('PASSWORD', ''), $driver, demoEnvironment('HOST', 'localhost'),
+        (int)demoEnvironment('PORT', $driver === 'pgsql' ? '5432' : '3306'));
     $stream = fopen($boundary, 'rb');
     if (false === $stream) {
         throw new RuntimeException('Could not open the boundary file.');
@@ -498,7 +438,12 @@ function demoRun(string $directory  ///< The private working directory created b
         demoRemoveDownloads($directory);
     }
     demoTiming('Load + capture reference geometry', $start);
-    $polygons = $admin->query('SELECT COUNT(*) FROM `'.$name.'`.timezones')->fetchColumn();
+    $validation = demoConnection($name);
+    if ($driver === 'pgsql') {
+        // Give PostgreSQL current statistics before its first bounding-box queries.
+        $validation->exec('ANALYZE timezones');
+    }
+    $polygons = $validation->query('SELECT COUNT(*) FROM timezones')->fetchColumn();
     printf("Loaded %s polygons in %.2f seconds. Download and extracted file deleted.\n", $polygons, (hrtime(true) - $start) / 1e9);
     if ((int)$polygons === 0) {
         throw new RuntimeException('No polygons were loaded.');
@@ -507,7 +452,7 @@ function demoRun(string $directory  ///< The private working directory created b
     $start = hrtime(true);
     demoResetMemoryPeak();
     echo "Checking stored polygons against the decoded source GeoJSON...\n";
-    $storageFailures = $source->validateStorage($admin, $name);
+    $storageFailures = $source->validateStorage($validation);
     foreach ($storageFailures as $failure) { echo 'FAIL '.$failure."\n"; }
     printf("Source/storage validation: %d polygons checked, %d failures.\n", count($source->shapes), count($storageFailures));
     $demoMetrics['database_bytes'] = $source->polygonBytes;
@@ -612,6 +557,8 @@ function demoRun(string $directory  ///< The private working directory created b
     run.sh supplies the mode and working directory. An invalid invocation exits with 2. A caught worker error exits
     with 1, after printing any collected metrics. The shell preserves the worker's exit status unless cleanup fails.
 */
+if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') !== __FILE__) { return; }
+
 if (PHP_SAPI !== 'cli' || $argc !== 3 || !in_array($argv[1], ['run', 'cleanup'], true) || !is_dir($argv[2])) {
     fwrite(STDERR, "Run this demo with: ./demo/run.sh\n");
     exit(2);

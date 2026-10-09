@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('_l_g_v___t_z__
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"></span> </div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">    This is a PDO abstraction class, derived from the Badger Hardened Baseline Database Component</span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">    </span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">    This defaults to a standard localhost MySQL server (can be other types of servers).</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">    This supports MySQL and PostgreSQL, including binary parameters and bounded polygon reads.</span></div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> */</span></div>
 <div class="foldopen" id="foldopen00032" data-start="{" data-end="};">
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="class_l_g_v___t_z___lookup___p_d_o.html">   32</a></span><span class="keyword">class </span><a class="code hl_class" href="class_l_g_v___t_z___lookup___p_d_o.html">LGV_TZ_Lookup_PDO</a> {<span class="comment"></span></div>
@@ -170,130 +170,185 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('_l_g_v___t_z__
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                                ) {</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        $this-&gt;_pdo = NULL;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a> = strtolower($inDriver);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        $dsn = $inDriver . <span class="stringliteral">&#39;:host=&#39;</span> . $inHost . <span class="stringliteral">&#39;;dbname=&#39;</span> . $inDatabase . <span class="stringliteral">&#39;;charset=utf8;port=&#39;</span> . strval($inPort);</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            $this-&gt;_pdo = <span class="keyword">new</span> PDO($dsn, $inUser, $inPassword);</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>            $this-&gt;_pdo-&gt;setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>            $this-&gt;_pdo-&gt;setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>            $this-&gt;_pdo-&gt;setAttribute(PDO::ATTR_EMULATE_PREPARES, <span class="keyword">true</span>);</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        } <span class="keywordflow">catch</span> (PDOException $exception) {</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__ . <span class="stringliteral">&#39;() &#39;</span> . $exception-&gt;getMessage());</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        }</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    }</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keywordflow">if</span> (!in_array($this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a>, [<span class="stringliteral">&#39;mysql&#39;</span>, <span class="stringliteral">&#39;pgsql&#39;</span>], <span class="keyword">true</span>)) {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> InvalidArgumentException(<span class="stringliteral">&#39;Supported database drivers are mysql and pgsql.&#39;</span>);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        }</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        $inPort = $inPort ?? (<span class="stringliteral">&#39;pgsql&#39;</span> === $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a> ? 5432 : 3306);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <a class="code hl_variable" href="databases_8php.html#a6441cca8c9fa11e16d2017e8cb733c10">$dsn</a> = $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a> . <span class="stringliteral">&#39;:host=&#39;</span> . $inHost . <span class="stringliteral">&#39;;dbname=&#39;</span> . $inDatabase . <span class="stringliteral">&#39;;port=&#39;</span> . strval($inPort);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <a class="code hl_variable" href="databases_8php.html#a6441cca8c9fa11e16d2017e8cb733c10">$dsn</a> .= <span class="stringliteral">&#39;mysql&#39;</span> === $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a> ? <span class="stringliteral">&#39;;charset=utf8&#39;</span> : <span class="stringliteral">&#39;;options=--client_encoding=UTF8&#39;</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>            $this-&gt;_pdo = <span class="keyword">new</span> PDO(<a class="code hl_variable" href="databases_8php.html#a6441cca8c9fa11e16d2017e8cb733c10">$dsn</a>, $inUser, $inPassword);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            $this-&gt;_pdo-&gt;setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            $this-&gt;_pdo-&gt;setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            $this-&gt;_pdo-&gt;setAttribute(PDO::ATTR_EMULATE_PREPARES, <span class="stringliteral">&#39;mysql&#39;</span> === $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a>);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            <span class="keywordflow">if</span> (<span class="stringliteral">&#39;pgsql&#39;</span> === $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a>) {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                <span class="comment">// Execute once without a separate PREPARE round trip; retain native binary parameter binding.</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                $attribute = class_exists(<span class="stringliteral">&#39;Pdo\\Pgsql&#39;</span>) ? \Pdo\Pgsql::ATTR_DISABLE_PREPARES : PDO::PGSQL_ATTR_DISABLE_PREPARES;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                $this-&gt;_pdo-&gt;setAttribute($attribute, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>            }</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        } <span class="keywordflow">catch</span> (PDOException $exception) {</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__ . <span class="stringliteral">&#39;() &#39;</span> . $exception-&gt;getMessage());</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        }</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    }</div>
 </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment">    /***********************/</span><span class="comment"></span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">    /**</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">        \brief Wrapper for preparing and executing a PDOStatement</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">        </span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">        \throws Exception   thrown if internal PDO exception is thrown</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">        \returns            true if execution is successful (and fetchResponse is false), or an array of associative arrays of results, if fetchResponse is true.</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment">    */</span></div>
-<div class="foldopen" id="foldopen00078" data-start="{" data-end="}">
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="class_l_g_v___t_z___lookup___p_d_o.html#afd264b5c885ddf759c184c14868ce323">   78</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="class_l_g_v___t_z___lookup___p_d_o.html#afd264b5c885ddf759c184c14868ce323">preparedStatement</a>(  $sql,                   <span class="comment">///&lt; SQL statement to send (with question mark placeholders).</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>                                        $params = array(),      <span class="comment">///&lt; Data for the placeholders. Default is an empty array.</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                                        $fetchResponse = <span class="keyword">false</span>  <span class="comment">///&lt; If true (default is false), then a fetch will be done, and a response returned.</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                                    ) {</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="comment">// A read needs no BEGIN/COMMIT round trips. Retain the array-returning public API.</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keywordflow">if</span> ($fetchResponse) {</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            <span class="keywordflow">return</span> iterator_to_array($this-&gt;<a class="code hl_function" href="class_l_g_v___t_z___lookup___p_d_o.html#a4ed647ea7227d1c66a27a403c38c7c49">preparedRows</a>($sql, $params), <span class="keyword">false</span>);</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        }</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keywordflow">if</span> ( NULL == $this-&gt;_pdo ) {</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__ . <span class="stringliteral">&#39;()::&#39;</span> . __LINE__ . <span class="stringliteral">&quot;\nNo PDO object!&quot;</span>);</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        }</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        <span class="comment">// Non-MySQL servers aren&#39;t fans of the backticks.</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <span class="keywordflow">if</span> ( <span class="stringliteral">&#39;mysql&#39;</span> != $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a> ) {</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>            $sql = str_ireplace(<span class="charliteral">&#39;`&#39;</span>, <span class="stringliteral">&#39;&#39;</span>, $sql);</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        }</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            <span class="keywordflow">if</span> ( !$this-&gt;_pdo-&gt;inTransaction() ) {</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>                $this-&gt;_pdo-&gt;beginTransaction();</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            }</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            $stmt = $this-&gt;_pdo-&gt;prepare($sql);</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment">    /***********************/</span><span class="comment"></span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">    /**</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">        \brief Wrapper for preparing and executing a PDOStatement</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment">        </span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment">        \throws Exception   thrown if internal PDO exception is thrown</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">        \returns            true if execution is successful (and fetchResponse is false), or an array of associative arrays of results, if fetchResponse is true.</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">    */</span></div>
+<div class="foldopen" id="foldopen00089" data-start="{" data-end="}">
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="class_l_g_v___t_z___lookup___p_d_o.html#aae28e7845654245df84bd84f76aa451e">   89</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="class_l_g_v___t_z___lookup___p_d_o.html#aae28e7845654245df84bd84f76aa451e">preparedStatement</a>(  $sql,                   <span class="comment">///&lt; SQL statement to send (with question mark placeholders).</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>                                        $params = array(),      <span class="comment">///&lt; Data for the placeholders. Default is an empty array.</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>                                        $fetchResponse = <span class="keyword">false</span>, <span class="comment">///&lt; If true (default is false), then a fetch will be done, and a response returned.</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>                                    $paramTypes = array()   <span class="comment">///&lt; Optional zero-based PDO parameter types for positional write parameters.</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>                                    ) {</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <span class="comment">// A read needs no BEGIN/COMMIT round trips. Retain the array-returning public API.</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordflow">if</span> ($fetchResponse) {</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            <span class="keywordflow">return</span> iterator_to_array($this-&gt;<a class="code hl_function" href="class_l_g_v___t_z___lookup___p_d_o.html#a4ed647ea7227d1c66a27a403c38c7c49">preparedRows</a>($sql, $params), <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        }</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <span class="keywordflow">if</span> ( NULL == $this-&gt;_pdo ) {</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__ . <span class="stringliteral">&#39;()::&#39;</span> . __LINE__ . <span class="stringliteral">&quot;\nNo PDO object!&quot;</span>);</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        }</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            <span class="keywordflow">if</span> ( <span class="keyword">false</span> == $stmt || -1 == $stmt ) {</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>                <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__ . <span class="stringliteral">&#39;()::&#39;</span> . __LINE__ . <span class="stringliteral">&quot;\n&quot;</span> . print_r($stmt-&gt;errorInfo(), <span class="keyword">true</span>));</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>            }</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>            </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>            $stmt-&gt;execute($params);</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            <span class="keywordflow">if</span> ( $this-&gt;_pdo-&gt;inTransaction() ) {</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                $this-&gt;_pdo-&gt;commit();</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>            }</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        } <span class="keywordflow">catch</span> (PDOException $exception) {</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>            $this-&gt;last_insert = NULL;</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            $this-&gt;_pdo-&gt;rollback();</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__ . <span class="stringliteral">&#39;()::&#39;</span> . __LINE__ . <span class="stringliteral">&quot;\n&quot;</span> . $exception-&gt;getMessage());</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        }</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    }</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        <span class="comment">// Non-MySQL servers aren&#39;t fans of the backticks.</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <span class="keywordflow">if</span> ( <span class="stringliteral">&#39;mysql&#39;</span> != $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a> ) {</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>            $sql = str_ireplace(<span class="charliteral">&#39;`&#39;</span>, <span class="stringliteral">&#39;&#39;</span>, $sql);</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        }</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        $ownsTransaction = !$this-&gt;_pdo-&gt;inTransaction();</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>            <span class="keywordflow">if</span> ($ownsTransaction) {</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>                $this-&gt;_pdo-&gt;beginTransaction();</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            }</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            $stmt = $this-&gt;_pdo-&gt;prepare($sql);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            <span class="keywordflow">if</span> ( <span class="keyword">false</span> == $stmt || -1 == $stmt ) {</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>                <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__ . <span class="stringliteral">&#39;()::&#39;</span> . __LINE__ . <span class="stringliteral">&quot;\n&quot;</span> . print_r($stmt-&gt;errorInfo(), <span class="keyword">true</span>));</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            }</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>            </div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            <span class="keywordflow">if</span> (empty($paramTypes)) {</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>                $stmt-&gt;execute($params);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>                <span class="keywordflow">foreach</span> (array_values($params) as $index =&gt; $value) {</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>                    $stmt-&gt;bindValue($index + 1, $value, $paramTypes[$index] ?? PDO::PARAM_STR);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>                }</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>                $stmt-&gt;execute();</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>            }</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            $stmt-&gt;closeCursor();</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>            <span class="keywordflow">if</span> ($ownsTransaction &amp;&amp; $this-&gt;_pdo-&gt;inTransaction()) {</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>                $this-&gt;_pdo-&gt;commit();</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>            }</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>            </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        } <span class="keywordflow">catch</span> (PDOException $exception) {</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>            $this-&gt;last_insert = NULL;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>            <span class="keywordflow">if</span> ($ownsTransaction &amp;&amp; $this-&gt;_pdo-&gt;inTransaction()) {</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>                $this-&gt;_pdo-&gt;rollBack();</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>            }</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__ . <span class="stringliteral">&#39;()::&#39;</span> . __LINE__ . <span class="stringliteral">&quot;\n&quot;</span> . $exception-&gt;getMessage(), 0, $exception);</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        }</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    }</div>
 </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">    /***********************************************************************************************************************/</span><span class="comment"></span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">    /**</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">        Yield rows one at a time and release the cursor, including when a lookup returns before consuming every row.</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">        Polygon reads can disable MySQL buffering to avoid retaining every candidate blob. An unbuffered reader</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">        must be closed before another query; the finally block drains its cursor and restores the connection mode.</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">     */</span></div>
-<div class="foldopen" id="foldopen00128" data-start="{" data-end="}">
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno"><a class="line" href="class_l_g_v___t_z___lookup___p_d_o.html#a4ed647ea7227d1c66a27a403c38c7c49">  128</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="class_l_g_v___t_z___lookup___p_d_o.html#a4ed647ea7227d1c66a27a403c38c7c49">preparedRows</a>($sql, $params = array(), $buffered = <span class="keyword">true</span>) {</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        <span class="keywordflow">if</span> (NULL == $this-&gt;_pdo) {</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__.<span class="stringliteral">&#39;(): No PDO object!&#39;</span>);</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        }</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        <span class="keywordflow">if</span> (<span class="stringliteral">&#39;mysql&#39;</span> != $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a>) {</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>            $sql = str_ireplace(<span class="charliteral">&#39;`&#39;</span>, <span class="stringliteral">&#39;&#39;</span>, $sql);</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        }</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        $stmt = NULL;</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        $bufferAttribute = NULL;</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        $previousBuffering = NULL;</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>            <span class="keywordflow">if</span> (<span class="stringliteral">&#39;mysql&#39;</span> == $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a> &amp;&amp; !$buffered) {</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>                <span class="comment">// PHP 8.5 deprecates the PDO alias; the fallback supports the project&#39;s earlier PHP versions.</span></div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>                $bufferAttribute = class_exists(<span class="stringliteral">&#39;Pdo\\Mysql&#39;</span>) ? \Pdo\Mysql::ATTR_USE_BUFFERED_QUERY : PDO::MYSQL_ATTR_USE_BUFFERED_QUERY;</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>                $previousBuffering = $this-&gt;_pdo-&gt;getAttribute($bufferAttribute);</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>                $this-&gt;_pdo-&gt;setAttribute($bufferAttribute, <span class="keyword">false</span>);</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>            }</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>            $stmt = $this-&gt;_pdo-&gt;prepare($sql);</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>            $stmt-&gt;execute($params);</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>            <span class="keywordflow">while</span> ($row = $stmt-&gt;fetch(PDO::FETCH_ASSOC)) {</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                yield $row;</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>                unset($row);</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>            }</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        } <span class="keywordflow">catch</span> (PDOException $exception) {</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__.<span class="stringliteral">&#39;() &#39;</span>.$exception-&gt;getMessage(), 0, $exception);</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        } <span class="keywordflow">finally</span> {</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>            <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>                <span class="keywordflow">if</span> (NULL !== $stmt &amp;&amp; <span class="keyword">false</span> !== $stmt) {</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>                    $stmt-&gt;closeCursor();</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>                }</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>            } <span class="keywordflow">finally</span> {</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                <span class="keywordflow">if</span> (NULL !== $previousBuffering) {</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>                    $this-&gt;_pdo-&gt;setAttribute($bufferAttribute, $previousBuffering);</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>                }</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>            }</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        }</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    }</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">    /***********************************************************************************************************************/</span><span class="comment"></span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="comment">    /**</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="comment">        Yield rows one at a time and release the cursor, including when a lookup returns before consuming every row.</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="comment">        Polygon reads can disable MySQL buffering to avoid retaining every candidate blob. An unbuffered reader</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="comment">        must be closed before another query; the finally block drains its cursor and restores the connection mode.</span></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="comment">        PostgreSQL uses single-row fetching on PHP 8.5+, or a server cursor on earlier PHP releases. BYTEA streams</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="comment">        are read and closed here, so callers receive the same binary strings on either database.</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="comment">     */</span></div>
+<div class="foldopen" id="foldopen00153" data-start="{" data-end="}">
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno"><a class="line" href="class_l_g_v___t_z___lookup___p_d_o.html#a4ed647ea7227d1c66a27a403c38c7c49">  153</a></span>    <span class="keyword">public</span> <span class="keyword">function</span> <a class="code hl_function" href="class_l_g_v___t_z___lookup___p_d_o.html#a4ed647ea7227d1c66a27a403c38c7c49">preparedRows</a>($sql, $params = array(), $buffered = <span class="keyword">true</span>) {</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        <span class="keywordflow">if</span> (NULL == $this-&gt;_pdo) {</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__.<span class="stringliteral">&#39;(): No PDO object!&#39;</span>);</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        }</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        <span class="keywordflow">if</span> (<span class="stringliteral">&#39;mysql&#39;</span> != $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a>) {</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>            $sql = str_ireplace(<span class="charliteral">&#39;`&#39;</span>, <span class="stringliteral">&#39;&#39;</span>, $sql);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        }</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        $stmt = NULL;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        $bufferAttribute = NULL;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        $previousBuffering = NULL;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        $pgsqlStreaming = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        $executed = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>            <span class="keywordflow">if</span> (<span class="stringliteral">&#39;mysql&#39;</span> == $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a> &amp;&amp; !$buffered) {</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>                <span class="comment">// PHP 8.5 deprecates the PDO alias; the fallback supports the project&#39;s earlier PHP versions.</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>                $bufferAttribute = class_exists(<span class="stringliteral">&#39;Pdo\\Mysql&#39;</span>) ? \Pdo\Mysql::ATTR_USE_BUFFERED_QUERY : PDO::MYSQL_ATTR_USE_BUFFERED_QUERY;</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>                $previousBuffering = $this-&gt;_pdo-&gt;getAttribute($bufferAttribute);</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>                $this-&gt;_pdo-&gt;setAttribute($bufferAttribute, <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>            }</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>            <a class="code hl_variable" href="composer_8php.html#a011800c63ece4cbbfa77136a20607023">$options</a> = [];</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>            <span class="keywordflow">if</span> (<span class="stringliteral">&#39;pgsql&#39;</span> === $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a> &amp;&amp; !$buffered) {</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>                $pgsqlStreaming = PHP_VERSION_ID &gt;= 80500;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>                <a class="code hl_variable" href="composer_8php.html#a011800c63ece4cbbfa77136a20607023">$options</a> = $pgsqlStreaming ? [PDO::ATTR_PREFETCH =&gt; 0] : [PDO::ATTR_CURSOR =&gt; PDO::CURSOR_SCROLL];</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            }</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>            $stmt = $this-&gt;_pdo-&gt;prepare($sql, <a class="code hl_variable" href="composer_8php.html#a011800c63ece4cbbfa77136a20607023">$options</a>);</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>            $stmt-&gt;execute($params);</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            $executed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>            <span class="keywordflow">while</span> ($row = $stmt-&gt;fetch(PDO::FETCH_ASSOC)) {</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                <span class="keywordflow">if</span> (<span class="stringliteral">&#39;pgsql&#39;</span> === $this-&gt;<a class="code hl_variable" href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a>) {</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>                    <span class="keywordflow">foreach</span> ($row as $column =&gt; $value) {</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>                        <span class="keywordflow">if</span> (is_resource($value)) {</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>                            <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>                                $row[$column] = stream_get_contents($value);</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>                                <span class="keywordflow">if</span> (<span class="keyword">false</span> === $row[$column]) {</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>                                    <span class="keywordflow">throw</span> <span class="keyword">new</span> RuntimeException(<span class="stringliteral">&#39;Could not read PostgreSQL binary column &#39;</span>.$column.<span class="charliteral">&#39;.&#39;</span>);</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>                                }</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>                            } <span class="keywordflow">finally</span> {</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                                fclose($value);</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>                            }</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>                        }</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                    }</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                    unset($value);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>                }</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>                yield $row;</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>                unset($row);</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>            }</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        } <span class="keywordflow">catch</span> (PDOException $exception) {</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>            <span class="keywordflow">throw</span> <span class="keyword">new</span> Exception(__METHOD__.<span class="stringliteral">&#39;() &#39;</span>.$exception-&gt;getMessage(), 0, $exception);</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        } <span class="keywordflow">finally</span> {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>            <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>                <span class="keywordflow">if</span> (NULL !== $stmt &amp;&amp; <span class="keyword">false</span> !== $stmt) {</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>                    <span class="keywordflow">if</span> ($pgsqlStreaming &amp;&amp; $executed) {</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>                        <span class="comment">// PDO_PGSQL closeCursor() does not drain lazy results. Destroying an unfinished statement</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>                        <span class="comment">// cancels its query, which can abort a caller&#39;s transaction. Consume without decoding columns.</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>                        <span class="keywordflow">while</span> ($stmt-&gt;fetch(PDO::FETCH_BOUND)) { }</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>                    }</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>                    $stmt-&gt;closeCursor();</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>                }</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>            } <span class="keywordflow">finally</span> {</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>                <span class="keywordflow">if</span> (NULL !== $previousBuffering) {</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>                    $this-&gt;_pdo-&gt;setAttribute($bufferAttribute, $previousBuffering);</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>                }</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>            }</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        }</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    }</div>
 </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>};</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>};</div>
 </div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>?&gt;</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>?&gt;</div>
 <div class="ttc" id="aclass_l_g_v___t_z___lookup___p_d_o_html"><div class="ttname"><a href="class_l_g_v___t_z___lookup___p_d_o.html">LGV_TZ_Lookup_PDO</a></div><div class="ttdoc">This class provides a genericized interface to the PHP PDO toolkit.</div><div class="ttdef"><b>Definition</b> <a href="#l00032">LGV_TZ_Lookup_PDO.class.php:32</a></div></div>
 <div class="ttc" id="aclass_l_g_v___t_z___lookup___p_d_o_html_a05f7b6017537ca7a367b35f3626991aa"><div class="ttname"><a href="class_l_g_v___t_z___lookup___p_d_o.html#a05f7b6017537ca7a367b35f3626991aa">LGV_TZ_Lookup_PDO\$driver_type</a></div><div class="ttdeci">$driver_type</div><div class="ttdoc">The type of PDO driver we are configured for.</div><div class="ttdef"><b>Definition</b> <a href="#l00036">LGV_TZ_Lookup_PDO.class.php:36</a></div></div>
 <div class="ttc" id="aclass_l_g_v___t_z___lookup___p_d_o_html_a40c95fd46a7ecdc6f518a8acdc2da394"><div class="ttname"><a href="class_l_g_v___t_z___lookup___p_d_o.html#a40c95fd46a7ecdc6f518a8acdc2da394">LGV_TZ_Lookup_PDO\$last_insert</a></div><div class="ttdeci">$last_insert</div><div class="ttdoc">This holds the integer ID of the last AUTO_INCREMENT insert.</div><div class="ttdef"><b>Definition</b> <a href="#l00038">LGV_TZ_Lookup_PDO.class.php:38</a></div></div>
-<div class="ttc" id="aclass_l_g_v___t_z___lookup___p_d_o_html_a4ed647ea7227d1c66a27a403c38c7c49"><div class="ttname"><a href="class_l_g_v___t_z___lookup___p_d_o.html#a4ed647ea7227d1c66a27a403c38c7c49">LGV_TZ_Lookup_PDO\preparedRows</a></div><div class="ttdeci">preparedRows($sql, $params=array(), $buffered=true)</div><div class="ttdef"><b>Definition</b> <a href="#l00128">LGV_TZ_Lookup_PDO.class.php:128</a></div></div>
+<div class="ttc" id="aclass_l_g_v___t_z___lookup___p_d_o_html_a4ed647ea7227d1c66a27a403c38c7c49"><div class="ttname"><a href="class_l_g_v___t_z___lookup___p_d_o.html#a4ed647ea7227d1c66a27a403c38c7c49">LGV_TZ_Lookup_PDO\preparedRows</a></div><div class="ttdeci">preparedRows($sql, $params=array(), $buffered=true)</div><div class="ttdef"><b>Definition</b> <a href="#l00153">LGV_TZ_Lookup_PDO.class.php:153</a></div></div>
+<div class="ttc" id="aclass_l_g_v___t_z___lookup___p_d_o_html_aae28e7845654245df84bd84f76aa451e"><div class="ttname"><a href="class_l_g_v___t_z___lookup___p_d_o.html#aae28e7845654245df84bd84f76aa451e">LGV_TZ_Lookup_PDO\preparedStatement</a></div><div class="ttdeci">preparedStatement( $sql, $params=array(), $fetchResponse=false, $paramTypes=array())</div><div class="ttdoc">Wrapper for preparing and executing a PDOStatement.</div><div class="ttdef"><b>Definition</b> <a href="#l00089">LGV_TZ_Lookup_PDO.class.php:89</a></div></div>
 <div class="ttc" id="aclass_l_g_v___t_z___lookup___p_d_o_html_ab52f5f6a8e72ac2d20a42bb7b5443839"><div class="ttname"><a href="class_l_g_v___t_z___lookup___p_d_o.html#ab52f5f6a8e72ac2d20a42bb7b5443839">LGV_TZ_Lookup_PDO\__construct</a></div><div class="ttdeci">__construct( $inDatabase, $inUser, $inPassword, $inDriver, $inHost, $inPort)</div><div class="ttdoc">Initializes connection param class members.</div><div class="ttdef"><b>Definition</b> <a href="#l00049">LGV_TZ_Lookup_PDO.class.php:49</a></div></div>
 <div class="ttc" id="aclass_l_g_v___t_z___lookup___p_d_o_html_af6424089631c60ad9be8015470aad85b"><div class="ttname"><a href="class_l_g_v___t_z___lookup___p_d_o.html#af6424089631c60ad9be8015470aad85b">LGV_TZ_Lookup_PDO\$_pdo</a></div><div class="ttdeci">$_pdo</div><div class="ttdoc">Internal PDO object.</div><div class="ttdef"><b>Definition</b> <a href="#l00034">LGV_TZ_Lookup_PDO.class.php:34</a></div></div>
-<div class="ttc" id="aclass_l_g_v___t_z___lookup___p_d_o_html_afd264b5c885ddf759c184c14868ce323"><div class="ttname"><a href="class_l_g_v___t_z___lookup___p_d_o.html#afd264b5c885ddf759c184c14868ce323">LGV_TZ_Lookup_PDO\preparedStatement</a></div><div class="ttdeci">preparedStatement( $sql, $params=array(), $fetchResponse=false)</div><div class="ttdoc">Wrapper for preparing and executing a PDOStatement.</div><div class="ttdef"><b>Definition</b> <a href="#l00078">LGV_TZ_Lookup_PDO.class.php:78</a></div></div>
+<div class="ttc" id="acomposer_8php_html_a011800c63ece4cbbfa77136a20607023"><div class="ttname"><a href="composer_8php.html#a011800c63ece4cbbfa77136a20607023">$options</a></div><div class="ttdeci">$options</div><div class="ttdef"><b>Definition</b> <a href="composer_8php_source.html#l00006">composer.php:6</a></div></div>
 <div class="ttc" id="acomposer_8php_html_aec81d8b5510e04d38479f94a44ab5e5e"><div class="ttname"><a href="composer_8php.html#aec81d8b5510e04d38479f94a44ab5e5e">driver_type</a></div><div class="ttdeci">$wrapper driver_type</div><div class="ttdef"><b>Definition</b> <a href="composer_8php_source.html#l00051">composer.php:51</a></div></div>
+<div class="ttc" id="adatabases_8php_html_a6441cca8c9fa11e16d2017e8cb733c10"><div class="ttname"><a href="databases_8php.html#a6441cca8c9fa11e16d2017e8cb733c10">$dsn</a></div><div class="ttdeci">$dsn</div><div class="ttdef"><b>Definition</b> <a href="databases_8php_source.html#l00213">databases.php:213</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

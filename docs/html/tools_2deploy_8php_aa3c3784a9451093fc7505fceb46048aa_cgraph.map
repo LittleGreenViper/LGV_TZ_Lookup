@@ -1,0 +1,4 @@
+<map id="deploySave" name="deploySave">
+<area shape="rect" id="Node000001" title="This saves recovery state atomically, with credentials readable only by the installer user." alt="" coords="5,29,96,55"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="34,30,31,21,33,12,39,5,51,3,64,6,70,15,65,18,61,11,51,8,42,10,37,14,36,20,39,28"/>
+</map>

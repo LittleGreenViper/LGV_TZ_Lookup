@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -123,8 +123,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a4bb350f6f40a4ddd25dbaacbf00770c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This selects the most detailed polygons, using exterior-ring point counts.  <br /></td></tr>
 <tr class="memitem:a9948bb5ead48c019e4388c90a04e90e9" id="r_a9948bb5ead48c019e4388c90a04e90e9"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a9948bb5ead48c019e4388c90a04e90e9">observe</a> (array $feature)</td></tr>
 <tr class="memdesc:a9948bb5ead48c019e4388c90a04e90e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This records the polygons from one decoded GeoJSON Feature.  <br /></td></tr>
-<tr class="memitem:a5ce2f047e9ce6729e4c803e08898d70d" id="r_a5ce2f047e9ce6729e4c803e08898d70d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a5ce2f047e9ce6729e4c803e08898d70d">validateStorage</a> (PDO $admin, string $database)</td></tr>
-<tr class="memdesc:a5ce2f047e9ce6729e4c803e08898d70d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This compares every stored polygon with its decoded source record.  <br /></td></tr>
+<tr class="memitem:a8561932b40890cf53566be3452cad5f5" id="r_a8561932b40890cf53566be3452cad5f5"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a8561932b40890cf53566be3452cad5f5">validateStorage</a> (PDO $connection)</td></tr>
+<tr class="memdesc:a8561932b40890cf53566be3452cad5f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This compares every stored polygon with its decoded source record.  <br /></td></tr>
 <tr class="memitem:afedc110a3f828f20f4d806762def5d19" id="r_afedc110a3f828f20f4d806762def5d19"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#afedc110a3f828f20f4d806762def5d19">zonesAt</a> (float $lng, float $lat)</td></tr>
 <tr class="memdesc:afedc110a3f828f20f4d806762def5d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">This finds all acceptable time zone names at a point, using the source geometry.  <br /></td></tr>
 </table><table class="memberdecls">
@@ -351,8 +351,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5ce2f047e9ce6729e4c803e08898d70d" name="a5ce2f047e9ce6729e4c803e08898d70d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ce2f047e9ce6729e4c803e08898d70d">&#9670;&#160;</a></span>validateStorage()</h2>
+<a id="a8561932b40890cf53566be3452cad5f5" name="a8561932b40890cf53566be3452cad5f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8561932b40890cf53566be3452cad5f5">&#9670;&#160;</a></span>validateStorage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -360,16 +360,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">DemoSourceGeometry::validateStorage </td>
           <td>(</td>
-          <td class="paramtype">PDO</td>          <td class="paramname"><span class="paramname"><em>$admin</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">PDO</td>          <td class="paramname"><span class="paramname"><em>$connection</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>$database</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>We check row counts, names, exterior-ring byte lengths and SHA-256 hashes. Domain rect coordinates allow a small tolerance for the schema's single-precision FLOAT storage. Hashes are calculated by MySQL, avoiding the memory cost of fetching all stored polygon blobs into PHP again.</p>
+<p>We check row counts, names, exterior-ring byte lengths and SHA-256 hashes. Domain rect coordinates allow a small tolerance for the schema's single-precision storage. Hashes are calculated by the database server, avoiding the memory cost of fetching all stored polygon blobs into PHP again.</p>
 <dl class="section return"><dt>Returns</dt><dd>: An array of failure descriptions. An empty array means all checks passed. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
@@ -379,15 +375,14 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">$admin</td><td>The demo's administrative PDO connection.  </td></tr>
-    <tr><td class="paramname">$database</td><td>The generated, validated database name owned by this run. </td></tr>
+    <tr><td class="paramname">$connection</td><td>A PDO connection to this run's temporary database. </td></tr>
   </table>
   </dd>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="_system_tests_8php_source.html#l00237">237</a> of file <a class="el" href="_system_tests_8php_source.html">SystemTests.php</a>.</p>
 
-<p class="reference">References <a class="el" href="composer_8php_source.html#l00052">$database</a>, <a class="el" href="benchmark_8php_source.html#l00076">$failures</a>, and <a class="el" href="regression_8php_source.html#l00130">$rows</a>.</p>
+<p class="reference">References <a class="el" href="composer_8php_source.html#l00031">$connection</a>, <a class="el" href="benchmark_8php_source.html#l00079">$failures</a>, and <a class="el" href="regression_8php_source.html#l00130">$rows</a>.</p>
 
 </div>
 </div>

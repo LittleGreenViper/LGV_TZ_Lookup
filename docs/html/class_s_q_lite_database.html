@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -129,7 +129,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a85f571f3220866e689b7cb5f5f0a22d4" id="r_a85f571f3220866e689b7cb5f5f0a22d4"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a85f571f3220866e689b7cb5f5f0a22d4">__construct</a> (string $path)</td></tr>
 <tr class="memitem:a23900e3d2a6f1a7436b1a086a56982ed" id="r_a23900e3d2a6f1a7436b1a086a56982ed"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a23900e3d2a6f1a7436b1a086a56982ed">reset_database</a> ()</td></tr>
 <tr class="inherit_header pub_methods_class_l_g_v___t_z___lookup___database"><td colspan="2" class="dyn-inherit"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="class_l_g_v___t_z___lookup___database.html">LGV_TZ_Lookup_Database</a></td></tr>
-<tr class="memitem:ae0d92fafb4c94663b1bd84bb95c1bd39 inherit pub_methods_class_l_g_v___t_z___lookup___database" id="r_ae0d92fafb4c94663b1bd84bb95c1bd39"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_l_g_v___t_z___lookup___database.html#ae0d92fafb4c94663b1bd84bb95c1bd39">__construct</a> ( $inDatabase, $inUser=NULL, $inPassword=NULL, $inDriver='mysql', $inHost='127.0.0.1', $inPort=3306)</td></tr>
+<tr class="memitem:ab341b28f50b5eb3ddde2093eefeea9d1 inherit pub_methods_class_l_g_v___t_z___lookup___database" id="r_ab341b28f50b5eb3ddde2093eefeea9d1"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_l_g_v___t_z___lookup___database.html#ab341b28f50b5eb3ddde2093eefeea9d1">__construct</a> ( $inDatabase, $inUser=NULL, $inPassword=NULL, $inDriver='mysql', $inHost='127.0.0.1', $inPort=NULL)</td></tr>
 <tr class="memitem:a60a092f9e626bf45f215c10d81131e54 inherit pub_methods_class_l_g_v___t_z___lookup___database" id="r_a60a092f9e626bf45f215c10d81131e54"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_l_g_v___t_z___lookup___database.html#a60a092f9e626bf45f215c10d81131e54">get_tz_entities</a> ( $in_id_list)</td></tr>
 <tr class="memitem:ab17af20558f66a9e12337ded8dd3e12d inherit pub_methods_class_l_g_v___t_z___lookup___database" id="r_ab17af20558f66a9e12337ded8dd3e12d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_l_g_v___t_z___lookup___database.html#ab17af20558f66a9e12337ded8dd3e12d">get_tz_ids</a> ( $in_lng, $in_lat)</td></tr>
 <tr class="memitem:aa174e8bcf0b0ded2529140a5bb01e768 inherit pub_methods_class_l_g_v___t_z___lookup___database" id="r_aa174e8bcf0b0ded2529140a5bb01e768"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_l_g_v___t_z___lookup___database.html#aa174e8bcf0b0ded2529140a5bb01e768">get_tz_polygons</a> ($in_id_list)</td></tr>
@@ -182,7 +182,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>This clears the database. </p>
+<p>This replaces the timezones table and its indexes for the configured database driver. </p>
 
 <p>Reimplemented from <a class="el" href="class_l_g_v___t_z___lookup___database.html#acf390d8f14a950cf66b0768c51be4d9c">LGV_TZ_Lookup_Database</a>.</p>
 

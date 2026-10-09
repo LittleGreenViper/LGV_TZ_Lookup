@@ -48,7 +48,9 @@
 declare(strict_types = 1);
 
 // This is the location of the config file. It should generally be located outside the HTTP directory. Change the path below, to wherever you put the file.
-define("__CONFIG_FILE_", __DIR__.'/../../../../TZInfo/config.php');
+if (!defined('__CONFIG_FILE_')) {
+    define("__CONFIG_FILE_", __DIR__.'/../../../../TZInfo/config.php');
+}
 
 // The class that we use to make queries.
 require_once __DIR__.'/Sources/LGV_TZ_Lookup_Query.class.php';
@@ -100,7 +102,9 @@ function call_server(   $inQuery,   ///< This is an ampersand-concatenated list 
             }
         }
         if (!empty($queries)) {
-            if (!isset($g_server_secret) || empty($g_server_secret) || (isset($queries['secret']) && ($g_server_secret == $queries['secret']))) {
+            $authorized = !isset($g_server_secret) || $g_server_secret === '' ||
+                (isset($queries['secret']) && is_string($queries['secret']) && hash_equals((string)$g_server_secret, $queries['secret']));
+            if ($authorized) {
                 $db_object = new LGV_TZ_Lookup_Database($g_dbName, $g_dbUserName, $g_dbPassword, $g_dbType, $g_dbHost, $g_dbPort);
                 if (isset($queries['test'])) {  // Test trumps all
                     $ret = '<html><head><style>.pass{color:green}.fail{color:red}</style></head><body>'.test_server().'</body></html>';
@@ -147,7 +151,7 @@ function call_server(   $inQuery,   ///< This is an ampersand-concatenated list 
                         header('HTTP/1.1 400 Malformed Query');
                     }
                 }
-            } elseif (isset($g_server_secret) && (!isset($queries['secret']) || ($g_server_secret != $queries['secret']))) {
+            } elseif (isset($g_server_secret)) {
                 $ret = 'Ah - Ah - Aaaah! You didn\'t say the magic word!';
                 if ("cli" != php_sapi_name()) {
                     header('HTTP/1.1 403 Not Authorized');

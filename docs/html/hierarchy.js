@@ -13,8 +13,12 @@ var hierarchy =
     [ "LGV_TZ_Lookup_Entity", "class_l_g_v___t_z___lookup___entity.html", null ],
     [ "LGV_TZ_Lookup_PDO", "class_l_g_v___t_z___lookup___p_d_o.html", null ],
     [ "LGV_TZ_Lookup_Query", "class_l_g_v___t_z___lookup___query.html", null ],
+    [ "LGV_TZ_Lookup_Setup", "class_l_g_v___t_z___lookup___setup.html", null ],
     [ "JsonStreamingParser\\Listener\\ListenerInterface", null, [
       [ "DemoInspectingListener", "class_demo_inspecting_listener.html", null ]
+    ] ],
+    [ "PDOStatement", null, [
+      [ "DatabaseTestStatement", "class_database_test_statement.html", null ]
     ] ],
     [ "SQLiteStatements", "class_s_q_lite_statements.html", null ]
 ];

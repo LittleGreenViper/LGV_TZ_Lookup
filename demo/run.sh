@@ -28,12 +28,12 @@
 #   Usage: ./demo/run.sh
 #
 #   The script uses POSIX sh, and takes no command-line arguments. Connection settings and test options come from
-#   the LGV_TZ_DEMO_* environment variables documented in README.md. PHP and a running MySQL server are required.
+#   the LGV_TZ_DEMO_* environment variables documented in README.md. PHP and a running MySQL or PostgreSQL server are required.
 #   The PHP worker obtains its own Composer executable and installs the package into a private temporary directory.
 #
 #   The exit trap runs cleanup in a separate PHP process, so it also works after a loader memory-limit failure.
 #   A successful cleanup drops this run's database and removes the directory. If database cleanup fails, the record
-#   is retained for recovery. Large boundary files are removed by the cleanup worker before it contacts MySQL.
+#   is retained for recovery. Large boundary files are removed by the cleanup worker before it contacts the database server.
 #
 #   Exit status: 0 means all tests and cleanup succeeded. Nonzero means a test, setup, interruption, or cleanup failed.
 #
@@ -42,7 +42,7 @@ set -eu
 umask 077
 
 if [ "$#" -ne 0 ]; then
-    printf 'Usage: %s\nConfigure MySQL with LGV_TZ_DEMO_HOST, PORT, USER, and PASSWORD environment variables.\n' "$0" >&2
+    printf 'Usage: %s\nConfigure LGV_TZ_DEMO_DRIVER (mysql or pgsql), HOST, PORT, USER, and PASSWORD environment variables.\n' "$0" >&2
     exit 2
 fi
 

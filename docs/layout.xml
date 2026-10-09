@@ -6,6 +6,8 @@
     <tab type="mainpage" visible="yes" title="Start Here"/>
     <tab type="usergroup" visible="yes" title="Guides" url="index.html">
       <tab type="user" title="Composer Library" url="index.html#composer-library"/>
+      <tab type="user" title="PostgreSQL" url="index.html#using-postgresql"/>
+      <tab type="user" title="Server Deployment" url="index.html#one-command-server-deployment"/>
       <tab type="user" title="Command-line Demo" url="index.html#turnkey-command-line-demo"/>
       <tab type="user" title="Standalone Server" url="index.html#standalone-server-implementation"/>
       <tab type="user" title="Performance" url="index.html#query-performance"/>

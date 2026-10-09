@@ -27,7 +27,7 @@
 
     This is a PDO abstraction class, derived from the Badger Hardened Baseline Database Component
     
-    This defaults to a standard localhost MySQL server (can be other types of servers).
+    This supports MySQL and PostgreSQL, including binary parameters and bounded polygon reads.
  */
 class LGV_TZ_Lookup_PDO {
 	/// \brief Internal PDO object
@@ -55,14 +55,25 @@ class LGV_TZ_Lookup_PDO {
 								) {
 		$this->_pdo = NULL;
 		$this->driver_type = strtolower($inDriver);
+
+        if (!in_array($this->driver_type, ['mysql', 'pgsql'], true)) {
+            throw new InvalidArgumentException('Supported database drivers are mysql and pgsql.');
+        }
 		
-        $dsn = $inDriver . ':host=' . $inHost . ';dbname=' . $inDatabase . ';charset=utf8;port=' . strval($inPort);
+        $inPort = $inPort ?? ('pgsql' === $this->driver_type ? 5432 : 3306);
+        $dsn = $this->driver_type . ':host=' . $inHost . ';dbname=' . $inDatabase . ';port=' . strval($inPort);
+        $dsn .= 'mysql' === $this->driver_type ? ';charset=utf8' : ';options=--client_encoding=UTF8';
         
 		try {
             $this->_pdo = new PDO($dsn, $inUser, $inPassword);
             $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-            $this->_pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+            $this->_pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, 'mysql' === $this->driver_type);
+            if ('pgsql' === $this->driver_type) {
+                // Execute once without a separate PREPARE round trip; retain native binary parameter binding.
+                $attribute = class_exists('Pdo\\Pgsql') ? \Pdo\Pgsql::ATTR_DISABLE_PREPARES : PDO::PGSQL_ATTR_DISABLE_PREPARES;
+                $this->_pdo->setAttribute($attribute, true);
+            }
         } catch (PDOException $exception) {
 			throw new Exception(__METHOD__ . '() ' . $exception->getMessage());
         }
@@ -77,7 +88,8 @@ class LGV_TZ_Lookup_PDO {
 	*/
 	public function preparedStatement(  $sql,				    ///< SQL statement to send (with question mark placeholders).
 								        $params = array(),      ///< Data for the placeholders. Default is an empty array.
-								        $fetchResponse = false  ///< If true (default is false), then a fetch will be done, and a response returned.
+								        $fetchResponse = false, ///< If true (default is false), then a fetch will be done, and a response returned.
+                                    $paramTypes = array()   ///< Optional zero-based PDO parameter types for positional write parameters.
 						            ) {
         // A read needs no BEGIN/COMMIT round trips. Retain the array-returning public API.
         if ($fetchResponse) {
@@ -92,8 +104,9 @@ class LGV_TZ_Lookup_PDO {
 		    $sql = str_ireplace('`', '', $sql);
 		}
 		
+        $ownsTransaction = !$this->_pdo->inTransaction();
 		try {
-            if ( !$this->_pdo->inTransaction() ) {
+            if ($ownsTransaction) {
 		        $this->_pdo->beginTransaction();
 		    }
 		    
@@ -103,17 +116,27 @@ class LGV_TZ_Lookup_PDO {
                 throw new Exception(__METHOD__ . '()::' . __LINE__ . "\n" . print_r($stmt->errorInfo(), true));
             }
             
-            $stmt->execute($params);
+            if (empty($paramTypes)) {
+                $stmt->execute($params);
+            } else {
+                foreach (array_values($params) as $index => $value) {
+                    $stmt->bindValue($index + 1, $value, $paramTypes[$index] ?? PDO::PARAM_STR);
+                }
+                $stmt->execute();
+            }
+            $stmt->closeCursor();
         
-            if ( $this->_pdo->inTransaction() ) {
+            if ($ownsTransaction && $this->_pdo->inTransaction()) {
                 $this->_pdo->commit();
             }
             
             return true;
 		} catch (PDOException $exception) {
 		    $this->last_insert = NULL;
-            $this->_pdo->rollback();
-			throw new Exception(__METHOD__ . '()::' . __LINE__ . "\n" . $exception->getMessage());
+            if ($ownsTransaction && $this->_pdo->inTransaction()) {
+                $this->_pdo->rollBack();
+            }
+			throw new Exception(__METHOD__ . '()::' . __LINE__ . "\n" . $exception->getMessage(), 0, $exception);
 		}
 		
         return false;
@@ -124,6 +147,8 @@ class LGV_TZ_Lookup_PDO {
         Yield rows one at a time and release the cursor, including when a lookup returns before consuming every row.
         Polygon reads can disable MySQL buffering to avoid retaining every candidate blob. An unbuffered reader
         must be closed before another query; the finally block drains its cursor and restores the connection mode.
+        PostgreSQL uses single-row fetching on PHP 8.5+, or a server cursor on earlier PHP releases. BYTEA streams
+        are read and closed here, so callers receive the same binary strings on either database.
      */
     public function preparedRows($sql, $params = array(), $buffered = true) {
         if (NULL == $this->_pdo) {
@@ -135,6 +160,8 @@ class LGV_TZ_Lookup_PDO {
         $stmt = NULL;
         $bufferAttribute = NULL;
         $previousBuffering = NULL;
+        $pgsqlStreaming = false;
+        $executed = false;
         try {
             if ('mysql' == $this->driver_type && !$buffered) {
                 // PHP 8.5 deprecates the PDO alias; the fallback supports the project's earlier PHP versions.
@@ -142,9 +169,30 @@ class LGV_TZ_Lookup_PDO {
                 $previousBuffering = $this->_pdo->getAttribute($bufferAttribute);
                 $this->_pdo->setAttribute($bufferAttribute, false);
             }
-            $stmt = $this->_pdo->prepare($sql);
+            $options = [];
+            if ('pgsql' === $this->driver_type && !$buffered) {
+                $pgsqlStreaming = PHP_VERSION_ID >= 80500;
+                $options = $pgsqlStreaming ? [PDO::ATTR_PREFETCH => 0] : [PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL];
+            }
+            $stmt = $this->_pdo->prepare($sql, $options);
             $stmt->execute($params);
+            $executed = true;
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                if ('pgsql' === $this->driver_type) {
+                    foreach ($row as $column => $value) {
+                        if (is_resource($value)) {
+                            try {
+                                $row[$column] = stream_get_contents($value);
+                                if (false === $row[$column]) {
+                                    throw new RuntimeException('Could not read PostgreSQL binary column '.$column.'.');
+                                }
+                            } finally {
+                                fclose($value);
+                            }
+                        }
+                    }
+                    unset($value);
+                }
                 yield $row;
                 unset($row);
             }
@@ -153,6 +201,11 @@ class LGV_TZ_Lookup_PDO {
         } finally {
             try {
                 if (NULL !== $stmt && false !== $stmt) {
+                    if ($pgsqlStreaming && $executed) {
+                        // PDO_PGSQL closeCursor() does not drain lazy results. Destroying an unfinished statement
+                        // cancels its query, which can abort a caller's transaction. Consume without decoding columns.
+                        while ($stmt->fetch(PDO::FETCH_BOUND)) { }
+                    }
                     $stmt->closeCursor();
                 }
             } finally {

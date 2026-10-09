@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -120,8 +120,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab52f5f6a8e72ac2d20a42bb7b5443839" id="r_ab52f5f6a8e72ac2d20a42bb7b5443839"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ab52f5f6a8e72ac2d20a42bb7b5443839">__construct</a> ( $inDatabase, $inUser, $inPassword, $inDriver, $inHost, $inPort)</td></tr>
 <tr class="memdesc:ab52f5f6a8e72ac2d20a42bb7b5443839"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes connection param class members.  <br /></td></tr>
 <tr class="memitem:a4ed647ea7227d1c66a27a403c38c7c49" id="r_a4ed647ea7227d1c66a27a403c38c7c49"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4ed647ea7227d1c66a27a403c38c7c49">preparedRows</a> ($sql, $params=array(), $buffered=true)</td></tr>
-<tr class="memitem:afd264b5c885ddf759c184c14868ce323" id="r_afd264b5c885ddf759c184c14868ce323"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#afd264b5c885ddf759c184c14868ce323">preparedStatement</a> ( $sql, $params=array(), $fetchResponse=false)</td></tr>
-<tr class="memdesc:afd264b5c885ddf759c184c14868ce323"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for preparing and executing a PDOStatement.  <br /></td></tr>
+<tr class="memitem:aae28e7845654245df84bd84f76aa451e" id="r_aae28e7845654245df84bd84f76aa451e"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aae28e7845654245df84bd84f76aa451e">preparedStatement</a> ( $sql, $params=array(), $fetchResponse=false, $paramTypes=array())</td></tr>
+<tr class="memdesc:aae28e7845654245df84bd84f76aa451e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for preparing and executing a PDOStatement.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -144,7 +144,7 @@ Private Attributes</h2></td></tr>
 <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 <p><a href="https://littlegreenviper.com">Little Green Viper Software Development LLC</a> </p>
 <p>This is a PDO abstraction class, derived from the Badger Hardened Baseline Database Component</p>
-<p>This defaults to a standard localhost MySQL server (can be other types of servers). </p>
+<p>This supports MySQL and PostgreSQL, including binary parameters and bounded polygon reads. </p>
 
 <p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00032">32</a> of file <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html">LGV_TZ_Lookup_PDO.class.php</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -202,7 +202,7 @@ Private Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00049">49</a> of file <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html">LGV_TZ_Lookup_PDO.class.php</a>.</p>
 
-<p class="reference">References <a class="el" href="composer_8php_source.html#l00051">driver_type</a>.</p>
+<p class="reference">References <a class="el" href="databases_8php_source.html#l00213">$dsn</a>, and <a class="el" href="composer_8php_source.html#l00051">driver_type</a>.</p>
 
 </div>
 </div>
@@ -230,13 +230,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Yield rows one at a time and release the cursor, including when a lookup returns before consuming every row. Polygon reads can disable MySQL buffering to avoid retaining every candidate blob. An unbuffered reader must be closed before another query; the finally block drains its cursor and restores the connection mode. </p>
+<p>Yield rows one at a time and release the cursor, including when a lookup returns before consuming every row. Polygon reads can disable MySQL buffering to avoid retaining every candidate blob. An unbuffered reader must be closed before another query; the finally block drains its cursor and restores the connection mode. PostgreSQL uses single-row fetching on PHP 8.5+, or a server cursor on earlier PHP releases. BYTEA streams are read and closed here, so callers receive the same binary strings on either database. </p>
 
-<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00128">128</a> of file <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html">LGV_TZ_Lookup_PDO.class.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00153">153</a> of file <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html">LGV_TZ_Lookup_PDO.class.php</a>.</p>
 
-<p class="reference">References <a class="el" href="composer_8php_source.html#l00051">driver_type</a>.</p>
+<p class="reference">References <a class="el" href="composer_8php_source.html#l00006">$options</a>, and <a class="el" href="composer_8php_source.html#l00051">driver_type</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00078">preparedStatement()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00089">preparedStatement()</a>.</p>
 <div id="dynsection-0" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
 <div id="dynsection-0-summary" class="dynsummary">
 </div>
@@ -246,8 +246,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afd264b5c885ddf759c184c14868ce323" name="afd264b5c885ddf759c184c14868ce323"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd264b5c885ddf759c184c14868ce323">&#9670;&#160;</a></span>preparedStatement()</h2>
+<a id="aae28e7845654245df84bd84f76aa451e" name="aae28e7845654245df84bd84f76aa451e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae28e7845654245df84bd84f76aa451e">&#9670;&#160;</a></span>preparedStatement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -265,7 +265,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>$fetchResponse</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>$fetchResponse</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>$paramTypes</em></span><span class="paramdefsep"> = </span><span class="paramdefval">array()</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -280,19 +285,20 @@ Private Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">$sql</td><td>SQL statement to send (with question mark placeholders).  </td></tr>
     <tr><td class="paramname">$params</td><td>Data for the placeholders. Default is an empty array.  </td></tr>
-    <tr><td class="paramname">$fetchResponse</td><td>If true (default is false), then a fetch will be done, and a response returned. </td></tr>
+    <tr><td class="paramname">$fetchResponse</td><td>If true (default is false), then a fetch will be done, and a response returned.  </td></tr>
+    <tr><td class="paramname">$paramTypes</td><td>Optional zero-based PDO parameter types for positional write parameters. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00078">78</a> of file <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html">LGV_TZ_Lookup_PDO.class.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00089">89</a> of file <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html">LGV_TZ_Lookup_PDO.class.php</a>.</p>
 
-<p class="reference">References <a class="el" href="composer_8php_source.html#l00051">driver_type</a>, and <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00128">preparedRows()</a>.</p>
+<p class="reference">References <a class="el" href="composer_8php_source.html#l00051">driver_type</a>, and <a class="el" href="_l_g_v___t_z___lookup___p_d_o_8class_8php_source.html#l00153">preparedRows()</a>.</p>
 <div id="dynsection-1" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
 <div id="dynsection-1-summary" class="dynsummary">
 </div>
 <div id="dynsection-1-content" class="dyncontent hidden">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_l_g_v___t_z___lookup___p_d_o_afd264b5c885ddf759c184c14868ce323_cgraph.svg" width="514" height="51"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_l_g_v___t_z___lookup___p_d_o_aae28e7845654245df84bd84f76aa451e_cgraph.svg" width="514" height="51"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

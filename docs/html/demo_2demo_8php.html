@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -121,12 +121,14 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('demo_2demo_8ph
 Functions</h2></td></tr>
 <tr class="memitem:a80c2ff4ef7e105223f237ea4afd88c6d" id="r_a80c2ff4ef7e105223f237ea4afd88c6d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a80c2ff4ef7e105223f237ea4afd88c6d">demoCleanup</a> (string $directory)</td></tr>
 <tr class="memdesc:a80c2ff4ef7e105223f237ea4afd88c6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This removes the downloads and drops the database owned by this demo run.  <br /></td></tr>
-<tr class="memitem:ab5c4548495ab40719480466f3ab7e258" id="r_ab5c4548495ab40719480466f3ab7e258"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ab5c4548495ab40719480466f3ab7e258">demoConnection</a> ()</td></tr>
-<tr class="memdesc:ab5c4548495ab40719480466f3ab7e258"><td class="mdescLeft">&#160;</td><td class="mdescRight">This opens the administrative MySQL connection used to create, inspect, and drop the demo database.  <br /></td></tr>
+<tr class="memitem:a42f62b8bb0a44c3f5e74a63417effd6d" id="r_a42f62b8bb0a44c3f5e74a63417effd6d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a42f62b8bb0a44c3f5e74a63417effd6d">demoConnection</a> (?string $database=null, ?string $driver=null)</td></tr>
+<tr class="memdesc:a42f62b8bb0a44c3f5e74a63417effd6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This opens an administrative or test-database connection for the selected backend. Connection settings come from DRIVER, HOST, PORT, USER, PASSWORD, and ADMIN_DATABASE. PostgreSQL administration connects to the existing "postgres" database by default; loaded data always goes into a separate temporary database.  <br /></td></tr>
 <tr class="memitem:a006c988f71fe3ed3e1024bb20cf5814e" id="r_a006c988f71fe3ed3e1024bb20cf5814e"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a006c988f71fe3ed3e1024bb20cf5814e">demoCreateDatabase</a> (PDO $admin, string $directory)</td></tr>
 <tr class="memdesc:a006c988f71fe3ed3e1024bb20cf5814e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This creates a uniquely named database and records it for cleanup.  <br /></td></tr>
 <tr class="memitem:aa709ff82ef52503b943e8e2c9f184ae2" id="r_aa709ff82ef52503b943e8e2c9f184ae2"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aa709ff82ef52503b943e8e2c9f184ae2">demoDownload</a> (string $url, string $destination)</td></tr>
 <tr class="memdesc:aa709ff82ef52503b943e8e2c9f184ae2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This downloads one HTTPS resource directly to a file.  <br /></td></tr>
+<tr class="memitem:a44ae472ed99b38a2954546153b76679e" id="r_a44ae472ed99b38a2954546153b76679e"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a44ae472ed99b38a2954546153b76679e">demoDriver</a> ()</td></tr>
+<tr class="memdesc:a44ae472ed99b38a2954546153b76679e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This validates the selected database driver.  <br /></td></tr>
 <tr class="memitem:ae500e25b814b78dd63bf379011d131bc" id="r_ae500e25b814b78dd63bf379011d131bc"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae500e25b814b78dd63bf379011d131bc">demoEnvironment</a> (string $name, string $default)</td></tr>
 <tr class="memdesc:ae500e25b814b78dd63bf379011d131bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">This reads a demo setting from the environment.  <br /></td></tr>
 <tr class="memitem:ac09653d53744028b74edd508c7ac9890" id="r_ac09653d53744028b74edd508c7ac9890"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac09653d53744028b74edd508c7ac9890">demoExtract</a> (string $archive, string $destination)</td></tr>
@@ -154,8 +156,8 @@ Variables</h2></td></tr>
 <tr class="memdesc:a6eb72d83bcd0d5473806015bd1c5036f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the package installed into the temporary Composer application.  <br /></td></tr>
 <tr class="memitem:ab87eba8c0a0ed4effb8fdced4aa4d8b8" id="r_ab87eba8c0a0ed4effb8fdced4aa4d8b8"><td class="memItemLeft">const&#160;</td><td class="memItemRight"><a class="el" href="#ab87eba8c0a0ed4effb8fdced4aa4d8b8">DEMO_RELEASE_API</a></td></tr>
 <tr class="memdesc:ab87eba8c0a0ed4effb8fdced4aa4d8b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This GitHub endpoint identifies the latest published Timezone Boundary Builder release.  <br /></td></tr>
-<tr class="memitem:a4eab16f8e1376ad457fb08e0c8418513" id="r_a4eab16f8e1376ad457fb08e0c8418513"><td class="memItemLeft"><a class="el" href="_l_g_v___t_z___lookup___loader_8class_8php.html#a05e9a67b5a536d62ff3e24a8b8bd62bb">if</a>(PHP_SAPI !=='cli'||$argc !==3||!in_array( $argv[1],[ 'run', 'cleanup'], true)||!is_dir( $argv[2])) <a class="el" href="_l_g_v___t_z___lookup___loader_8class_8php.html#a05e9a67b5a536d62ff3e24a8b8bd62bb">if</a>(function_exists('pcntl_async_signals'))&#160;</td><td class="memItemRight"><a class="el" href="#a4eab16f8e1376ad457fb08e0c8418513">try</a></td></tr>
-<tr class="memdesc:a4eab16f8e1376ad457fb08e0c8418513"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the worker entrypoint.  <br /></td></tr>
+<tr class="memitem:a022a8ce4029f72c198c5ba865452183d" id="r_a022a8ce4029f72c198c5ba865452183d"><td class="memItemLeft"><a class="el" href="src_2index_8php.html#ae30818dca132a9dc043a0e9a728a1b85">if</a>(realpath($_SERVER['SCRIPT_FILENAME'] ?? '') !==__FILE__) <a class="el" href="src_2index_8php.html#ae30818dca132a9dc043a0e9a728a1b85">if</a>(PHP_SAPI !=='cli'||$argc !==3||!in_array( $argv[1],[ 'run', 'cleanup'], true)||!is_dir( $argv[2])) <a class="el" href="src_2index_8php.html#ae30818dca132a9dc043a0e9a728a1b85">if</a>(function_exists('pcntl_async_signals'))&#160;</td><td class="memItemRight"><a class="el" href="#a022a8ce4029f72c198c5ba865452183d">try</a></td></tr>
+<tr class="memdesc:a022a8ce4029f72c198c5ba865452183d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the worker entrypoint.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>© Copyright 2023-2026, <a href="https://littlegreenviper.com">Little Green Viper Software Development LLC</a></p>
@@ -184,12 +186,12 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The database name comes from database.json, and must match the generated demo naming pattern. We delete large files before connecting to MySQL, so they are removed even when the server is unavailable. If dropping the database fails, its cleanup record remains for recovery. The shell removes the working directory only on success.</p>
+<p>The database name comes from database.json, and must match the generated demo naming pattern. We delete large files before connecting to the database server, so they are removed even when the server is unavailable. If dropping the database fails, its cleanup record remains for recovery. The shell removes the working directory only on success.</p>
 <dl class="section return"><dt>Returns</dt><dd>: True, if cleanup succeeded, or no database had been created. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">RuntimeException</td><td>if a cleanup record is unexpected, or a file cannot be removed. </td></tr>
-    <tr><td class="paramname">PDOException</td><td>if MySQL cleanup fails. </td></tr>
+    <tr><td class="paramname">PDOException</td><td>if database cleanup fails. </td></tr>
   </table>
   </dd>
 </dl>
@@ -200,11 +202,11 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00357">357</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00285">285</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, <a class="el" href="benchmark_8php_source.html#l00081">$start</a>, <a class="el" href="demo_2demo_8php_source.html#l00357">demoCleanup()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00336">demoRemoveDownloads()</a>.</p>
+<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, <a class="el" href="benchmark_8php_source.html#l00084">$start</a>, <a class="el" href="tests_2deploy_8php_source.html#l00093">$state</a>, <a class="el" href="demo_2demo_8php_source.html#l00285">demoCleanup()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00264">demoRemoveDownloads()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00357">demoCleanup()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00285">demoCleanup()</a>.</p>
 <div id="dynsection-0" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
 <div id="dynsection-0-summary" class="dynsummary">
 </div>
@@ -220,8 +222,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ab5c4548495ab40719480466f3ab7e258" name="ab5c4548495ab40719480466f3ab7e258"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5c4548495ab40719480466f3ab7e258">&#9670;&#160;</a></span>demoConnection()</h2>
+<a id="a42f62b8bb0a44c3f5e74a63417effd6d" name="a42f62b8bb0a44c3f5e74a63417effd6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42f62b8bb0a44c3f5e74a63417effd6d">&#9670;&#160;</a></span>demoConnection()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -229,37 +231,47 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">demoConnection </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">?string</td>          <td class="paramname"><span class="paramname"><em>$database</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">?string</td>          <td class="paramname"><span class="paramname"><em>$driver</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Connection settings come from the HOST, PORT, USER, and PASSWORD environment settings. We do not select an existing application database. The demo creates its own database after this connection succeeds.</p>
-<dl class="section return"><dt>Returns</dt><dd>: An initialized PDO connection, configured to throw database exceptions. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: A PDO connection with exception reporting enabled. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">RuntimeException</td><td>if the configured port is outside the valid TCP port range. </td></tr>
-    <tr><td class="paramname">PDOException</td><td>if the connection cannot be opened. </td></tr>
+    <tr><td class="paramname">RuntimeException</td><td>if the configured port is invalid. </td></tr>
+    <tr><td class="paramname">PDOException</td><td>if the connection fails. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">$database</td><td>Test database, or NULL for the administrative database.  </td></tr>
+    <tr><td class="paramname">$driver</td><td>Recorded cleanup driver, or NULL for the environment setting. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00178">178</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00191">191</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00178">demoConnection()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00160">demoEnvironment()</a>.</p>
+<p class="reference">References <a class="el" href="composer_8php_source.html#l00052">$database</a>, <a class="el" href="databases_8php_source.html#l00038">$driver</a>, <a class="el" href="databases_8php_source.html#l00210">$port</a>, <a class="el" href="demo_2demo_8php_source.html#l00191">demoConnection()</a>, <a class="el" href="demo_2demo_8php_source.html#l00174">demoDriver()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00161">demoEnvironment()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00178">demoConnection()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00191">demoConnection()</a>.</p>
 <div id="dynsection-2" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary">
 </div>
 <div id="dynsection-2-content" class="dyncontent hidden">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ab5c4548495ab40719480466f3ab7e258_cgraph.svg" width="306" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a42f62b8bb0a44c3f5e74a63417effd6d_cgraph.svg" width="443" height="86"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div id="dynsection-3" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
 <div id="dynsection-3-summary" class="dynsummary">
 </div>
 <div id="dynsection-3-content" class="dyncontent hidden">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ab5c4548495ab40719480466f3ab7e258_icgraph.svg" width="131" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a42f62b8bb0a44c3f5e74a63417effd6d_icgraph.svg" width="131" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -299,11 +311,11 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00392">392</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00326">326</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, and <a class="el" href="demo_2demo_8php_source.html#l00392">demoCreateDatabase()</a>.</p>
+<p class="reference">References <a class="el" href="databases_8php_source.html#l00215">$admin</a>, <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, <a class="el" href="databases_8php_source.html#l00038">$driver</a>, <a class="el" href="databases_8php_source.html#l00216">$name</a>, <a class="el" href="databases_8php_source.html#l00217">$quote</a>, and <a class="el" href="demo_2demo_8php_source.html#l00326">demoCreateDatabase()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00392">demoCreateDatabase()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00326">demoCreateDatabase()</a>.</p>
 <div id="dynsection-4" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
 <div id="dynsection-4-summary" class="dynsummary">
 </div>
@@ -352,11 +364,11 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00198">198</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00220">220</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00198">demoDownload()</a>.</p>
+<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00220">demoDownload()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00198">demoDownload()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00287">demoInstall()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00220">demoDownload()</a>.</p>
 <div id="dynsection-6" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
 <div id="dynsection-6-summary" class="dynsummary">
 </div>
@@ -367,7 +379,49 @@ Variables</h2></td></tr>
 <div id="dynsection-7-summary" class="dynsummary">
 </div>
 <div id="dynsection-7-content" class="dyncontent hidden">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_aa709ff82ef52503b943e8e2c9f184ae2_icgraph.svg" width="260" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_aa709ff82ef52503b943e8e2c9f184ae2_icgraph.svg" width="123" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a44ae472ed99b38a2954546153b76679e" name="a44ae472ed99b38a2954546153b76679e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44ae472ed99b38a2954546153b76679e">&#9670;&#160;</a></span>demoDriver()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">demoDriver </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>: "mysql" (the default) or "pgsql". </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">RuntimeException</td><td>if another driver is requested. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00174">174</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+
+<p class="reference">References <a class="el" href="databases_8php_source.html#l00038">$driver</a>, <a class="el" href="demo_2demo_8php_source.html#l00174">demoDriver()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00161">demoEnvironment()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00191">demoConnection()</a>, <a class="el" href="demo_2demo_8php_source.html#l00174">demoDriver()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00251">demoInstall()</a>.</p>
+<div id="dynsection-8" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-8-summary" class="dynsummary">
+</div>
+<div id="dynsection-8-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a44ae472ed99b38a2954546153b76679e_cgraph.svg" width="275" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div id="dynsection-9" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-9-summary" class="dynsummary">
+</div>
+<div id="dynsection-9-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a44ae472ed99b38a2954546153b76679e_icgraph.svg" width="268" height="134"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -400,22 +454,22 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00160">160</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00161">161</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00160">demoEnvironment()</a>.</p>
+<p class="reference">References <a class="el" href="databases_8php_source.html#l00216">$name</a>, and <a class="el" href="demo_2demo_8php_source.html#l00161">demoEnvironment()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00178">demoConnection()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00160">demoEnvironment()</a>.</p>
-<div id="dynsection-8" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-8-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00191">demoConnection()</a>, <a class="el" href="demo_2demo_8php_source.html#l00174">demoDriver()</a>, <a class="el" href="demo_2demo_8php_source.html#l00161">demoEnvironment()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00251">demoInstall()</a>.</p>
+<div id="dynsection-10" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-10-summary" class="dynsummary">
 </div>
-<div id="dynsection-8-content" class="dyncontent hidden">
+<div id="dynsection-10-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ae500e25b814b78dd63bf379011d131bc_cgraph.svg" width="138" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-9" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-9-summary" class="dynsummary">
+<div id="dynsection-11" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-11-summary" class="dynsummary">
 </div>
-<div id="dynsection-9-content" class="dyncontent hidden">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ae500e25b814b78dd63bf379011d131bc_icgraph.svg" width="306" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div id="dynsection-11-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ae500e25b814b78dd63bf379011d131bc_icgraph.svg" width="443" height="147"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -453,21 +507,21 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00236">236</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00235">235</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00236">demoExtract()</a>, and <a class="el" href="_l_g_v___t_z___lookup___loader_8class_8php_source.html#l00044">if</a>.</p>
+<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00235">demoExtract()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00236">demoExtract()</a>.</p>
-<div id="dynsection-10" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-10-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00235">demoExtract()</a>.</p>
+<div id="dynsection-12" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-12-summary" class="dynsummary">
 </div>
-<div id="dynsection-10-content" class="dyncontent hidden">
+<div id="dynsection-12-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ac09653d53744028b74edd508c7ac9890_cgraph.svg" width="107" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-11" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-11-summary" class="dynsummary">
+<div id="dynsection-13" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-13-summary" class="dynsummary">
 </div>
-<div id="dynsection-11-content" class="dyncontent hidden">
+<div id="dynsection-13-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ac09653d53744028b74edd508c7ac9890_icgraph.svg" width="107" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -501,21 +555,21 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00287">287</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00251">251</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, <a class="el" href="demo_2demo_8php_source.html#l00198">demoDownload()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00287">demoInstall()</a>.</p>
+<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, <a class="el" href="demo_2demo_8php_source.html#l00174">demoDriver()</a>, <a class="el" href="demo_2demo_8php_source.html#l00161">demoEnvironment()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00251">demoInstall()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00287">demoInstall()</a>.</p>
-<div id="dynsection-12" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-12-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00251">demoInstall()</a>.</p>
+<div id="dynsection-14" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-14-summary" class="dynsummary">
 </div>
-<div id="dynsection-12-content" class="dyncontent hidden">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ab9368ee826abf0b19065d8531f7e1560_cgraph.svg" width="260" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div id="dynsection-14-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ab9368ee826abf0b19065d8531f7e1560_cgraph.svg" width="412" height="86"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-13" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-13-summary" class="dynsummary">
+<div id="dynsection-15" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-15-summary" class="dynsummary">
 </div>
-<div id="dynsection-13-content" class="dyncontent hidden">
+<div id="dynsection-15-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ab9368ee826abf0b19065d8531f7e1560_icgraph.svg" width="100" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -544,21 +598,21 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00090">90</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00091">91</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00090">demoLatency()</a>.</p>
+<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00091">demoLatency()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00090">demoLatency()</a>.</p>
-<div id="dynsection-14" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-14-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00091">demoLatency()</a>.</p>
+<div id="dynsection-16" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-16-summary" class="dynsummary">
 </div>
-<div id="dynsection-14-content" class="dyncontent hidden">
+<div id="dynsection-16-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a060a93f9b6adf54dd551aec03972b12e_cgraph.svg" width="111" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-15" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-15-summary" class="dynsummary">
+<div id="dynsection-17" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-17-summary" class="dynsummary">
 </div>
-<div id="dynsection-15-content" class="dyncontent hidden">
+<div id="dynsection-17-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a060a93f9b6adf54dd551aec03972b12e_icgraph.svg" width="111" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -578,23 +632,23 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Lookup timings cover calls to the package API, using an existing connection. They exclude downloading, loading, and reference-geometry calculations. PHP memory measurements describe this worker, and do not include MySQL or the separate Composer process. Large-polygon audit counters show which geometry was actually evaluated. </p>
+<p>Lookup timings cover calls to the package API, using an existing connection. They exclude downloading, loading, and reference-geometry calculations. PHP memory measurements describe this worker, and do not include the database server or the separate Composer process. Large-polygon audit counters show which geometry was actually evaluated. </p>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00108">108</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00109">109</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00057">$demoMetrics</a>, <a class="el" href="benchmark_8php_source.html#l00114">$seconds</a>, and <a class="el" href="demo_2demo_8php_source.html#l00108">demoPrintMetrics()</a>.</p>
+<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00058">$demoMetrics</a>, <a class="el" href="benchmark_8php_source.html#l00117">$seconds</a>, and <a class="el" href="demo_2demo_8php_source.html#l00109">demoPrintMetrics()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00108">demoPrintMetrics()</a>.</p>
-<div id="dynsection-16" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-16-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00109">demoPrintMetrics()</a>.</p>
+<div id="dynsection-18" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-18-summary" class="dynsummary">
 </div>
-<div id="dynsection-16-content" class="dyncontent hidden">
+<div id="dynsection-18-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a719157c90fbacf21cc9b545731877f26_cgraph.svg" width="135" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-17" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-17-summary" class="dynsummary">
+<div id="dynsection-19" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-19-summary" class="dynsummary">
 </div>
-<div id="dynsection-17-content" class="dyncontent hidden">
+<div id="dynsection-19-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a719157c90fbacf21cc9b545731877f26_icgraph.svg" width="135" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -628,21 +682,21 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00336">336</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00264">264</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, and <a class="el" href="demo_2demo_8php_source.html#l00336">demoRemoveDownloads()</a>.</p>
+<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, and <a class="el" href="demo_2demo_8php_source.html#l00264">demoRemoveDownloads()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00357">demoCleanup()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00336">demoRemoveDownloads()</a>.</p>
-<div id="dynsection-18" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-18-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00285">demoCleanup()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00264">demoRemoveDownloads()</a>.</p>
+<div id="dynsection-20" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-20-summary" class="dynsummary">
 </div>
-<div id="dynsection-18-content" class="dyncontent hidden">
+<div id="dynsection-20-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a1dd8cfc89668632a9696e27b01245ceb_cgraph.svg" width="179" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-19" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-19-summary" class="dynsummary">
+<div id="dynsection-21" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-21-summary" class="dynsummary">
 </div>
-<div id="dynsection-19-content" class="dyncontent hidden">
+<div id="dynsection-21-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a1dd8cfc89668632a9696e27b01245ceb_icgraph.svg" width="330" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -664,21 +718,21 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>PHP 8.2 and later can reset the peak between phases and lookup calls. Earlier versions leave the lifetime peak intact; the report labels those measurements accordingly. </p>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00078">78</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00079">79</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00078">demoResetMemoryPeak()</a>, and <a class="el" href="_l_g_v___t_z___lookup___loader_8class_8php_source.html#l00044">if</a>.</p>
+<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00079">demoResetMemoryPeak()</a>, and <a class="el" href="src_2index_8php_source.html#l00051">if</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00078">demoResetMemoryPeak()</a>.</p>
-<div id="dynsection-20" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-20-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00079">demoResetMemoryPeak()</a>.</p>
+<div id="dynsection-22" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-22-summary" class="dynsummary">
 </div>
-<div id="dynsection-20-content" class="dyncontent hidden">
+<div id="dynsection-22-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a49a931b6f5de5541d3604ada7de83747_cgraph.svg" width="178" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-21" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-21-summary" class="dynsummary">
+<div id="dynsection-23" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-23-summary" class="dynsummary">
 </div>
-<div id="dynsection-21-content" class="dyncontent hidden">
+<div id="dynsection-23-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a49a931b6f5de5541d3604ada7de83747_icgraph.svg" width="178" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -698,7 +752,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>We first check PHP and MySQL, then install the package and obtain the latest boundary release. The package performs the actual load while a listener retains independent source geometry for storage and lookup checks. The large files are deleted after loading, and the reference geometry is freed before lookup measurements.</p>
+<p>We first check PHP and the database server, then install the package and obtain the latest boundary release. The package performs the actual load while a listener retains independent source geometry for storage and lookup checks. The large files are deleted after loading, and the reference geometry is freed before lookup measurements.</p>
 <p>The known locations come from the installed package. Generated tests sample the largest polygons, including points on both sides of boundaries. Coverage must show that those polygons were actually decoded by the API. The parent shell handles database and directory cleanup after this function returns or the worker fails.</p>
 <dl class="section return"><dt>Returns</dt><dd>: 0, if every check passes; 1, if a storage, lookup, or coverage check fails. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
@@ -714,21 +768,21 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00427">427</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00363">363</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00057">$demoMetrics</a>, <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, and <a class="el" href="demo_2demo_8php_source.html#l00427">demoRun()</a>.</p>
+<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00058">$demoMetrics</a>, <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, and <a class="el" href="demo_2demo_8php_source.html#l00363">demoRun()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00427">demoRun()</a>.</p>
-<div id="dynsection-22" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-22-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00363">demoRun()</a>.</p>
+<div id="dynsection-24" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-24-summary" class="dynsummary">
 </div>
-<div id="dynsection-22-content" class="dyncontent hidden">
+<div id="dynsection-24-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ae930fcf1b80e47863d161c3878607c4c_cgraph.svg" width="90" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-23" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-23-summary" class="dynsummary">
+<div id="dynsection-25" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-25-summary" class="dynsummary">
 </div>
-<div id="dynsection-23-content" class="dyncontent hidden">
+<div id="dynsection-25-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_ae930fcf1b80e47863d161c3878607c4c_icgraph.svg" width="90" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -760,21 +814,21 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00064">64</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00065">65</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00057">$demoMetrics</a>, <a class="el" href="benchmark_8php_source.html#l00081">$start</a>, and <a class="el" href="demo_2demo_8php_source.html#l00064">demoTiming()</a>.</p>
+<p class="reference">References <a class="el" href="demo_2demo_8php_source.html#l00058">$demoMetrics</a>, <a class="el" href="benchmark_8php_source.html#l00084">$start</a>, and <a class="el" href="demo_2demo_8php_source.html#l00065">demoTiming()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00064">demoTiming()</a>.</p>
-<div id="dynsection-24" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-24-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00065">demoTiming()</a>.</p>
+<div id="dynsection-26" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-26-summary" class="dynsummary">
 </div>
-<div id="dynsection-24-content" class="dyncontent hidden">
+<div id="dynsection-26-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a5ae9f6605fac4c525b9f7d615f9c3c6b_cgraph.svg" width="104" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-25" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-25-summary" class="dynsummary">
+<div id="dynsection-27" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-27-summary" class="dynsummary">
 </div>
-<div id="dynsection-25-content" class="dyncontent hidden">
+<div id="dynsection-27-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="demo_2demo_8php_a5ae9f6605fac4c525b9f7d615f9c3c6b_icgraph.svg" width="104" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -795,9 +849,9 @@ Variables</h2></td></tr>
 <p>"started" contains a monotonic timestamp in nanoseconds. "timings" contains phase durations in seconds. The lookup arrays contain individual call durations in milliseconds. Fields ending in "bytes" describe data sizes or PHP memory usage. "largest" contains only the small description records needed for the final report.</p>
 <p>We retain measurements from completed phases, so a failed run can still print the information available so far. </p>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00057">57</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00058">58</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00108">demoPrintMetrics()</a>, <a class="el" href="demo_2demo_8php_source.html#l00427">demoRun()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00064">demoTiming()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00109">demoPrintMetrics()</a>, <a class="el" href="demo_2demo_8php_source.html#l00363">demoRun()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00065">demoTiming()</a>.</p>
 
 </div>
 </div>
@@ -813,7 +867,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00042">42</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00043">43</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
 </div>
 </div>
@@ -829,24 +883,24 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00045">45</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00046">46</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
 </div>
 </div>
-<a id="a4eab16f8e1376ad457fb08e0c8418513" name="a4eab16f8e1376ad457fb08e0c8418513"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4eab16f8e1376ad457fb08e0c8418513">&#9670;&#160;</a></span>try</h2>
+<a id="a022a8ce4029f72c198c5ba865452183d" name="a022a8ce4029f72c198c5ba865452183d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a022a8ce4029f72c198c5ba865452183d">&#9670;&#160;</a></span>try</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="_l_g_v___t_z___lookup___loader_8class_8php.html#a05e9a67b5a536d62ff3e24a8b8bd62bb">if</a>(PHP_SAPI !=='cli'|| $argc !==3||!in_array($argv[1], ['run', 'cleanup'], true)||!is_dir($argv[2])) <a class="el" href="_l_g_v___t_z___lookup___loader_8class_8php.html#a05e9a67b5a536d62ff3e24a8b8bd62bb">if</a> (function_exists( 'pcntl_async_signals')) try</td>
+          <td class="memname"><a class="el" href="src_2index_8php.html#ae30818dca132a9dc043a0e9a728a1b85">if</a>(realpath( $_SERVER[ 'SCRIPT_FILENAME'] ?? '') !==__FILE__) <a class="el" href="src_2index_8php.html#ae30818dca132a9dc043a0e9a728a1b85">if</a>(PHP_SAPI !=='cli'|| $argc !==3||!in_array($argv[1], ['run', 'cleanup'], true)||!is_dir($argv[2])) <a class="el" href="src_2index_8php.html#ae30818dca132a9dc043a0e9a728a1b85">if</a> (function_exists( 'pcntl_async_signals')) try</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>run.sh supplies the mode and working directory. An invalid invocation exits with 2. A caught worker error exits with 1, after printing any collected metrics. The shell preserves the worker's exit status unless cleanup fails. </p>
 
-<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00628">628</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="demo_2demo_8php_source.html#l00575">575</a> of file <a class="el" href="demo_2demo_8php_source.html">demo.php</a>.</p>
 
 </div>
 </div>

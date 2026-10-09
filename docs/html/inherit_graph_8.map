@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,116,31"/>
+<area shape="rect" id="Node000001" href="$class_database_test_statement.html" title="This observes native PostgreSQL result sizes without keeping statements or cursors alive...." alt="" coords="164,5,327,31"/>
+<area shape="poly" id="edge6_Node000000_Node000001" title=" " alt="" coords="129,15,164,15,164,21,129,21"/>
+</map>

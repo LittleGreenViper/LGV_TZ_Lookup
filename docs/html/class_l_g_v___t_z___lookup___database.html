@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('class_l_g_v___
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae0d92fafb4c94663b1bd84bb95c1bd39" id="r_ae0d92fafb4c94663b1bd84bb95c1bd39"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae0d92fafb4c94663b1bd84bb95c1bd39">__construct</a> ( $inDatabase, $inUser=NULL, $inPassword=NULL, $inDriver='mysql', $inHost='127.0.0.1', $inPort=3306)</td></tr>
+<tr class="memitem:ab341b28f50b5eb3ddde2093eefeea9d1" id="r_ab341b28f50b5eb3ddde2093eefeea9d1"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ab341b28f50b5eb3ddde2093eefeea9d1">__construct</a> ( $inDatabase, $inUser=NULL, $inPassword=NULL, $inDriver='mysql', $inHost='127.0.0.1', $inPort=NULL)</td></tr>
 <tr class="memitem:a60a092f9e626bf45f215c10d81131e54" id="r_a60a092f9e626bf45f215c10d81131e54"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a60a092f9e626bf45f215c10d81131e54">get_tz_entities</a> ( $in_id_list)</td></tr>
 <tr class="memitem:ab17af20558f66a9e12337ded8dd3e12d" id="r_ab17af20558f66a9e12337ded8dd3e12d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ab17af20558f66a9e12337ded8dd3e12d">get_tz_ids</a> ( $in_lng, $in_lat)</td></tr>
 <tr class="memitem:aa174e8bcf0b0ded2529140a5bb01e768" id="r_aa174e8bcf0b0ded2529140a5bb01e768"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aa174e8bcf0b0ded2529140a5bb01e768">get_tz_polygons</a> ($in_id_list)</td></tr>
@@ -139,17 +139,17 @@ Public Attributes</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:ad6aaa26963407618367a34766d3a0efe" id="r_ad6aaa26963407618367a34766d3a0efe"><td class="memItemLeft">static&#160;</td><td class="memItemRight"><a class="el" href="#ad6aaa26963407618367a34766d3a0efe">_sort_by_domainSize</a> ($in_A, $in_B)</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pri-static-attribs" class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:aac6aca811d026953fc915fb55242655b" id="r_aac6aca811d026953fc915fb55242655b"><td class="memItemLeft">static&#160;</td><td class="memItemRight"><a class="el" href="#aac6aca811d026953fc915fb55242655b">$_init_sql</a></td></tr>
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aac6aca811d026953fc915fb55242655b" id="r_aac6aca811d026953fc915fb55242655b"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aac6aca811d026953fc915fb55242655b">$_init_sql</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class manages interactions between the server and the database. </p>
 
 <p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00037">37</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae0d92fafb4c94663b1bd84bb95c1bd39" name="ae0d92fafb4c94663b1bd84bb95c1bd39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0d92fafb4c94663b1bd84bb95c1bd39">&#9670;&#160;</a></span>__construct()</h2>
+<a id="ab341b28f50b5eb3ddde2093eefeea9d1" name="ab341b28f50b5eb3ddde2093eefeea9d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab341b28f50b5eb3ddde2093eefeea9d1">&#9670;&#160;</a></span>__construct()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -182,7 +182,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>$inPort</em></span><span class="paramdefsep"> = </span><span class="paramdefval">3306</span>&#160;)</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>$inPort</em></span><span class="paramdefsep"> = </span><span class="paramdefval">NULL</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -194,7 +194,7 @@ Static Private Attributes</h2></td></tr>
     <tr><td class="paramname">$inPassword</td><td>database password, optional  </td></tr>
     <tr><td class="paramname">$inDriver</td><td>database server type (optional, default is 'mysql')  </td></tr>
     <tr><td class="paramname">$inHost</td><td>database server host (optional, default is 127.0.0.1)  </td></tr>
-    <tr><td class="paramname">$inPort</td><td>database TCP port (optional, default is 3306) </td></tr>
+    <tr><td class="paramname">$inPort</td><td>database TCP port (optional, defaults to 3306 for mysql, 5432 for pgsql) </td></tr>
   </table>
   </dd>
 </dl>
@@ -236,9 +236,9 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00118">118</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00135">135</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00129">store_entity()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00146">store_entity()</a>.</p>
 <div id="dynsection-1" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
 <div id="dynsection-1-summary" class="dynsummary">
 </div>
@@ -284,7 +284,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00093">93</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00110">110</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
 
 </div>
 </div>
@@ -310,7 +310,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00162">162</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00180">180</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
 
 <p class="reference">References <a class="el" href="composer_8php_source.html#l00053">pdo_instance</a>.</p>
 
@@ -344,7 +344,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00145">145</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00163">163</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
 
 <p class="reference">References <a class="el" href="composer_8php_source.html#l00053">pdo_instance</a>.</p>
 
@@ -368,7 +368,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="class_demo_tracked_database.html#a9700a3fabc0d36e8cec3225bec7bf0da">DemoTrackedDatabase</a>, and <a class="el" href="class_tracking_database.html#ae32ea0236ddd6da69a0cbe0b5e1f934e">TrackingDatabase</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00199">199</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00217">217</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
 
 <p class="reference">References <a class="el" href="composer_8php_source.html#l00053">pdo_instance</a>.</p>
 
@@ -388,11 +388,11 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>This clears the database. </p>
+<p>This replaces the timezones table and its indexes for the configured database driver. </p>
 
 <p>Reimplemented in <a class="el" href="class_s_q_lite_database.html#a23900e3d2a6f1a7436b1a086a56982ed">SQLiteDatabase</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00212">212</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00230">230</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
 
 <p class="reference">References <a class="el" href="composer_8php_source.html#l00053">pdo_instance</a>.</p>
 
@@ -420,9 +420,9 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00129">129</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00146">146</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
 
-<p class="reference">References <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00118">_array_flatten()</a>, and <a class="el" href="composer_8php_source.html#l00053">pdo_instance</a>.</p>
+<p class="reference">References <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00135">_array_flatten()</a>, and <a class="el" href="composer_8php_source.html#l00053">pdo_instance</a>.</p>
 <div id="dynsection-2" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary">
 </div>
@@ -448,11 +448,11 @@ Static Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The SQL that we use to initialize the database. </p>
+<p>The statements that initialize this connection's MySQL or PostgreSQL schema. </p>
 
 <p class="definition">Definition at line <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00042">42</a> of file <a class="el" href="_l_g_v___t_z___lookup___database_8class_8php_source.html">LGV_TZ_Lookup_Database.class.php</a>.</p>
 

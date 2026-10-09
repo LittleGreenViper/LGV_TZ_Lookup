@@ -7,5 +7,6 @@ var searchData=
   ['initial_20load_20and_20database_20setup_4',['The Initial Load and Database Setup',['../index.html#the-initial-load-and-database-setup',1,'']]],
   ['initial_20setup_5',['Initial Setup',['../index.html#initial-setup',1,'']]],
   ['install_20from_20github_6',['Install From GitHub',['../index.html#install-from-github',1,'']]],
-  ['installation_7',['Initial Installation',['../index.html#initial-installation',1,'']]]
+  ['installation_7',['Initial Installation',['../index.html#initial-installation',1,'']]],
+  ['integration_20tests_8',['Database Integration Tests',['../index.html#database-integration-tests',1,'']]]
 ];

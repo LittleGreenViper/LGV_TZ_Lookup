@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('_l_g_v___t_z__
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keyword">function</span> _testllGen($inLng, <span class="comment">///&lt; The longitude to use</span></div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                        $inLat  <span class="comment">///&lt; The latitude to use</span></div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                        ) {</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        include <a class="code hl_variable" href="src_2index_8php.html#a115e225a8c3c8475044f09225d6ce4b8">__CONFIG_FILE_</a>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        include __CONFIG_FILE_;</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        </div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <a class="code hl_variable" href="src_2index_8php.html#a6f0e31bba691c3a1e02d99e70bcdcd47">$queryString</a> = isset($g_server_secret) ? <span class="stringliteral">&quot;secret=$g_server_secret&quot;</span> : <span class="stringliteral">&quot;&quot;</span>;</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        </div>
@@ -234,10 +234,9 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('_l_g_v___t_z__
 </div>
 <div class="ttc" id="a_l_g_v___t_z___lookup___test_8php_html_a5fdb5cb9a08a7933dd607dfc4df5f231"><div class="ttname"><a href="_l_g_v___t_z___lookup___test_8php.html#a5fdb5cb9a08a7933dd607dfc4df5f231">test_server</a></div><div class="ttdeci">test_server()</div><div class="ttdef"><b>Definition</b> <a href="#l00037">LGV_TZ_Lookup_Test.php:37</a></div></div>
 <div class="ttc" id="a_test_locations_8php_html_a26017ee2a775de48fd677fe0876b157e"><div class="ttname"><a href="_test_locations_8php.html#a26017ee2a775de48fd677fe0876b157e">$test_locations_param_array</a></div><div class="ttdeci">$test_locations_param_array</div><div class="ttdoc">This file has a list of long/lat pairs, along with the expected results, when presented to the server...</div><div class="ttdef"><b>Definition</b> <a href="_test_locations_8php_source.html#l00028">TestLocations.php:28</a></div></div>
-<div class="ttc" id="abenchmark_8php_html_ad511f4eeab6abd500279ac610b3cc78f"><div class="ttname"><a href="benchmark_8php.html#ad511f4eeab6abd500279ac610b3cc78f">$failures</a></div><div class="ttdeci">$failures</div><div class="ttdef"><b>Definition</b> <a href="benchmark_8php_source.html#l00076">benchmark.php:76</a></div></div>
-<div class="ttc" id="asrc_2index_8php_html_a115e225a8c3c8475044f09225d6ce4b8"><div class="ttname"><a href="src_2index_8php.html#a115e225a8c3c8475044f09225d6ce4b8">__CONFIG_FILE_</a></div><div class="ttdeci">const __CONFIG_FILE_</div><div class="ttdef"><b>Definition</b> <a href="src_2index_8php_source.html#l00051">index.php:51</a></div></div>
-<div class="ttc" id="asrc_2index_8php_html_a501cb619e17e9b3108d9bbd10221a648"><div class="ttname"><a href="src_2index_8php.html#a501cb619e17e9b3108d9bbd10221a648">call_server</a></div><div class="ttdeci">call_server( $inQuery, $inIsCLI)</div><div class="ttdef"><b>Definition</b> <a href="src_2index_8php_source.html#l00069">index.php:69</a></div></div>
-<div class="ttc" id="asrc_2index_8php_html_a6f0e31bba691c3a1e02d99e70bcdcd47"><div class="ttname"><a href="src_2index_8php.html#a6f0e31bba691c3a1e02d99e70bcdcd47">$queryString</a></div><div class="ttdeci">$queryString</div><div class="ttdef"><b>Definition</b> <a href="src_2index_8php_source.html#l00059">index.php:59</a></div></div>
+<div class="ttc" id="abenchmark_8php_html_ad511f4eeab6abd500279ac610b3cc78f"><div class="ttname"><a href="benchmark_8php.html#ad511f4eeab6abd500279ac610b3cc78f">$failures</a></div><div class="ttdeci">$failures</div><div class="ttdef"><b>Definition</b> <a href="benchmark_8php_source.html#l00079">benchmark.php:79</a></div></div>
+<div class="ttc" id="asrc_2index_8php_html_a501cb619e17e9b3108d9bbd10221a648"><div class="ttname"><a href="src_2index_8php.html#a501cb619e17e9b3108d9bbd10221a648">call_server</a></div><div class="ttdeci">call_server( $inQuery, $inIsCLI)</div><div class="ttdef"><b>Definition</b> <a href="src_2index_8php_source.html#l00071">index.php:71</a></div></div>
+<div class="ttc" id="asrc_2index_8php_html_a6f0e31bba691c3a1e02d99e70bcdcd47"><div class="ttname"><a href="src_2index_8php.html#a6f0e31bba691c3a1e02d99e70bcdcd47">$queryString</a></div><div class="ttdeci">$queryString</div><div class="ttdef"><b>Definition</b> <a href="src_2index_8php_source.html#l00061">index.php:61</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

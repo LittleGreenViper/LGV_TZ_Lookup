@@ -1,6 +1,8 @@
-**Unreleased** *October 9, 2026*
+**1.4.0** *October 9, 2026*
 
-- Added a portable command-line Composer demo that downloads the latest boundaries, loads a temporary MySQL database, runs location tests, and removes the data and database afterward.
+- Added PostgreSQL lookup/loading support alongside MySQL, with binary-safe storage, bounded polygon reads, and backend-selectable Composer demos and integration tests.
+- Added one-command server deployment with prompted database settings, a random server secret enabled by default, private configuration, tested loading, and ownership-checked rollback.
+- Added a portable command-line Composer demo that downloads the latest boundaries, loads a temporary MySQL or PostgreSQL database, runs location tests, and removes the data and database afterward.
 - Added independent source/storage validation and boundary/interior probes for the largest polygons, with phase timings, lookup latency, memory, data-size and coverage metrics.
 - Documented demo setup, results, metrics, cleanup recovery, and helper APIs, with matching MIT license notices.
 - Improved HTML documentation coverage and navigation, with the README landing page and a root generate-docs.sh build script.

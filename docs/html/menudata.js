@@ -26,6 +26,8 @@ var menudata={children:[
 {text:"Start Here",url:"index.html"},
 {text:"Guides",url:"index.html",children:[
 {text:"Composer Library",url:"index.html#composer-library"},
+{text:"PostgreSQL",url:"index.html#using-postgresql"},
+{text:"Server Deployment",url:"index.html#one-command-server-deployment"},
 {text:"Command-line Demo",url:"index.html#turnkey-command-line-demo"},
 {text:"Standalone Server",url:"index.html#standalone-server-implementation"},
 {text:"Performance",url:"index.html#query-performance"},
@@ -40,8 +42,10 @@ var menudata={children:[
 {text:"$",url:"functions.html#index__24"},
 {text:"_",url:"functions.html#index__5F"},
 {text:"c",url:"functions.html#index_c"},
+{text:"d",url:"functions.html#index_d"},
 {text:"e",url:"functions.html#index_e"},
 {text:"g",url:"functions.html#index_g"},
+{text:"i",url:"functions.html#index_i"},
 {text:"k",url:"functions.html#index_k"},
 {text:"l",url:"functions.html#index_l"},
 {text:"o",url:"functions.html#index_o"},
@@ -54,8 +58,10 @@ var menudata={children:[
 {text:"Functions",url:"functions_func.html",children:[
 {text:"_",url:"functions_func.html#index__5F"},
 {text:"c",url:"functions_func.html#index_c"},
+{text:"d",url:"functions_func.html#index_d"},
 {text:"e",url:"functions_func.html#index_e"},
 {text:"g",url:"functions_func.html#index_g"},
+{text:"i",url:"functions_func.html#index_i"},
 {text:"k",url:"functions_func.html#index_k"},
 {text:"l",url:"functions_func.html#index_l"},
 {text:"o",url:"functions_func.html#index_o"},
@@ -71,7 +77,6 @@ var menudata={children:[
 {text:"Functions and Variables",url:"globals.html",children:[
 {text:"All",url:"globals.html",children:[
 {text:"$",url:"globals.html#index__24"},
-{text:"_",url:"globals.html#index__5F"},
 {text:"c",url:"globals.html#index_c"},
 {text:"d",url:"globals.html#index_d"},
 {text:"e",url:"globals.html#index_e"},
@@ -80,10 +85,14 @@ var menudata={children:[
 {text:"p",url:"globals.html#index_p"},
 {text:"r",url:"globals.html#index_r"},
 {text:"t",url:"globals.html#index_t"}]},
-{text:"Functions",url:"globals_func.html"},
+{text:"Functions",url:"globals_func.html",children:[
+{text:"c",url:"globals_func.html#index_c"},
+{text:"d",url:"globals_func.html#index_d"},
+{text:"p",url:"globals_func.html#index_p"},
+{text:"r",url:"globals_func.html#index_r"},
+{text:"t",url:"globals_func.html#index_t"}]},
 {text:"Variables",url:"globals_vars.html",children:[
 {text:"$",url:"globals_vars.html#index__24"},
-{text:"_",url:"globals_vars.html#index__5F"},
 {text:"d",url:"globals_vars.html#index_d"},
 {text:"e",url:"globals_vars.html#index_e"},
 {text:"f",url:"globals_vars.html#index_f"},

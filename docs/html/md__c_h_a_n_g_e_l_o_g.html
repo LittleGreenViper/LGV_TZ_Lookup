@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -111,9 +111,11 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('md__c_h_a_n_g_
   <div class="headertitle"><div class="title">CHANGELOG </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md1"></a> <b>Unreleased</b> <em>October 9, 2026</em></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md1"></a> <b>1.4.0</b> <em>October 9, 2026</em></p>
 <ul>
-<li>Added a portable command-line Composer demo that downloads the latest boundaries, loads a temporary MySQL database, runs location tests, and removes the data and database afterward.</li>
+<li>Added PostgreSQL lookup/loading support alongside MySQL, with binary-safe storage, bounded polygon reads, and backend-selectable Composer demos and integration tests.</li>
+<li>Added one-command server deployment with prompted database settings, a random server secret enabled by default, private configuration, tested loading, and ownership-checked rollback.</li>
+<li>Added a portable command-line Composer demo that downloads the latest boundaries, loads a temporary MySQL or PostgreSQL database, runs location tests, and removes the data and database afterward.</li>
 <li>Added independent source/storage validation and boundary/interior probes for the largest polygons, with phase timings, lookup latency, memory, data-size and coverage metrics.</li>
 <li>Documented demo setup, results, metrics, cleanup recovery, and helper APIs, with matching MIT license notices.</li>
 <li>Improved HTML documentation coverage and navigation, with the README landing page and a root generate-docs.sh build script.</li>

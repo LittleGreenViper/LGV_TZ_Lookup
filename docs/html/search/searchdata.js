@@ -3,8 +3,8 @@ var indexSectionsWithContent =
   0: "$_abcdefghiklmnopqrstuvwz",
   1: "dlst",
   2: "bcdfilmnrst",
-  3: "_cdegkloprstvwz",
-  4: "$_defipt",
+  3: "_cdegikloprstvwz",
+  4: "$defipt",
   5: "abcdfghilmnopqrstuwz"
 };
 

@@ -1,9 +1,10 @@
 var demo_2demo_8php =
 [
     [ "demoCleanup", "demo_2demo_8php.html#a80c2ff4ef7e105223f237ea4afd88c6d", null ],
-    [ "demoConnection", "demo_2demo_8php.html#ab5c4548495ab40719480466f3ab7e258", null ],
+    [ "demoConnection", "demo_2demo_8php.html#a42f62b8bb0a44c3f5e74a63417effd6d", null ],
     [ "demoCreateDatabase", "demo_2demo_8php.html#a006c988f71fe3ed3e1024bb20cf5814e", null ],
     [ "demoDownload", "demo_2demo_8php.html#aa709ff82ef52503b943e8e2c9f184ae2", null ],
+    [ "demoDriver", "demo_2demo_8php.html#a44ae472ed99b38a2954546153b76679e", null ],
     [ "demoEnvironment", "demo_2demo_8php.html#ae500e25b814b78dd63bf379011d131bc", null ],
     [ "demoExtract", "demo_2demo_8php.html#ac09653d53744028b74edd508c7ac9890", null ],
     [ "demoInstall", "demo_2demo_8php.html#ab9368ee826abf0b19065d8531f7e1560", null ],
@@ -16,5 +17,5 @@ var demo_2demo_8php =
     [ "$demoMetrics", "demo_2demo_8php.html#a16104ef90397fb1eb82e57080349c219", null ],
     [ "DEMO_PACKAGE", "demo_2demo_8php.html#a6eb72d83bcd0d5473806015bd1c5036f", null ],
     [ "DEMO_RELEASE_API", "demo_2demo_8php.html#ab87eba8c0a0ed4effb8fdced4aa4d8b8", null ],
-    [ "try", "demo_2demo_8php.html#a4eab16f8e1376ad457fb08e0c8418513", null ]
+    [ "try", "demo_2demo_8php.html#a022a8ce4029f72c198c5ba865452183d", null ]
 ];

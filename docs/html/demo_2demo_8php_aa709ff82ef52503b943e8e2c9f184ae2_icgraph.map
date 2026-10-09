@@ -1,7 +1,4 @@
 <map id="demoDownload" name="demoDownload">
-<area shape="rect" id="Node000001" title="This downloads one HTTPS resource directly to a file." alt="" coords="143,29,255,55"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="224,18,216,11,199,8,183,10,176,15,174,20,178,28,174,31,169,21,171,11,182,5,199,3,219,6,228,15"/>
-<area shape="rect" id="Node000002" href="$demo_2demo_8php.html#ab9368ee826abf0b19065d8531f7e1560" title="This builds the temporary Composer application and loads its autoloader." alt="" coords="5,29,95,55"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="129,45,95,45,95,39,129,39"/>
-<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="75,18,68,11,50,8,35,10,27,15,25,20,30,28,25,31,20,21,23,11,33,5,50,3,70,6,79,15"/>
+<area shape="rect" id="Node000001" title="This downloads one HTTPS resource directly to a file." alt="" coords="5,29,117,55"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="80,18,74,11,61,8,50,10,44,14,43,20,47,28,42,30,38,21,40,12,48,5,61,3,77,6,84,14"/>
 </map>

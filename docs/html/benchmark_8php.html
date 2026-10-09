@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('benchmark_8php
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a83ee16fb562be66b0d3b38cda1a48a27" id="r_a83ee16fb562be66b0d3b38cda1a48a27"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a83ee16fb562be66b0d3b38cda1a48a27">$cases</a></td></tr>
-<tr class="memitem:ac97d38f73a8c7a91f8450d710b0c18c2" id="r_ac97d38f73a8c7a91f8450d710b0c18c2"><td class="memItemLeft"><a class="el" href="#ac961b1413ce146cb38bf6caeb66f0138">if</a>(empty($options['mysql']) &amp;&amp;!isset($options['build']) &amp;&amp;!is_file($options['fixture']))&#160;</td><td class="memItemRight"><a class="el" href="#ac97d38f73a8c7a91f8450d710b0c18c2">$createDatabase</a></td></tr>
+<tr class="memitem:a994c591de18c1fe7cbe1f594e2a9e2e9" id="r_a994c591de18c1fe7cbe1f594e2a9e2e9"><td class="memItemLeft"><a class="el" href="#ac961b1413ce146cb38bf6caeb66f0138">if</a>(isset($options['fixture']) &amp;&amp;!isset($options['build']) &amp;&amp;!is_file($options['fixture']))&#160;</td><td class="memItemRight"><a class="el" href="#a994c591de18c1fe7cbe1f594e2a9e2e9">$createDatabase</a></td></tr>
 <tr class="memitem:a7691c0162d89de0b6ba47edcd8ba8878" id="r_a7691c0162d89de0b6ba47edcd8ba8878"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a7691c0162d89de0b6ba47edcd8ba8878">$database</a></td></tr>
 <tr class="memitem:a62ff8b27f7c8e69c8ff29fca96f29793" id="r_a62ff8b27f7c8e69c8ff29fca96f29793"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a62ff8b27f7c8e69c8ff29fca96f29793">$expectedResults</a></td></tr>
 <tr class="memitem:ad511f4eeab6abd500279ac610b3cc78f" id="r_ad511f4eeab6abd500279ac610b3cc78f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ad511f4eeab6abd500279ac610b3cc78f">$failures</a></td></tr>
@@ -129,7 +129,7 @@ Variables</h2></td></tr>
 <tr class="memitem:a233d12bd8b6d3453e9a7a3f0b8c31db2" id="r_a233d12bd8b6d3453e9a7a3f0b8c31db2"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a233d12bd8b6d3453e9a7a3f0b8c31db2">$results</a></td></tr>
 <tr class="memitem:ad5d2bc0247a8cc6025c8265d131e2551" id="r_ad5d2bc0247a8cc6025c8265d131e2551"><td class="memItemLeft">for($run=0; $run&lt; max(1,(int)($options['runs'] ?? 3));++$run)&#160;</td><td class="memItemRight"><a class="el" href="#ad5d2bc0247a8cc6025c8265d131e2551">$seconds</a></td></tr>
 <tr class="memitem:acf96197b49ba32fd1ae8a1e966cba55a" id="r_acf96197b49ba32fd1ae8a1e966cba55a"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#acf96197b49ba32fd1ae8a1e966cba55a">$slowest</a></td></tr>
-<tr class="memitem:a3d2283bf12023e115430cc08031338d1" id="r_a3d2283bf12023e115430cc08031338d1"><td class="memItemLeft"><a class="el" href="#ac961b1413ce146cb38bf6caeb66f0138">if</a>(empty($options['fixture']) &amp;&amp;empty($options['mysql']))&#160;</td><td class="memItemRight"><a class="el" href="#a3d2283bf12023e115430cc08031338d1">$source</a></td></tr>
+<tr class="memitem:af690db4f1f0e7b3d3ed759d66d5f7b89" id="r_af690db4f1f0e7b3d3ed759d66d5f7b89"><td class="memItemLeft"><a class="el" href="#ac961b1413ce146cb38bf6caeb66f0138">if</a>(count(array_intersect(['fixture', 'mysql', 'pgsql'], array_keys($options))) !==1)&#160;</td><td class="memItemRight"><a class="el" href="#af690db4f1f0e7b3d3ed759d66d5f7b89">$source</a></td></tr>
 <tr class="memitem:a50a00e7de77365e00b117e73aa82fb9b" id="r_a50a00e7de77365e00b117e73aa82fb9b"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a50a00e7de77365e00b117e73aa82fb9b">$start</a></td></tr>
 <tr class="memitem:ab2b7ea7f32c0dd084502969afba91f5a" id="r_ab2b7ea7f32c0dd084502969afba91f5a"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ab2b7ea7f32c0dd084502969afba91f5a">$times</a></td></tr>
 <tr class="memitem:ac961b1413ce146cb38bf6caeb66f0138" id="r_ac961b1413ce146cb38bf6caeb66f0138"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac961b1413ce146cb38bf6caeb66f0138">if</a> (isset( $options[ 'build']))</td></tr>
@@ -148,23 +148,23 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00064">64</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00067">67</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
-<a id="ac97d38f73a8c7a91f8450d710b0c18c2" name="ac97d38f73a8c7a91f8450d710b0c18c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac97d38f73a8c7a91f8450d710b0c18c2">&#9670;&#160;</a></span>$createDatabase</h2>
+<a id="a994c591de18c1fe7cbe1f594e2a9e2e9" name="a994c591de18c1fe7cbe1f594e2a9e2e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a994c591de18c1fe7cbe1f594e2a9e2e9">&#9670;&#160;</a></span>$createDatabase</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ac961b1413ce146cb38bf6caeb66f0138">if</a> (empty( $options[ 'mysql']) &amp;&amp;!isset( $options[ 'build']) &amp;&amp;!is_file( $options[ 'fixture'])) $createDatabase</td>
+          <td class="memname"><a class="el" href="#ac961b1413ce146cb38bf6caeb66f0138">if</a> (isset( $options[ 'fixture']) &amp;&amp;!isset( $options[ 'build']) &amp;&amp;!is_file( $options[ 'fixture'])) $createDatabase</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00021">21</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00022">22</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -180,7 +180,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00032">32</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00035">35</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -196,7 +196,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00073">73</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00076">76</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -212,7 +212,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00076">76</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00079">79</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="_l_g_v___t_z___lookup___test_8php_source.html#l00037">test_server()</a>, and <a class="el" href="_system_tests_8php_source.html#l00237">DemoSourceGeometry\validateStorage()</a>.</p>
 
@@ -233,7 +233,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00072">72</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00075">75</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -249,7 +249,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00077">77</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00080">80</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -265,7 +265,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00079">79</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00082">82</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -281,7 +281,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00078">78</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00081">81</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -297,7 +297,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00008">8</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00009">9</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -313,7 +313,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00075">75</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00078">78</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -332,9 +332,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00114">114</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00117">117</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00108">demoPrintMetrics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00109">demoPrintMetrics()</a>.</p>
 
 </div>
 </div>
@@ -350,23 +350,23 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00080">80</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00083">83</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
-<a id="a3d2283bf12023e115430cc08031338d1" name="a3d2283bf12023e115430cc08031338d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d2283bf12023e115430cc08031338d1">&#9670;&#160;</a></span>$source</h2>
+<a id="af690db4f1f0e7b3d3ed759d66d5f7b89" name="af690db4f1f0e7b3d3ed759d66d5f7b89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af690db4f1f0e7b3d3ed759d66d5f7b89">&#9670;&#160;</a></span>$source</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ac961b1413ce146cb38bf6caeb66f0138">if</a> (empty( $options[ 'fixture']) &amp;&amp;empty( $options[ 'mysql'])) $source</td>
+          <td class="memname"><a class="el" href="#ac961b1413ce146cb38bf6caeb66f0138">if</a> (count(array_intersect([ 'fixture', 'mysql', 'pgsql'], array_keys( $options))) !==1) $source</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00013">13</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00014">14</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -382,9 +382,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00081">81</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00084">84</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00357">demoCleanup()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00064">demoTiming()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="demo_2demo_8php_source.html#l00285">demoCleanup()</a>, and <a class="el" href="demo_2demo_8php_source.html#l00065">demoTiming()</a>.</p>
 
 </div>
 </div>
@@ -400,7 +400,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00074">74</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00077">77</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -419,7 +419,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00033">33</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00036">36</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>
@@ -438,7 +438,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00117">117</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="benchmark_8php_source.html#l00120">120</a> of file <a class="el" href="benchmark_8php_source.html">benchmark.php</a>.</p>
 
 </div>
 </div>

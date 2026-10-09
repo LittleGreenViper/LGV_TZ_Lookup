@@ -36,14 +36,16 @@ $markdown = file_get_contents($argv[1]);
 // Older README fences and note markers remain intact in GitHub; normalize them only for Doxygen's Markdown reader.
 $markdown = preg_replace('/^```\((bash|php)\)\s*$/m', '```$1', $markdown);
 $markdown = preg_replace('/^>(NOTE|CAUTION):/m', '> $1:', $markdown);
-echo preg_replace_callback('~\[([^\]]+)\]\((docs/Doxyfile|demo/run\.sh|demo/demo\.php|tests/demo\.php|tests/benchmarks/query-2026-10-07\.json)\)~',
+echo preg_replace_callback('~\[([^\]]+)\]\((docs/Doxyfile|deploy\.sh|demo/run\.sh|demo/demo\.php|tests/demo\.php|tests/benchmarks/query-2026-10-07\.json|tests/benchmarks/postgres-2026-10-09\.json)\)~',
     static function(array $match): string {
         $target = [
             'docs/Doxyfile' => 'documentation_guide.html#doxygen-configuration',
+            'deploy.sh' => 'documentation_guide.html#deployment-command',
             'demo/run.sh' => 'documentation_guide.html#demo-command',
             'demo/demo.php' => 'demo_2demo_8php.html',
             'tests/demo.php' => 'tests_2demo_8php.html',
             'tests/benchmarks/query-2026-10-07.json' => 'query-2026-10-07.json',
+            'tests/benchmarks/postgres-2026-10-09.json' => 'postgres-2026-10-09.json',
         ][$match[2]];
         return '<a href="'.$target.'">'.htmlspecialchars($match[1], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</a>';
     }, $markdown);

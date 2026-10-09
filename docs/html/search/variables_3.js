@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['else_0',['else',['../composer_8php.html#af04d78aa46d0fe70b37e36efbfb179f5',1,'composer.php']]]
+  ['finally_0',['finally',['../databases_8php.html#add54dddec4f0266c6fab8d04bf7d9136',1,'finally:&#160;databases.php'],['../tests_2demo_8php.html#add54dddec4f0266c6fab8d04bf7d9136',1,'finally:&#160;demo.php'],['../tests_2deploy_8php.html#add54dddec4f0266c6fab8d04bf7d9136',1,'finally:&#160;deploy.php']]]
 ];

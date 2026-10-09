@@ -1,0 +1,102 @@
+{
+    "date": "2026-10-09",
+    "environment": {
+        "php": "8.5.10",
+        "mysql": "26.7.0",
+        "postgresql": "18.6"
+    },
+    "mysql": {
+        "mode": "query",
+        "backend": "mysql",
+        "reconnect": false,
+        "cases": 2200,
+        "lookups": 2200,
+        "seconds": 2.240945292,
+        "mean_ms": 1.017917196818182,
+        "median_ms": 0.14975,
+        "p95_ms": 6.561125,
+        "max_ms": 25.32325,
+        "max_extra_php_mib": 8.428184509277344,
+        "peak_php_mib": 11.84112548828125,
+        "peak_reserved_php_mib": 14.40625,
+        "statements": null,
+        "failures": [],
+        "slowest": [
+            {
+                "title": "Random 978",
+                "milliseconds": 25.32325
+            },
+            {
+                "title": "Random 1275",
+                "milliseconds": 19.468375
+            },
+            {
+                "title": "Random 557",
+                "milliseconds": 17.942625
+            },
+            {
+                "title": "Random 1060",
+                "milliseconds": 17.680459
+            },
+            {
+                "title": "Random 1282",
+                "milliseconds": 17.162875
+            }
+        ]
+    },
+    "boundary": {
+        "release": "2026d",
+        "archive_sha256": "e391c92c7b90339c3afe8558082b4532b8d9afc9daad68da31f4569a1ca61034",
+        "polygons": 1355,
+        "driver": "pgsql",
+        "known_location_checks": 200
+    },
+    "method": "One reused connection per backend; 200 known and 2000 seeded random locations; memory_limit=16M; HTTP and setup excluded.",
+    "results_identical": true,
+    "full_demo": {
+        "checks_per_backend": 490,
+        "stored_polygons_validated_per_backend": 1355,
+        "largest_polygons_decoded": 10,
+        "actual_named_crossings": 112
+    },
+    "memory_note": "PHP heap counters exclude database server memory and native libpq buffers. The focused PostgreSQL test observed a 2.00 MiB native buffer for 24 one-MiB binary rows.",
+    "pgsql": {
+        "mode": "query",
+        "backend": "pgsql",
+        "reconnect": false,
+        "cases": 2200,
+        "lookups": 2200,
+        "seconds": 1.808043542,
+        "mean_ms": 0.8211058118181813,
+        "median_ms": 0.107625,
+        "p95_ms": 5.294958,
+        "max_ms": 16.194458,
+        "max_extra_php_mib": 8.413848876953125,
+        "peak_php_mib": 11.937713623046875,
+        "peak_reserved_php_mib": 12.40625,
+        "statements": null,
+        "failures": [],
+        "slowest": [
+            {
+                "title": "Random 1025",
+                "milliseconds": 16.194458
+            },
+            {
+                "title": "Random 557",
+                "milliseconds": 15.286708
+            },
+            {
+                "title": "Random 1262",
+                "milliseconds": 15.27125
+            },
+            {
+                "title": "Random 1036",
+                "milliseconds": 15.127542
+            },
+            {
+                "title": "Random 1886",
+                "milliseconds": 14.345584
+            }
+        ]
+    }
+}

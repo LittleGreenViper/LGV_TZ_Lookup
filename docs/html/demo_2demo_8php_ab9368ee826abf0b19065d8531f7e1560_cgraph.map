@@ -1,7 +1,11 @@
 <map id="demoInstall" name="demoInstall">
-<area shape="rect" id="Node000001" title="This builds the temporary Composer application and loads its autoloader." alt="" coords="5,29,95,55"/>
-<area shape="poly" id="edge3_Node000001_Node000001" title=" " alt="" coords="25,31,20,21,23,11,33,5,50,3,70,6,79,15,75,18,68,11,50,8,35,10,27,15,25,20,30,28"/>
-<area shape="rect" id="Node000002" href="$demo_2demo_8php.html#aa709ff82ef52503b943e8e2c9f184ae2" title="This downloads one HTTPS resource directly to a file." alt="" coords="143,29,255,55"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,39,129,39,129,45,95,45"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="174,31,169,21,171,11,182,5,199,3,219,6,228,15,224,18,216,11,199,8,183,10,176,15,174,20,178,28"/>
+<area shape="rect" id="Node000001" title="This builds the temporary Composer application and loads its autoloader." alt="" coords="5,55,95,80"/>
+<area shape="poly" id="edge6_Node000001_Node000001" title=" " alt="" coords="27,56,22,46,24,37,34,30,50,28,69,31,77,40,73,43,66,36,50,33,36,35,29,40,27,46,31,53"/>
+<area shape="rect" id="Node000002" href="$demo_2demo_8php.html#a44ae472ed99b38a2954546153b76679e" title="This validates the selected database driver." alt="" coords="143,29,232,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,57,129,50,130,55,95,62"/>
+<area shape="rect" id="Node000003" href="$demo_2demo_8php.html#ae500e25b814b78dd63bf379011d131bc" title="This reads a demo setting from the environment." alt="" coords="280,55,407,80"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="95,65,266,65,266,70,95,70"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="164,30,159,21,162,11,171,5,187,3,206,6,214,14,210,18,203,11,187,8,173,10,166,15,165,20,169,28"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="233,47,266,52,266,57,232,52"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="317,56,312,46,315,37,326,30,343,28,365,31,374,40,370,44,362,36,343,33,327,35,319,40,317,46,322,53"/>
 </map>

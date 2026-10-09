@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// An isolated benchmark database. Production still uses the configured MySQL database.
+// An isolated benchmark database. Production uses the configured MySQL or PostgreSQL database.
 class SQLiteStatements {
     public PDO $connection;
     public int $statements = 0;
@@ -12,11 +12,11 @@ class SQLiteStatements {
         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function preparedStatement($sql, $params = [], $fetchResponse = false) {
+    public function preparedStatement($sql, $params = [], $fetchResponse = false, $paramTypes = []) {
         ++$this->statements;
         $statement = $this->connection->prepare($sql);
         foreach (array_values($params) as $index => $value) {
-            $type = str_starts_with($sql, 'INSERT') && $index === 5 ? PDO::PARAM_LOB : PDO::PARAM_STR;
+            $type = $paramTypes[$index] ?? (str_starts_with($sql, 'INSERT') && $index === 5 ? PDO::PARAM_LOB : PDO::PARAM_STR);
             $statement->bindValue($index + 1, $value, $type);
         }
         $statement->execute();

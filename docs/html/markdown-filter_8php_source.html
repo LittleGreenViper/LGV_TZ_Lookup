@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -149,17 +149,19 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('markdown-filte
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">// Older README fences and note markers remain intact in GitHub; normalize them only for Doxygen&#39;s Markdown reader.</span></div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><a class="code hl_variable" href="markdown-filter_8php.html#af1addd6607e1f6c844c5870507e860c0">$markdown</a> = preg_replace(<span class="stringliteral">&#39;/^```\&zwj;((bash|php)\&zwj;)\s*$/m&#39;</span>, <span class="stringliteral">&#39;```$1&#39;</span>, <a class="code hl_variable" href="markdown-filter_8php.html#af1addd6607e1f6c844c5870507e860c0">$markdown</a>);</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><a class="code hl_variable" href="markdown-filter_8php.html#af1addd6607e1f6c844c5870507e860c0">$markdown</a> = preg_replace(<span class="stringliteral">&#39;/^&gt;(NOTE|CAUTION):/m&#39;</span>, <span class="stringliteral">&#39;&gt; $1:&#39;</span>, <a class="code hl_variable" href="markdown-filter_8php.html#af1addd6607e1f6c844c5870507e860c0">$markdown</a>);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>echo preg_replace_callback(<span class="stringliteral">&#39;~\&zwj;[([^\&zwj;]]+)\&zwj;]\&zwj;((docs/Doxyfile|demo/run\.sh|demo/demo\.php|tests/demo\.php|tests/benchmarks/query-2026-10-07\.json)\&zwj;)~&#39;</span>,</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>echo preg_replace_callback(<span class="stringliteral">&#39;~\&zwj;[([^\&zwj;]]+)\&zwj;]\&zwj;((docs/Doxyfile|deploy\.sh|demo/run\.sh|demo/demo\.php|tests/demo\.php|tests/benchmarks/query-2026-10-07\.json|tests/benchmarks/postgres-2026-10-09\.json)\&zwj;)~&#39;</span>,</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keyword">static</span> <span class="keyword">function</span>(array $match): <span class="keywordtype">string</span> {</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        $target = [</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <span class="stringliteral">&#39;docs/Doxyfile&#39;</span> =&gt; <span class="stringliteral">&#39;documentation_guide.html#doxygen-configuration&#39;</span>,</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="stringliteral">&#39;demo/run.sh&#39;</span> =&gt; <span class="stringliteral">&#39;documentation_guide.html#demo-command&#39;</span>,</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <span class="stringliteral">&#39;demo/demo.php&#39;</span> =&gt; <span class="stringliteral">&#39;demo_2demo_8php.html&#39;</span>,</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            <span class="stringliteral">&#39;tests/demo.php&#39;</span> =&gt; <span class="stringliteral">&#39;tests_2demo_8php.html&#39;</span>,</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <span class="stringliteral">&#39;tests/benchmarks/query-2026-10-07.json&#39;</span> =&gt; <span class="stringliteral">&#39;query-2026-10-07.json&#39;</span>,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        ][$match[2]];</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordflow">return</span> <span class="stringliteral">&#39;&lt;a href=&quot;&#39;</span>.$target.<span class="stringliteral">&#39;&quot;&gt;&#39;</span>.htmlspecialchars($match[1], ENT_QUOTES | ENT_SUBSTITUTE, <span class="stringliteral">&#39;UTF-8&#39;</span>).<span class="stringliteral">&#39;&lt;/a&gt;&#39;</span>;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    }, <a class="code hl_variable" href="markdown-filter_8php.html#af1addd6607e1f6c844c5870507e860c0">$markdown</a>);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="stringliteral">&#39;deploy.sh&#39;</span> =&gt; <span class="stringliteral">&#39;documentation_guide.html#deployment-command&#39;</span>,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <span class="stringliteral">&#39;demo/run.sh&#39;</span> =&gt; <span class="stringliteral">&#39;documentation_guide.html#demo-command&#39;</span>,</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            <span class="stringliteral">&#39;demo/demo.php&#39;</span> =&gt; <span class="stringliteral">&#39;demo_2demo_8php.html&#39;</span>,</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <span class="stringliteral">&#39;tests/demo.php&#39;</span> =&gt; <span class="stringliteral">&#39;tests_2demo_8php.html&#39;</span>,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            <span class="stringliteral">&#39;tests/benchmarks/query-2026-10-07.json&#39;</span> =&gt; <span class="stringliteral">&#39;query-2026-10-07.json&#39;</span>,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            <span class="stringliteral">&#39;tests/benchmarks/postgres-2026-10-09.json&#39;</span> =&gt; <span class="stringliteral">&#39;postgres-2026-10-09.json&#39;</span>,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        ][$match[2]];</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keywordflow">return</span> <span class="stringliteral">&#39;&lt;a href=&quot;&#39;</span>.$target.<span class="stringliteral">&#39;&quot;&gt;&#39;</span>.htmlspecialchars($match[1], ENT_QUOTES | ENT_SUBSTITUTE, <span class="stringliteral">&#39;UTF-8&#39;</span>).<span class="stringliteral">&#39;&lt;/a&gt;&#39;</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    }, <a class="code hl_variable" href="markdown-filter_8php.html#af1addd6607e1f6c844c5870507e860c0">$markdown</a>);</div>
 <div class="ttc" id="amarkdown-filter_8php_html_af1addd6607e1f6c844c5870507e860c0"><div class="ttname"><a href="markdown-filter_8php.html#af1addd6607e1f6c844c5870507e860c0">$markdown</a></div><div class="ttdeci">if($argc !==2||!is_file($argv[1])) $markdown</div><div class="ttdef"><b>Definition</b> <a href="#l00035">markdown-filter.php:35</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

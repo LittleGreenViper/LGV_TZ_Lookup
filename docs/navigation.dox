@@ -9,6 +9,8 @@ standalone server, and performance notes. Use **Guides** to jump directly to tho
 | What You Want To Do | Where To Look |
 | --- | --- |
 | Install the library and make a lookup | [Composer Library](index.html#composer-library) and LGV_TZ_Lookup_Query. |
+| Use PostgreSQL | [Using PostgreSQL](index.html#using-postgresql). |
+| Install a service on a server | [One-Command Deployment](index.html#one-command-server-deployment). |
 | Download current data and run a complete test | [Command-line Demo](index.html#turnkey-command-line-demo). |
 | Run the HTTP service | [Standalone Server](index.html#standalone-server-implementation). |
 | Understand storage and loading | LGV_TZ_Lookup_Database, LGV_TZ_Lookup_Entity, and LGV_TZ_Lookup_Loader. |
@@ -55,6 +57,12 @@ for the repository settings.
 This is the shell entrypoint for the demo; its PHP worker and geometry helpers have their own source/reference pages.
 
 \verbinclude run.sh
+
+## Deployment Command
+
+The one-command installer uses the shared preparation helpers, and has its own database rollback and endpoint publication steps.
+
+\verbinclude deploy.sh
 
 ## Doxygen Configuration
 

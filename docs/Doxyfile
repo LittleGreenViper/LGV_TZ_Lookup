@@ -13,6 +13,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = LGV_TZ_Lookup
+PROJECT_NUMBER         = 1.4.0
 PROJECT_BRIEF          = "Time zone lookup for PHP applications and HTTP clients"
 PROJECT_LOGO           = ../img/icon.png
 OUTPUT_DIRECTORY       = .
@@ -101,7 +102,7 @@ HTML_COLORSTYLE        = AUTO_LIGHT
 HTML_DYNAMIC_MENUS     = YES
 HTML_DYNAMIC_SECTIONS  = YES
 HTML_EXTRA_STYLESHEET  = style.css
-HTML_EXTRA_FILES       = .nojekyll ../tests/benchmarks/query-2026-10-07.json
+HTML_EXTRA_FILES       = .nojekyll ../tests/benchmarks/query-2026-10-07.json ../tests/benchmarks/postgres-2026-10-09.json
 LAYOUT_FILE            = layout.xml
 DISABLE_INDEX          = NO
 GENERATE_TREEVIEW      = YES

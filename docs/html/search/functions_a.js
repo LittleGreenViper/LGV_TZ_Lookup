@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['startarray_0',['startArray',['../class_demo_inspecting_listener.html#a9fa185f927f7aa4456a312a2d1d419dc',1,'DemoInspectingListener']]],
-  ['startdocument_1',['startDocument',['../class_demo_inspecting_listener.html#ac78d1aa0c40ff3e8563d8261a0bd1ddf',1,'DemoInspectingListener']]],
-  ['startobject_2',['startObject',['../class_demo_inspecting_listener.html#a9a7f014574a1af59969c872e263d231a',1,'DemoInspectingListener']]],
-  ['store_5fentity_3',['store_entity',['../class_l_g_v___t_z___lookup___database.html#a616e07a4b2efb66d5473968d2be3b09e',1,'LGV_TZ_Lookup_Database']]]
+  ['referencecontains_0',['referenceContains',['../regression_8php.html#a2c8719ae9f24a20855e4118255f5ee8b',1,'regression.php']]],
+  ['reset_5fdatabase_1',['reset_database',['../class_l_g_v___t_z___lookup___database.html#acf390d8f14a950cf66b0768c51be4d9c',1,'LGV_TZ_Lookup_Database\\reset_database()'],['../class_s_q_lite_database.html#a23900e3d2a6f1a7436b1a086a56982ed',1,'SQLiteDatabase\\reset_database()']]],
+  ['ringcontains_2',['ringContains',['../class_demo_source_geometry.html#acadde633701d3d52c18142d560ed573e',1,'DemoSourceGeometry']]]
 ];

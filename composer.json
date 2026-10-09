@@ -1,6 +1,6 @@
 {
     "name": "littlegreenviper/lgv_tz_lookup",
-    "description": "Look up IANA time zones from longitude and latitude using a preloaded MySQL boundary database.",
+    "description": "Look up IANA time zones from longitude and latitude using a preloaded MySQL or PostgreSQL boundary database.",
     "type": "library",
     "license": "MIT",
     "keywords": ["timezone", "tz", "geocode", "geojson"],
@@ -14,14 +14,15 @@
     ],
     "require": {
         "php": "^8.0",
-        "ext-pdo": "*",
-        "ext-pdo_mysql": "*"
+        "ext-pdo": "*"
     },
     "require-dev": {
         "ext-pdo_sqlite": "*",
         "salsify/json-streaming-parser": "8.3.*"
     },
     "suggest": {
+        "ext-pdo_mysql": "Required when using a MySQL boundary database.",
+        "ext-pdo_pgsql": "Required when using a PostgreSQL boundary database.",
         "salsify/json-streaming-parser": "Required only to load a GeoJSON boundary file (8.3.*)."
     },
     "autoload": {
@@ -30,7 +31,11 @@
     "scripts": {
         "test": "@php tests/regression.php",
         "test:composer": "@php tests/composer.php --with-loader",
-        "test:demo": "@php tests/demo.php"
+        "test:demo": "@php tests/demo.php",
+        "test:mysql": "@php tests/databases.php --driver=mysql",
+        "test:postgres": "@php tests/databases.php --driver=pgsql",
+        "test:deploy:mysql": "@php tests/deploy.php --driver=mysql",
+        "test:deploy:postgres": "@php tests/deploy.php --driver=pgsql"
     },
     "archive": {
         "exclude": [

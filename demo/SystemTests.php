@@ -228,19 +228,19 @@ class DemoSourceGeometry {
         \brief This compares every stored polygon with its decoded source record.
 
         We check row counts, names, exterior-ring byte lengths and SHA-256 hashes. Domain rect coordinates allow a
-        small tolerance for the schema's single-precision FLOAT storage. Hashes are calculated by MySQL, avoiding
+        small tolerance for the schema's single-precision storage. Hashes are calculated by the database server, avoiding
         the memory cost of fetching all stored polygon blobs into PHP again.
 
         \returns: An array of failure descriptions. An empty array means all checks passed.
         \throws PDOException if the validation query fails.
      */
-    public function validateStorage(PDO $admin,         ///< The demo's administrative PDO connection.
-                                    string $database    ///< The generated, validated database name owned by this run.
+    public function validateStorage(PDO $connection    ///< A PDO connection to this run's temporary database.
                                     ): array {
         // Server-side hashes avoid transferring every large blob back to PHP just to check its encoding.
-        $rows = $admin->query('SELECT id, tzname, OCTET_LENGTH(polygon) AS bytes, SHA2(polygon, 256) AS sha256,
+        $hash = $connection->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql' ? "encode(sha256(polygon), 'hex')" : 'SHA2(polygon, 256)';
+        $rows = $connection->query('SELECT id, tzname, OCTET_LENGTH(polygon) AS bytes, '.$hash.' AS sha256,
             east + 0.0 AS east, west + 0.0 AS west, north + 0.0 AS north, south + 0.0 AS south
-            FROM `'.$database.'`.timezones ORDER BY id')->fetchAll(PDO::FETCH_ASSOC);
+            FROM timezones ORDER BY id')->fetchAll(PDO::FETCH_ASSOC);
         $failures = [];
         if (count($rows) !== count($this->shapes)) {
             $failures[] = 'Source/database polygon counts differ: '.count($this->shapes).' versus '.count($rows);
@@ -253,7 +253,7 @@ class DemoSourceGeometry {
                 continue;
             }
             foreach ($source['bounds'] as $edge => $value) {
-                // The schema stores bounding coordinates as single-precision FLOAT.
+                // Both schemas store bounding coordinates with single precision.
                 if (abs((float)$row[$edge] - $value) > 0.00002) {
                     $failures[] = 'Stored '.$edge.' bound mismatch for polygon '.$row['id'];
                 }

@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('class_s_q_lite
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0dcb24e3d51de5d977608b9713763c24" id="r_a0dcb24e3d51de5d977608b9713763c24"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a0dcb24e3d51de5d977608b9713763c24">__construct</a> (string $path)</td></tr>
 <tr class="memitem:a4561ac5c651d23a4c3313d7b50fb843c" id="r_a4561ac5c651d23a4c3313d7b50fb843c"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4561ac5c651d23a4c3313d7b50fb843c">preparedRows</a> ($sql, $params=[], $buffered=true)</td></tr>
-<tr class="memitem:a643b4711af68a1ca6408103a2c5f6b45" id="r_a643b4711af68a1ca6408103a2c5f6b45"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a643b4711af68a1ca6408103a2c5f6b45">preparedStatement</a> ($sql, $params=[], $fetchResponse=false)</td></tr>
+<tr class="memitem:a34f83fd5f91e8da3989681b85ec0eeb3" id="r_a34f83fd5f91e8da3989681b85ec0eeb3"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a34f83fd5f91e8da3989681b85ec0eeb3">preparedStatement</a> ($sql, $params=[], $fetchResponse=false, $paramTypes=[])</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -173,10 +173,12 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="_s_q_lite_database_8php_source.html#l00026">26</a> of file <a class="el" href="_s_q_lite_database_8php_source.html">SQLiteDatabase.php</a>.</p>
 
+<p class="reference">References <a class="el" href="tests_2deploy_8php_source.html#l00136">$statement</a>.</p>
+
 </div>
 </div>
-<a id="a643b4711af68a1ca6408103a2c5f6b45" name="a643b4711af68a1ca6408103a2c5f6b45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a643b4711af68a1ca6408103a2c5f6b45">&#9670;&#160;</a></span>preparedStatement()</h2>
+<a id="a34f83fd5f91e8da3989681b85ec0eeb3" name="a34f83fd5f91e8da3989681b85ec0eeb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34f83fd5f91e8da3989681b85ec0eeb3">&#9670;&#160;</a></span>preparedStatement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,14 +196,19 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>$fetchResponse</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>$fetchResponse</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>$paramTypes</em></span><span class="paramdefsep"> = </span><span class="paramdefval">[]</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="_s_q_lite_database_8php_source.html#l00015">15</a> of file <a class="el" href="_s_q_lite_database_8php_source.html">SQLiteDatabase.php</a>.</p>
 
-<p class="reference">References <a class="el" href="_s_q_lite_database_8php_source.html#l00008">$statements</a>.</p>
+<p class="reference">References <a class="el" href="tests_2deploy_8php_source.html#l00136">$statement</a>, and <a class="el" href="_s_q_lite_database_8php_source.html#l00008">$statements</a>.</p>
 
 </div>
 </div>

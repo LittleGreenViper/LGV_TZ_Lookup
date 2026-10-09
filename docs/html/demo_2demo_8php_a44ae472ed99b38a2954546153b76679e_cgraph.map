@@ -1,0 +1,7 @@
+<map id="demoDriver" name="demoDriver">
+<area shape="rect" id="Node000001" title="This validates the selected database driver." alt="" coords="5,29,95,55"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="24,31,18,21,21,11,32,5,50,3,71,6,80,15,77,19,69,11,50,8,34,10,26,15,24,20,28,28"/>
+<area shape="rect" id="Node000002" href="$demo_2demo_8php.html#ae500e25b814b78dd63bf379011d131bc" title="This reads a demo setting from the environment." alt="" coords="143,29,269,55"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="95,39,129,39,129,45,95,45"/>
+<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="180,31,174,21,177,11,188,5,206,3,227,6,236,15,233,19,225,11,206,8,190,10,182,15,180,20,184,28"/>
+</map>
