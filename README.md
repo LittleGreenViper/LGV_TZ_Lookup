@@ -7,10 +7,12 @@
 <div style="clear:both"></div>
 
 # LGV_TZ_Lookup
-A Server for Matching Long/Lat to Timezone
+A Server and PHP Library for Matching Long/Lat to Timezone
 
 ## Overview
 This project is a fairly simple PHP project, designed to accept the GeoJSON output of [the Timezone Boundary Builder Project](https://github.com/evansiroky/timezone-boundary-builder), and provide a simple API, for matching longitude/latitude locations with timezones.
+
+Use the lookup classes directly in a PHP application through Composer, or run the standalone HTTP server described below. Both use the same preloaded boundary database and lookup implementation.
 
 Send in a long/lat, and get back a string, with [the standard TZ time zone designator](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) of the timezone that covers that point.
 
@@ -48,7 +50,7 @@ From a usage standpoint, you simply send in a longitude/latitude pair, as a simp
 The long/lat is sent as a comma-separated pair of floating-point numbers that represent degrees of longitude and latitude.
 
 ## Dependencies
-This is a server project, designed for your classic ["LAMP"](https://en.wikipedia.org/wiki/LAMP_(software_bundle)) hosting, so you'll need to have a standard PHP/MySQL host.
+Lookup requires PHP 8.0 or later, the PDO and PDO MySQL extensions (`ext-pdo` and `ext-pdo_mysql`), and a populated MySQL boundary database. The standalone server is designed for your classic ["LAMP"](https://en.wikipedia.org/wiki/LAMP_(software_bundle)) hosting.
 
 This project uses [the streaming JSON parser](https://github.com/salsify/jsonstreamingparser), in order to parse [this file](https://github.com/evansiroky/timezone-boundary-builder/releases/download/2023b/timezones-with-oceans.geojson.zip) (a current release, at the time of this writing), which is [a GeoJSON file](https://geojson.org), containing the calculated timezones, and is created by [this project](https://github.com/evansiroky/timezone-boundary-builder).
 
@@ -56,12 +58,70 @@ Otherwise, it is a very basic [PHP](https://php.net) project (tested against [PH
 
 The initial release is built for [MySQL](https://www.mysql.com) (tested against [MySQL 5.7](https://downloads.mysql.com/archives/community/)), but uses [PHP PDO](https://www.php.net/manual/en/book.pdo.php), and has [an absurdly simple database schema](https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/5cb4aafac824b330c9181a2186ff3c89aac784f6/src/Sources/LGV_TZ_Lookup_Database.class.php#L65), so it can be expanded to other databases fairly easily.
 
-Other than a [Composer](https://getcomposer.org) link to [the streaming JSON parser](https://github.com/salsify/jsonstreamingparser), there are no other dependencies.
+The [streaming JSON parser](https://github.com/salsify/jsonstreamingparser) is required only for boundary-file loading. It is an optional dependency of the Composer library; lookup installations do not install it.
 
 ### Batteries Not Included
 Well...that's not _strictly_ true. You'll need to download the GeoJSON file from [the Timezone Boundary Builder Project releases](https://github.com/evansiroky/timezone-boundary-builder/releases). It's a big file, and may be updated, as timezones change. You can use either of the files (with or without oceans), but the project tests against the oceans variant.
 
-## Implementation
+## Composer Library
+
+The package name is `littlegreenviper/lgv_tz_lookup`. Its root `composer.json` registers the existing `LGV_TZ_Lookup_*` classes for autoloading. Requiring your application's `vendor/autoload.php` makes the lookup API available without starting the HTTP server or loading the JSON parser.
+
+### Install From GitHub
+
+After the Composer packaging changes have been committed and pushed to `main`, run these commands in **your application's directory**:
+
+```bash
+composer config repositories.lgv-tz-lookup vcs https://github.com/LittleGreenViper/LGV_TZ_Lookup.git
+composer require littlegreenviper/lgv_tz_lookup:dev-main
+```
+
+This uses a [Composer VCS repository](https://getcomposer.org/doc/05-repositories.md#vcs), so Packagist registration is not required. The existing `1.2.0` and earlier tags predate the Composer library manifest; use `dev-main` until a release containing it is tagged. Once the package is registered on Packagist with such a release, applications can omit the repository configuration and require the released version instead.
+
+To try a local checkout before pushing, use a path repository instead:
+
+```bash
+composer config repositories.lgv-tz-lookup path /absolute/path/to/LGV_TZ_Lookup
+composer require littlegreenviper/lgv_tz_lookup:@dev
+```
+
+### Look Up a Time Zone
+
+The `timezones` table must already have been populated using the standalone loader or imported from an existing installation. Lookup itself requires only `SELECT` access to that table. It does not download boundary data or create the table.
+
+```php
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+
+$database = new LGV_TZ_Lookup_Database(
+    'tz_database',       // Database name.
+    'tz_reader',         // Database user.
+    'your-db-password',  // Database password.
+    'mysql',
+    '127.0.0.1',
+    3306
+);
+$lookup = new LGV_TZ_Lookup_Query($database);
+
+echo $lookup->get_tz(-77.036543, 38.895037); // America/New_York (Washington, DC).
+```
+
+Pass longitude first, then latitude, as numeric degrees within `[-180, 180]` and `[-90, 90]`. The result is a time zone name, or an empty string when no match is found. You can reuse the database and lookup objects for multiple coordinates. Pass connection settings from your application's configuration; the standalone server's separate config file and HTTP secret are not used by this API. Creating a library database connection preserves your application's execution time limit.
+
+### Optional Boundary Loading
+
+The library's runtime dependencies are PHP, PDO, and PDO MySQL. Applications that also need the loader can add its parser explicitly:
+
+```bash
+composer require salsify/json-streaming-parser:"8.3.*"
+```
+
+`LGV_TZ_Lookup_Loader` then becomes usable through the same autoloader. Initial database loading and subsequent boundary updates can also be handled separately with the standalone CLI instructions below. The GeoJSON boundary file is obtained separately and is not bundled in the library.
+
+For development in a repository checkout, running `composer install` at the repository root installs the optional parser as a development dependency. Run `composer test` for regression checks and `composer test:composer` for the autoloading and optional-loader checks. When this library is installed into another application, its development dependencies are not installed.
+
+## Standalone Server Implementation
 
 ### Initial Installation
 Once you have a server available, install the contents of the [`src` subdirectory](https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src) into a place of your choosing, accessible via HTTP. You should have a URI that points to the [`index.php` file](https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/main/src/index.php) in the [`src` directory](https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src).
@@ -110,15 +170,15 @@ That `$g_server_secret` is important, if you don't want "just anyone" accessing 
 #### Command Line:
 `?> php`_&lt;PATH TO THE src DIRECTORY>_`/index.php secret=Shh-Dont-Tell-Anyone load`
 
-### Composer
-Once the directory is in place, you'll need to update composer, to bring in the dependency.
+### Loader Dependency
+For a standalone server installed by copying `src`, install the loader's JSON parser in that directory:
 
 ```(bash)
 $> cd <YOUR src DIRECTORY>
-$> composer update
+$> composer install
 ```
 
-That will set up a `vendor` subdirectory. Just ignore it, after that. The server knows where to get it.
+That will set up a `vendor` subdirectory inside `src`. A full repository checkout can instead use `composer install` at the repository root; the loader supports both layouts.
 
 >NOTE: The dependency is only required for the load and setup. It is not required for subsequent queries.
 
@@ -158,7 +218,7 @@ This can take a while.
 
 Upon success, the script emits a simple `1`. If there was a problem, it emits a `0`.
 
-Once that's done. the server is ready to go. You can even delete the JSON file and the vendor directory, if you want, but they will need to be back, before you can load.
+Once that's done, the standalone server is ready to go. In a server installed directly from `src`, you can delete the JSON file and `src/vendor` after loading; restore them before another load. Composer applications keep their own `vendor` directory for the library's autoloader.
 
 You won't need to run `load` very often, so it shouldn't be in a `cron` job, or anything.
 

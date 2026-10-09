@@ -40,6 +40,7 @@ function packedRing(array $ring): string {
 }
 
 $packedTest = new ReflectionMethod(LGV_TZ_Lookup_Query::class, '_wn_PackedPoly');
+if (PHP_VERSION_ID < 80100) { $packedTest->setAccessible(true); }
 $rings = [[], [[1.0, 2.0]], [[0.0, 0.0], [2.0, 2.0]],
     [[0, 0], [4, 0], [4, 4], [0, 4]],
     [[0, 0], [4, 0], [4, 4], [2, 2], [0, 4], [0, 0]],
@@ -120,6 +121,7 @@ $pdo = new PDO('sqlite::memory:');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $wrapper = (new ReflectionClass(LGV_TZ_Lookup_PDO::class))->newInstanceWithoutConstructor();
 $connectionProperty = new ReflectionProperty(LGV_TZ_Lookup_PDO::class, '_pdo');
+if (PHP_VERSION_ID < 80100) { $connectionProperty->setAccessible(true); }
 $connectionProperty->setValue($wrapper, $pdo);
 $wrapper->driver_type = 'sqlite';
 $pdo->beginTransaction();

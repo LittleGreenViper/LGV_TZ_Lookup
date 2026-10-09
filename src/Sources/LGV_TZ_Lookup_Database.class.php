@@ -27,7 +27,6 @@
  */
 
 declare(strict_types = 1);
-define('LGV_DB_CATCHER', 1);
 require_once __DIR__.'/LGV_TZ_Lookup_PDO.class.php';
 require_once __DIR__.'/LGV_TZ_Lookup_Entity.class.php';
 
@@ -60,8 +59,6 @@ class LGV_TZ_Lookup_Database {
                                     $inPort = 3306 	        ///< database TCP port (optional, default is 3306)
 								) {
 		$this->pdo_instance = new LGV_TZ_Lookup_PDO($inDatabase, $inUser, $inPassword, $inDriver, $inHost, $inPort);
-        ini_set('max_execution_time', 1200);
-		set_time_limit(1200);
 		
 		// This is the SQL that we use to create the table. Currently, it is MySQL-only, but should be changeable.
 		self::$_init_sql = 'DROP TABLE IF EXISTS timezones;
@@ -213,6 +210,9 @@ class LGV_TZ_Lookup_Database {
         This clears the database.
      */
     public function reset_database() {
+        // Extend the time limit only for a database rebuild, leaving an embedding application's lookup limits alone.
+        ini_set('max_execution_time', 1200);
+        set_time_limit(1200);
         $this->pdo_instance->preparedStatement(self::$_init_sql);
     }
 }

@@ -29,7 +29,21 @@
  
 declare(strict_types = 1);
 
-require_once __DIR__.'/../vendor/autoload.php'; // The dependency.
+// Composer consumers already have an autoloader. Also support the original src-only server installation,
+// and a repository checkout with Composer installed at its root.
+if (!class_exists(\JsonStreamingParser\Listener\GeoJsonListener::class)) {
+    foreach ([__DIR__.'/../vendor/autoload.php', __DIR__.'/../../vendor/autoload.php'] as $autoload) {
+        if (is_file($autoload)) {
+            require_once $autoload;
+            if (class_exists(\JsonStreamingParser\Listener\GeoJsonListener::class)) {
+                break;
+            }
+        }
+    }
+}
+if (!class_exists(\JsonStreamingParser\Listener\GeoJsonListener::class)) {
+    throw new RuntimeException('Boundary loading requires salsify/json-streaming-parser. Run: composer require salsify/json-streaming-parser:"8.3.*"');
+}
 
 require_once __DIR__.'/LGV_TZ_Lookup_Database.class.php';
 require_once __DIR__.'/LGV_TZ_Lookup_Entity.class.php';

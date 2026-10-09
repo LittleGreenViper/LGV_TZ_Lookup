@@ -1,3 +1,8 @@
+**1.3.0** *October 9, 2026*
+
+- Added Composer library packaging and lookup usage instructions. Boundary-file loading remains optional.
+- Queries no longer load the JSON parser, and library connections preserve the application's execution time limit.
+
 **1.2.0** *October 7, 2026*
 
 - Used an LLM to optimize the project for lookup performance and memory footprint.

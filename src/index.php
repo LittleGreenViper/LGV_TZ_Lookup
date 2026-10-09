@@ -53,9 +53,6 @@ define("__CONFIG_FILE_", __DIR__.'/../../../../TZInfo/config.php');
 // The class that we use to make queries.
 require_once __DIR__.'/Sources/LGV_TZ_Lookup_Query.class.php';
 
-// The class that we use to initialize the database.
-require_once __DIR__.'/Sources/LGV_TZ_Lookup_Loader.class.php';
-
 // The class that we use to run tests.
 require_once __DIR__.'/LGV_TZ_Lookup_Test.php';
 
@@ -113,6 +110,8 @@ function call_server(   $inQuery,   ///< This is an ampersand-concatenated list 
                         $stream = fopen("$path/combined-with-oceans.json", 'r');
 
                         try {
+                            // The JSON parser is needed only for a boundary-file load.
+                            require_once __DIR__.'/Sources/LGV_TZ_Lookup_Loader.class.php';
                             $listener = new LGV_TZ_Lookup_Loader($db_object);
                             $parser = new \JsonStreamingParser\Parser($stream, $listener);
                             $parser->parse();
