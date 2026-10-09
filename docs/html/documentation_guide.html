@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.1</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('documentation_
   <div class="headertitle"><div class="title">Building and Browsing the Documentation </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>The README is the documentation's starting page. Its contents include the Composer library, command-line demo, standalone server, and performance notes. Use <b>Guides</b> to jump directly to those sections.</p>
+<div class="textblock"><p>The README is the documentation's starting page, with a short Composer example and the main commands. The <a class="el" href="md_docs_2guide.html" title="Detailed Usage Guide">Detailed Usage Guide</a> contains setup, maintenance, demo metrics, and development details. Use <b>Guides</b> to jump directly to either level of documentation.</p>
 <h2 class="doxsection"><a class="anchor" id="where-should-i-start"></a>
 Where Should I Start?</h2>
 <table class="markdownTable">
@@ -120,13 +120,17 @@ Where Should I Start?</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Install the library and make a lookup  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#composer-library" title="Composer Library">Composer Library</a> and <a class="el" href="class_l_g_v___t_z___lookup___query.html">LGV_TZ_Lookup_Query</a>.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Use PostgreSQL  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#using-postgresql" title="Using PostgreSQL">Using PostgreSQL</a>.  </td></tr>
+<td class="markdownTableBodyNone">Load boundaries or configure PostgreSQL  </td><td class="markdownTableBodyNone"><a class="el" href="md_docs_2guide.html#loading-boundaries-for-a-library-application" title="Loading Boundaries for a Library Application">Initial Loading</a>.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Install a service on a server  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#one-command-server-deployment" title="One-Command Server Deployment">One-Command Deployment</a>.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Download current data and run a complete test  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#turnkey-command-line-demo" title="Turnkey Command-line Demo">Command-line Demo</a>.  </td></tr>
+<td class="markdownTableBodyNone">Report the latest boundary version or reload a database  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#updating-the-boundary-data" title="Updating the Boundary Data">Updating the Boundary Data</a>.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Run the HTTP service  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#standalone-server-implementation" title="Standalone Server Implementation">Standalone Server</a>.  </td></tr>
+<td class="markdownTableBodyNone">Download current data and run a complete test  </td><td class="markdownTableBodyNone"><a class="el" href="index.html#try-the-demo" title="Try the Demo">Command-line Demo</a>.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Run the HTTP service manually  </td><td class="markdownTableBodyNone"><a class="el" href="md_docs_2guide.html#standalone-server-implementation" title="Standalone Server Implementation">Standalone Server</a>.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Read benchmarks and integration-test instructions  </td><td class="markdownTableBodyNone"><a class="el" href="md_docs_2guide.html#query-performance" title="Query Performance">Performance</a>.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Understand storage and loading  </td><td class="markdownTableBodyNone"><a class="el" href="class_l_g_v___t_z___lookup___database.html">LGV_TZ_Lookup_Database</a>, <a class="el" href="class_l_g_v___t_z___lookup___entity.html">LGV_TZ_Lookup_Entity</a>, and <a class="el" href="class_l_g_v___t_z___lookup___loader.html">LGV_TZ_Lookup_Loader</a>.  </td></tr>
 <tr class="markdownTableRowOdd">
@@ -282,6 +286,66 @@ if [ ! -f "$worker" ]; then
     test -f "$worker" || { printf 'This installer has not been published on main yet.\n' &gt;&amp;2; exit 1; }
 fi
 "$php_command" -d "memory_limit=${LGV_TZ_DEPLOY_MEMORY_LIMIT:-1G}" "$worker" run "$work_directory" "${1:-}"
+</pre><h2 class="doxsection"><a class="anchor" id="update-command"></a>
+Update Command</h2>
+<p>Report the latest boundary version with &ndash;check, or download and reload it using the server's private configuration. The worker stages new data before replacing the live table; the shell removes downloads and handles interrupted loads.</p>
+<pre class="fragment">#!/bin/sh
+# © Copyright 2023-2026, Little Green Viper Software Development LLC.
+#
+# MIT License
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+# files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
+# modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+# Report the latest boundary version, or reload an existing database using its private PHP configuration.
+set -eu
+umask 077
+php_command=${LGV_TZ_UPDATE_PHP:-php}
+command -v "$php_command" &gt;/dev/null 2&gt;&amp;1 || { printf 'PHP 8.0 or later is required.\n' &gt;&amp;2; exit 2; }
+project_directory=$(CDPATH= cd -P "$(dirname "$0")" &amp;&amp; pwd)
+check=0
+if [ "${1:-}" = --check ]; then
+    check=1
+    shift
+fi
+if [ "$#" -gt 1 ]; then
+    printf 'Usage: %s [--check] [CONFIG_FILE]\n' "$0" &gt;&amp;2
+    exit 2
+fi
+config=${1:-$project_directory/config.php}
+if [ "$check" -eq 0 ] &amp;&amp; [ ! -f "$config" ]; then
+    printf 'Supply the existing private configuration: %s /path/to/config.php\n' "$0" &gt;&amp;2
+    exit 2
+fi
+work_directory=$(mktemp -d "${TMPDIR:-/tmp}/lgv-tz-update.XXXXXXXX")
+cleanup() {
+    result=$?
+    trap - 0 1 2 15
+    if "$php_command" "$project_directory/tools/update.php" cleanup "$work_directory"; then
+        rm -rf "$work_directory" || result=1
+    else
+        printf 'Update recovery information remains in %s\n' "$work_directory" &gt;&amp;2
+        result=1
+    fi
+    if [ "$result" -eq 0 ] &amp;&amp; [ "$check" -eq 0 ]; then
+        printf 'Boundary downloads deleted.\n'
+    fi
+    exit "$result"
+}
+trap cleanup 0
+trap 'exit 129' 1
+trap 'exit 130' 2
+trap 'exit 143' 15
+"$php_command" -d "memory_limit=${LGV_TZ_UPDATE_MEMORY_LIMIT:-1G}" "$project_directory/tools/update.php" "$work_directory" "$config" "$check"
 </pre><h2 class="doxsection"><a class="anchor" id="doxygen-configuration"></a>
 Doxygen Configuration</h2>
 <p>These are the project settings used by the root build script. Paths are relative to the docs directory.</p>
@@ -300,7 +364,7 @@ Doxygen Configuration</h2>
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = LGV_TZ_Lookup
-PROJECT_NUMBER         = 1.4.0
+PROJECT_NUMBER         = 1.4.1
 PROJECT_BRIEF          = "Time zone lookup for PHP applications and HTTP clients"
 PROJECT_LOGO           = ../img/icon.png
 OUTPUT_DIRECTORY       = .
@@ -317,6 +381,7 @@ STRIP_FROM_INC_PATH    = ..
 #---------------------------------------------------------------------------
 INPUT                  = ../README.md \
                          ../CHANGELOG.md \
+                         guide.md \
                          ../src \
                          ../demo \
                          ../tests \

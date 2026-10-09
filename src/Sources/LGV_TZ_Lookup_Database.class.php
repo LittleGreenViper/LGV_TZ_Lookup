@@ -40,6 +40,9 @@ class LGV_TZ_Lookup_Database {
         The statements that initialize this connection's MySQL or PostgreSQL schema.
      */
     private $_init_sql;
+
+    /** \brief Destination for schema creation and polygon inserts; updater subclasses can stage a new load. */
+    protected $_load_table = 'timezones';
     
     /***********************************************************************************************************************/
     /**
@@ -148,7 +151,7 @@ class LGV_TZ_Lookup_Database {
         $polygon_nested_array = array($inEntity->polygon);
         $polygon_array = self::_array_flatten($polygon_nested_array);
         $polygon = implode(array_map(function($inValue) { return pack('d*', $inValue); }, $polygon_array));
-        $sql = "INSERT INTO timezones (tzname, east, west, north, south, polygon) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = 'INSERT INTO '.$this->_load_table.' (tzname, east, west, north, south, polygon) VALUES (?, ?, ?, ?, ?, ?)';
         $params = [$inEntity->tzID, $inEntity->domainRect['east'], $inEntity->domainRect['west'], $inEntity->domainRect['north'], $inEntity->domainRect['south'], $polygon];
         // Packed doubles contain zero bytes; PostgreSQL must receive them as binary, not text parameters.
         $this->pdo_instance->preparedStatement($sql, $params, false, [5 => PDO::PARAM_LOB]);
@@ -225,14 +228,14 @@ class LGV_TZ_Lookup_Database {
     
     /***********************************************************************************************************************/
     /**
-        This replaces the timezones table and its indexes for the configured database driver.
+        This replaces the loader's destination table and its indexes for the configured database driver.
      */
     public function reset_database() {
         // Extend the time limit only for a database rebuild, leaving an embedding application's lookup limits alone.
         ini_set('max_execution_time', 1200);
         set_time_limit(1200);
         foreach ($this->_init_sql as $sql) {
-            $this->pdo_instance->preparedStatement($sql);
+            $this->pdo_instance->preparedStatement(str_replace('timezones', $this->_load_table, $sql));
         }
     }
 }

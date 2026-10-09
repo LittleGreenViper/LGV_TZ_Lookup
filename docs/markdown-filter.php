@@ -24,7 +24,7 @@
     Doxygen supplies the source filename as an argument. PHP source links are resolved by Doxygen itself. The demo
     shell script has a verbatim section in the documentation guide, and the small benchmark JSON is copied to HTML.
     We use HTML anchors for those two links, so Doxygen does not try to resolve them as undocumented API symbols.
-    The original README and changelog are never modified by this filter.
+    The original README, detailed guide, and changelog are never modified by this filter.
 */
 declare(strict_types = 1);
 
@@ -36,16 +36,20 @@ $markdown = file_get_contents($argv[1]);
 // Older README fences and note markers remain intact in GitHub; normalize them only for Doxygen's Markdown reader.
 $markdown = preg_replace('/^```\((bash|php)\)\s*$/m', '```$1', $markdown);
 $markdown = preg_replace('/^>(NOTE|CAUTION):/m', '> $1:', $markdown);
-echo preg_replace_callback('~\[([^\]]+)\]\((docs/Doxyfile|deploy\.sh|demo/run\.sh|demo/demo\.php|tests/demo\.php|tests/benchmarks/query-2026-10-07\.json|tests/benchmarks/postgres-2026-10-09\.json)\)~',
+echo preg_replace_callback('~\[([^\]]+)\]\((?:\.\./)?(README\.md|LICENSE|docs/guide\.md|docs/Doxyfile|update\.sh|deploy\.sh|demo/run\.sh|demo/demo\.php|tests/demo\.php|tests/benchmarks/query-2026-10-07\.json|tests/benchmarks/postgres-2026-10-09\.json)(#[^)]*)?\)~',
     static function(array $match): string {
         $target = [
+            'README.md' => 'index.html',
+            'LICENSE' => 'https://opensource.org/license/mit/',
+            'docs/guide.md' => 'md_docs_2guide.html',
             'docs/Doxyfile' => 'documentation_guide.html#doxygen-configuration',
             'deploy.sh' => 'documentation_guide.html#deployment-command',
+            'update.sh' => 'documentation_guide.html#update-command',
             'demo/run.sh' => 'documentation_guide.html#demo-command',
             'demo/demo.php' => 'demo_2demo_8php.html',
             'tests/demo.php' => 'tests_2demo_8php.html',
             'tests/benchmarks/query-2026-10-07.json' => 'query-2026-10-07.json',
             'tests/benchmarks/postgres-2026-10-09.json' => 'postgres-2026-10-09.json',
         ][$match[2]];
-        return '<a href="'.$target.'">'.htmlspecialchars($match[1], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</a>';
+        return '<a href="'.$target.($match[3] ?? '').'">'.htmlspecialchars($match[1], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</a>';
     }, $markdown);

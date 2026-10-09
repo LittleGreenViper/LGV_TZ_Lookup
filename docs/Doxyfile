@@ -13,7 +13,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = LGV_TZ_Lookup
-PROJECT_NUMBER         = 1.4.0
+PROJECT_NUMBER         = 1.4.1
 PROJECT_BRIEF          = "Time zone lookup for PHP applications and HTTP clients"
 PROJECT_LOGO           = ../img/icon.png
 OUTPUT_DIRECTORY       = .
@@ -30,6 +30,7 @@ STRIP_FROM_INC_PATH    = ..
 #---------------------------------------------------------------------------
 INPUT                  = ../README.md \
                          ../CHANGELOG.md \
+                         guide.md \
                          ../src \
                          ../demo \
                          ../tests \

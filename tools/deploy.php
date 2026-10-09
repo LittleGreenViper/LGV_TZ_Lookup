@@ -285,19 +285,13 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
     LGV_TZ_Lookup_Setup::install($privateStage.'/app', $driver, dirname(__DIR__));
     $package = Composer\InstalledVersions::getInstallPath(LGV_TZ_Lookup_Setup::PACKAGE);
     echo "Downloading the latest timezone boundaries...\n";
-    LGV_TZ_Lookup_Setup::download('https://api.github.com/repos/evansiroky/timezone-boundary-builder/releases/latest', $work.'/release.json');
-    $release = json_decode(file_get_contents($work.'/release.json'), true, 512, JSON_THROW_ON_ERROR);
-    $asset = null;
-    foreach ($release['assets'] ?? [] as $candidate) { if ($candidate['name'] === 'timezones-with-oceans.geojson.zip') { $asset = $candidate; break; } }
-    if ($asset === null) { throw new RuntimeException('The latest release has no full oceans GeoJSON archive.'); }
+    $release = LGV_TZ_Lookup_Setup::latestBoundaries($work);
+    $asset = $release['asset'];
     LGV_TZ_Lookup_Setup::download($asset['browser_download_url'], $work.'/boundaries.zip');
-    $checksum = hash_file('sha256', $work.'/boundaries.zip');
-    if (!empty($asset['digest']) && str_starts_with($asset['digest'], 'sha256:') && !hash_equals(substr($asset['digest'], 7), $checksum)) {
-        throw new RuntimeException('The boundary archive checksum differs from release metadata.');
-    }
+    $checksum = LGV_TZ_Lookup_Setup::verifyBoundaries($work.'/boundaries.zip', $asset);
     LGV_TZ_Lookup_Setup::extract($work.'/boundaries.zip', $work.'/boundaries.json');
     $database = new LGV_TZ_Lookup_Database($settings['database'], $settings['user'], $settings['password'], $driver, $settings['host'], $settings['port']);
-    echo 'Loading boundary release '.$release['tag_name']."...\n";
+    echo 'Loading boundary release '.$release['version']."...\n";
     $stream = fopen($work.'/boundaries.json', 'rb');
     try { (new JsonStreamingParser\Parser($stream, new LGV_TZ_Lookup_Loader($database)))->parse(); }
     finally { fclose($stream); unlink($work.'/boundaries.zip'); unlink($work.'/boundaries.json'); }
@@ -327,6 +321,15 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
     if (!chmod($privateStage.'/config.php', 0640) || !chgrp($privateStage.'/config.php', $group['gid'])) {
         throw new RuntimeException('Could not set private configuration permissions for the PHP group.');
     }
+    mkdir($privateStage.'/tools', 0755);
+    foreach (['update.php', 'Setup.php'] as $file) {
+        if (!copy(__DIR__.'/'.$file, $privateStage.'/tools/'.$file) || !chmod($privateStage.'/tools/'.$file, 0644)) {
+            throw new RuntimeException('Could not install the boundary updater.');
+        }
+    }
+    if (!copy(dirname(__DIR__).'/update.sh', $privateStage.'/update.sh') || !chmod($privateStage.'/update.sh', 0755)) {
+        throw new RuntimeException('Could not install the boundary update command.');
+    }
     $relativePackage = substr($package, strlen($privateStage));
     $endpointCode = $licenseHeader.
         "define('__CONFIG_FILE_', ".var_export($private.'/config.php', true).");\n".
@@ -346,7 +349,7 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
         if (!chmod($file->getPathname(), $mode)) { throw new RuntimeException('Could not set installed code permissions.'); }
     }
     chmod($privateStage.'/app', 0755);
-    file_put_contents($privateStage.'/installation.json', json_encode(['release' => $release['tag_name'], 'archive_sha256' => $checksum,
+    file_put_contents($privateStage.'/installation.json', json_encode(['release' => $release['version'], 'archive_sha256' => $checksum,
         'polygons' => $count, 'driver' => $driver, 'known_location_checks' => count($test_locations_param_array)], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
     chmod($privateStage, 0750);
     chmod($publicStage, 0755);
@@ -356,6 +359,7 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
     printf("\nInstalled %d polygons; %d/%d known locations passed (%.3f ms mean lookup).\n", $count, count($test_locations_param_array), count($test_locations_param_array), $lookupSeconds * 1000 / count($test_locations_param_array));
     printf("Installation: %.2f s; PHP peak %.2f MiB.\n", (hrtime(true) - $started) / 1e9, memory_get_peak_usage() / 1048576);
     echo 'Public endpoint: '.$public."/index.php\nPrivate configuration: ".$private."/config.php\n";
+    echo 'Boundary updater: '.$private."/update.sh (use --check to report the latest release).\n";
     echo $secret === '' ? "Server secret: disabled.\n" : 'Server secret: '.$secret."\n";
     echo 'Example request: /'.$endpoint.'/?ll=-77.036543,38.895037'.($secret === '' ? '' : '&secret='.$secret)."\n";
     echo "Boundary downloads deleted. The installed database is retained.\n";

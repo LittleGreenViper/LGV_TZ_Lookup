@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.1</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -123,6 +123,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7f968b89a258a282717c020bc1b007e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract exactly one GeoJSON entry without using archive paths.  <br /></td></tr>
 <tr class="memitem:a36339d82750e877493d897586fe4a41d" id="r_a36339d82750e877493d897586fe4a41d"><td class="memItemLeft">static&#160;</td><td class="memItemRight"><a class="el" href="#a36339d82750e877493d897586fe4a41d">install</a> (string $directory, string $driver, string $packagePath='', string $version='^1.4')</td></tr>
 <tr class="memdesc:a36339d82750e877493d897586fe4a41d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Install the library and optional loader, then require its Composer autoloader.  <br /></td></tr>
+<tr class="memitem:a8586febfd49a43fd818c323a3f8aaf89" id="r_a8586febfd49a43fd818c323a3f8aaf89"><td class="memItemLeft">static&#160;</td><td class="memItemRight"><a class="el" href="#a8586febfd49a43fd818c323a3f8aaf89">latestBoundaries</a> (string $directory, ?callable $<a class="el" href="#aa1304875c8f9c3f160c441bfd9c7ece5">download</a>=null)</td></tr>
+<tr class="memdesc:a8586febfd49a43fd818c323a3f8aaf89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Discover the latest full boundary release with oceans.  <br /></td></tr>
+<tr class="memitem:a8d53b3a28df9dceb8f277103e1217ead" id="r_a8d53b3a28df9dceb8f277103e1217ead"><td class="memItemLeft">static&#160;</td><td class="memItemRight"><a class="el" href="#a8d53b3a28df9dceb8f277103e1217ead">verifyBoundaries</a> (string $archive, array $asset)</td></tr>
+<tr class="memdesc:a8d53b3a28df9dceb8f277103e1217ead"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify the archive against the release's size and optional SHA-256 digest.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -173,7 +177,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_setup_8php_source.html#l00042">42</a> of file <a class="el" href="_setup_8php_source.html">Setup.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_setup_8php_source.html#l00076">76</a> of file <a class="el" href="_setup_8php_source.html">Setup.php</a>.</p>
 
 </div>
 </div>
@@ -217,7 +221,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_setup_8php_source.html#l00073">73</a> of file <a class="el" href="_setup_8php_source.html">Setup.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_setup_8php_source.html#l00107">107</a> of file <a class="el" href="_setup_8php_source.html">Setup.php</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2index_8php_source.html#l00051">if</a>.</p>
 
@@ -266,9 +270,79 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_setup_8php_source.html#l00116">116</a> of file <a class="el" href="_setup_8php_source.html">Setup.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_setup_8php_source.html#l00150">150</a> of file <a class="el" href="_setup_8php_source.html">Setup.php</a>.</p>
 
 <p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, and <a class="el" href="databases_8php_source.html#l00038">$driver</a>.</p>
+
+</div>
+</div>
+<a id="a8586febfd49a43fd818c323a3f8aaf89" name="a8586febfd49a43fd818c323a3f8aaf89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8586febfd49a43fd818c323a3f8aaf89">&#9670;&#160;</a></span>latestBoundaries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">LGV_TZ_Lookup_Setup::latestBoundaries </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>$directory</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">?callable</td>          <td class="paramname"><span class="paramname"><em>$download</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">RuntimeException</td><td>if metadata is incomplete. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="_setup_8php_source.html#l00042">42</a> of file <a class="el" href="_setup_8php_source.html">Setup.php</a>.</p>
+
+<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>.</p>
+
+</div>
+</div>
+<a id="a8d53b3a28df9dceb8f277103e1217ead" name="a8d53b3a28df9dceb8f277103e1217ead"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d53b3a28df9dceb8f277103e1217ead">&#9670;&#160;</a></span>verifyBoundaries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">LGV_TZ_Lookup_Setup::verifyBoundaries </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>$archive</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">array</td>          <td class="paramname"><span class="paramname"><em>$asset</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_setup_8php_source.html#l00061">61</a> of file <a class="el" href="_setup_8php_source.html">Setup.php</a>.</p>
 
 </div>
 </div>

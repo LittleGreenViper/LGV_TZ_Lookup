@@ -9,5 +9,6 @@ var class_l_g_v___t_z___lookup___database =
     [ "reset_database", "class_l_g_v___t_z___lookup___database.html#acf390d8f14a950cf66b0768c51be4d9c", null ],
     [ "store_entity", "class_l_g_v___t_z___lookup___database.html#a616e07a4b2efb66d5473968d2be3b09e", null ],
     [ "$_init_sql", "class_l_g_v___t_z___lookup___database.html#aac6aca811d026953fc915fb55242655b", null ],
+    [ "$_load_table", "class_l_g_v___t_z___lookup___database.html#a9b091915766540bff04d0f726ee493c8", null ],
     [ "$pdo_instance", "class_l_g_v___t_z___lookup___database.html#aea46915c48ed623187bac4838b48aff7", null ]
 ];

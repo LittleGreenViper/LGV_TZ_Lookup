@@ -1,18 +1,21 @@
 /**
 \page documentation_guide Building and Browsing the Documentation
 
-The README is the documentation's starting page. Its contents include the Composer library, command-line demo,
-standalone server, and performance notes. Use **Guides** to jump directly to those sections.
+The README is the documentation's starting page, with a short Composer example and the main commands.
+The \ref md_docs_2guide "Detailed Usage Guide" contains setup, maintenance, demo metrics, and development details.
+Use **Guides** to jump directly to either level of documentation.
 
 ## Where Should I Start?
 
 | What You Want To Do | Where To Look |
 | --- | --- |
 | Install the library and make a lookup | [Composer Library](index.html#composer-library) and LGV_TZ_Lookup_Query. |
-| Use PostgreSQL | [Using PostgreSQL](index.html#using-postgresql). |
+| Load boundaries or configure PostgreSQL | [Initial Loading](md_docs_2guide.html#loading-boundaries-for-a-library-application). |
 | Install a service on a server | [One-Command Deployment](index.html#one-command-server-deployment). |
-| Download current data and run a complete test | [Command-line Demo](index.html#turnkey-command-line-demo). |
-| Run the HTTP service | [Standalone Server](index.html#standalone-server-implementation). |
+| Report the latest boundary version or reload a database | [Updating the Boundary Data](index.html#updating-the-boundary-data). |
+| Download current data and run a complete test | [Command-line Demo](index.html#try-the-demo). |
+| Run the HTTP service manually | [Standalone Server](md_docs_2guide.html#standalone-server-implementation). |
+| Read benchmarks and integration-test instructions | [Performance](md_docs_2guide.html#query-performance). |
 | Understand storage and loading | LGV_TZ_Lookup_Database, LGV_TZ_Lookup_Entity, and LGV_TZ_Lookup_Loader. |
 | Understand the independent demo checks | DemoSourceGeometry, DemoInspectingListener, and DemoTrackedDatabase. |
 | Read implementation details | **API Reference** includes public/private members; **Source and Tests** includes annotated source. |
@@ -63,6 +66,13 @@ This is the shell entrypoint for the demo; its PHP worker and geometry helpers h
 The one-command installer uses the shared preparation helpers, and has its own database rollback and endpoint publication steps.
 
 \verbinclude deploy.sh
+
+## Update Command
+
+Report the latest boundary version with --check, or download and reload it using the server's private configuration.
+The worker stages new data before replacing the live table; the shell removes downloads and handles interrupted loads.
+
+\verbinclude update.sh
 
 ## Doxygen Configuration
 

@@ -35,7 +35,9 @@
         "test:mysql": "@php tests/databases.php --driver=mysql",
         "test:postgres": "@php tests/databases.php --driver=pgsql",
         "test:deploy:mysql": "@php tests/deploy.php --driver=mysql",
-        "test:deploy:postgres": "@php tests/deploy.php --driver=pgsql"
+        "test:deploy:postgres": "@php tests/deploy.php --driver=pgsql",
+        "test:update:mysql": "@php tests/update.php --driver=mysql",
+        "test:update:postgres": "@php tests/update.php --driver=pgsql"
     },
     "archive": {
         "exclude": [

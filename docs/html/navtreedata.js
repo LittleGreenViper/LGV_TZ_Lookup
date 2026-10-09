@@ -26,54 +26,25 @@ var NAVTREE =
 [
   [ "LGV_TZ_Lookup", "index.html", [
     [ "LGV_TZ_Lookup", "index.html#lgv_tz_lookup", [
-      [ "Overview", "index.html#overview", null ],
       [ "What Problem Does This Solve?", "index.html#what-problem-does-this-solve", null ],
-      [ "How This Works", "index.html#how-this-works", null ],
-      [ "Dependencies", "index.html#dependencies", [
-        [ "Batteries Not Included", "index.html#batteries-not-included", null ]
-      ] ],
       [ "Composer Library", "index.html#composer-library", [
-        [ "Install From GitHub", "index.html#install-from-github", null ],
-        [ "Look Up a Time Zone", "index.html#look-up-a-time-zone", null ],
-        [ "Using PostgreSQL", "index.html#using-postgresql", null ],
-        [ "Optional Boundary Loading", "index.html#optional-boundary-loading", null ]
+        [ "Initial Boundary Loading", "index.html#initial-boundary-loading", null ]
       ] ],
       [ "One-Command Server Deployment", "index.html#one-command-server-deployment", null ],
-      [ "Turnkey Command-line Demo", "index.html#turnkey-command-line-demo", [
-        [ "What Happens During a Run?", "index.html#what-happens-during-a-run", null ],
-        [ "What Gets Tested?", "index.html#what-gets-tested", null ],
-        [ "Reading the Results", "index.html#reading-the-results", null ],
-        [ "The Metrics", "index.html#the-metrics", null ],
-        [ "Initial Setup", "index.html#initial-setup", null ],
-        [ "Changing the Demo Settings", "index.html#changing-the-demo-settings", null ],
-        [ "What Gets Cleaned Up?", "index.html#what-gets-cleaned-up", null ],
-        [ "The Demo Files", "index.html#the-demo-files", null ]
-      ] ],
-      [ "Standalone Server Implementation", "index.html#standalone-server-implementation", [
-        [ "Initial Installation", "index.html#initial-installation", null ],
-        [ "Database Setup", "index.html#database-setup", null ],
-        [ "Config File", "index.html#config-file", [
-          [ "HTTP Request:", "index.html#http-request", null ],
-          [ "Command Line:", "index.html#command-line", null ]
-        ] ],
-        [ "Loader Dependency", "index.html#loader-dependency", null ],
-        [ "The Data File", "index.html#the-data-file", null ],
-        [ "The Initial Load and Database Setup", "index.html#the-initial-load-and-database-setup", null ],
-        [ "Testing", "index.html#testing", null ],
-        [ "Query Performance", "index.html#query-performance", null ],
-        [ "Database Integration Tests", "index.html#database-integration-tests", null ]
-      ] ],
-      [ "Generating the HTML Documentation", "index.html#generating-the-html-documentation", null ],
+      [ "Updating the Boundary Data", "index.html#updating-the-boundary-data", null ],
+      [ "Try the Demo", "index.html#try-the-demo", null ],
+      [ "More Information", "index.html#more-information", null ],
       [ "License", "index.html#license", null ]
     ] ],
     [ "Guides", "index.html", [
       [ "Composer Library", "index.html#composer-library", null ],
-      [ "PostgreSQL", "index.html#using-postgresql", null ],
+      [ "Detailed Usage", "md_docs_2guide.html", null ],
       [ "Server Deployment", "index.html#one-command-server-deployment", null ],
-      [ "Command-line Demo", "index.html#turnkey-command-line-demo", null ],
-      [ "Standalone Server", "index.html#standalone-server-implementation", null ],
-      [ "Performance", "index.html#query-performance", null ],
-      [ "Generate HTML Docs", "index.html#generating-the-html-documentation", null ],
+      [ "Update Boundaries", "index.html#updating-the-boundary-data", null ],
+      [ "Command-line Demo", "index.html#try-the-demo", null ],
+      [ "Standalone Server", "md_docs_2guide.html#standalone-server-implementation", null ],
+      [ "Performance", "md_docs_2guide.html#query-performance", null ],
+      [ "Generate HTML Docs", "md_docs_2guide.html#generating-the-html-documentation", null ],
       [ "Build and Browse Docs", "documentation_guide.html", null ]
     ] ],
     [ "API Reference", "annotated.html", [
@@ -95,6 +66,31 @@ var NAVTREE =
       ] ]
     ] ],
     [ "CHANGELOG", "md__c_h_a_n_g_e_l_o_g.html", null ],
+    [ "Detailed Usage Guide", "md_docs_2guide.html", [
+      [ "Loading Boundaries for a Library Application", "md_docs_2guide.html#loading-boundaries-for-a-library-application", null ],
+      [ "Composer Details", "md_docs_2guide.html#composer-details", null ],
+      [ "Deploying a Server", "md_docs_2guide.html#deploying-a-server", null ],
+      [ "Updater Details", "md_docs_2guide.html#updater-details", null ],
+      [ "Turnkey Command-line Demo", "md_docs_2guide.html#turnkey-command-line-demo", [
+        [ "What Happens During a Run?", "md_docs_2guide.html#what-happens-during-a-run", null ],
+        [ "What Gets Tested?", "md_docs_2guide.html#what-gets-tested", null ],
+        [ "Reading the Results", "md_docs_2guide.html#reading-the-results", null ],
+        [ "The Metrics", "md_docs_2guide.html#the-metrics", null ],
+        [ "Initial Setup", "md_docs_2guide.html#initial-setup", null ],
+        [ "Changing the Demo Settings", "md_docs_2guide.html#changing-the-demo-settings", null ],
+        [ "What Gets Cleaned Up?", "md_docs_2guide.html#what-gets-cleaned-up", null ],
+        [ "The Demo Files", "md_docs_2guide.html#the-demo-files", null ]
+      ] ],
+      [ "Standalone Server Implementation", "md_docs_2guide.html#standalone-server-implementation", [
+        [ "Private Configuration", "md_docs_2guide.html#private-configuration", null ],
+        [ "Initial Boundary Load", "md_docs_2guide.html#initial-boundary-load", null ],
+        [ "Requests and Tests", "md_docs_2guide.html#requests-and-tests", null ]
+      ] ],
+      [ "Query Performance", "md_docs_2guide.html#query-performance", null ],
+      [ "Database Integration Tests", "md_docs_2guide.html#database-integration-tests", null ],
+      [ "Generating the HTML Documentation", "md_docs_2guide.html#generating-the-html-documentation", null ],
+      [ "How the Lookup Works", "md_docs_2guide.html#how-the-lookup-works", null ]
+    ] ],
     [ "Building and Browsing the Documentation", "documentation_guide.html", null ],
     [ "GitHub", "^https://github.com/LittleGreenViper/LGV_TZ_Lookup", null ]
   ] ]
@@ -103,7 +99,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_l_g_v___t_z___lookup___database_8class_8php.html",
-"index.html#what-gets-cleaned-up"
+"md_docs_2guide.html#requests-and-tests"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

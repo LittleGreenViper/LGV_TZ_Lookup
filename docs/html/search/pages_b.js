@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['one_20command_20server_20deployment_0',['One-Command Server Deployment',['../index.html#one-command-server-deployment',1,'']]],
-  ['optional_20boundary_20loading_1',['Optional Boundary Loading',['../index.html#optional-boundary-loading',1,'']]],
-  ['overview_2',['Overview',['../index.html#overview',1,'']]]
+  ['pages_0',['Preview and GitHub Pages',['../documentation_guide.html#preview-and-github-pages',1,'']]],
+  ['performance_1',['Query Performance',['../md_docs_2guide.html#query-performance',1,'']]],
+  ['preview_20and_20github_20pages_2',['Preview and GitHub Pages',['../documentation_guide.html#preview-and-github-pages',1,'']]],
+  ['private_20configuration_3',['Private Configuration',['../md_docs_2guide.html#private-configuration',1,'']]],
+  ['problem_20does_20this_20solve_4',['What Problem Does This Solve?',['../index.html#what-problem-does-this-solve',1,'']]]
 ];

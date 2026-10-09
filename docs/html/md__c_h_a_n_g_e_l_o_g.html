@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.1</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -111,7 +111,15 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('md__c_h_a_n_g_
   <div class="headertitle"><div class="title">CHANGELOG </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md1"></a> <b>1.4.0</b> <em>October 9, 2026</em></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md1"></a> <b>1.4.1</b> <em>October 9, 2026</em></p>
+<ul>
+<li>Added a simple boundary updater that reports the latest shapefile release, downloads and reloads the full GeoJSON boundaries with oceans, and deletes the downloaded files afterward.</li>
+<li>Added a <span class="tt">--<a class="el" href="regression_8php.html#a7e830a71bad74ece222eb233f5098a19">check</a></span> mode to report the latest boundary version without loading it or connecting to the database.</li>
+<li>Updates load into a staging table and replace the live MySQL or PostgreSQL table only after parsing succeeds; failed loads retain existing boundaries.</li>
+<li>New server deployments include the updater beside the private configuration, with interruption cleanup and documentation.</li>
+<li>Simplified the README around the Composer lookup and main commands; moved detailed setup, demo metrics, and development instructions into a linked usage guide.</li>
+</ul>
+<p><b>1.4.0</b> <em>October 9, 2026</em></p>
 <ul>
 <li>Added PostgreSQL lookup/loading support alongside MySQL, with binary-safe storage, bounded polygon reads, and backend-selectable Composer demos and integration tests.</li>
 <li>Added one-command server deployment with prompted database settings, a random server secret enabled by default, private configuration, tested loading, and ownership-checked rollback.</li>

@@ -38,6 +38,40 @@ class LGV_TZ_Lookup_Setup {
     const PACKAGE = 'littlegreenviper/lgv_tz_lookup'; ///< The package installed by both command-line tools.
 
     /***********************************************************************************************************************/
+    /** \brief Discover the latest full boundary release with oceans. \throws RuntimeException if metadata is incomplete. */
+    public static function latestBoundaries(string $directory, ?callable $download = null): array {
+        $download = $download ?? [self::class, 'download'];
+        $download('https://api.github.com/repos/evansiroky/timezone-boundary-builder/releases/latest', $directory.'/release.json');
+        $release = json_decode(file_get_contents($directory.'/release.json'), true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($release) || !is_string($release['tag_name'] ?? null) || trim($release['tag_name']) === '') {
+            throw new RuntimeException('The latest boundary release has no version tag.');
+        }
+        foreach ($release['assets'] ?? [] as $asset) {
+            if (($asset['name'] ?? '') === 'timezones-with-oceans.geojson.zip' &&
+                is_string($asset['browser_download_url'] ?? null) &&
+                str_starts_with($asset['browser_download_url'], 'https://')) {
+                return ['version' => $release['tag_name'], 'asset' => $asset];
+            }
+        }
+        throw new RuntimeException('The latest release has no full oceans GeoJSON archive.');
+    }
+
+    /***********************************************************************************************************************/
+    /** \brief Verify the archive against the release's size and optional SHA-256 digest. */
+    public static function verifyBoundaries(string $archive, array $asset): string {
+        $size = filesize($archive);
+        if ($size === false || $size === 0 || (isset($asset['size']) && $size !== $asset['size'])) {
+            throw new RuntimeException('The boundary archive is empty or incomplete.');
+        }
+        $checksum = hash_file('sha256', $archive);
+        if (!empty($asset['digest']) && str_starts_with($asset['digest'], 'sha256:') &&
+            !hash_equals(substr($asset['digest'], 7), $checksum)) {
+            throw new RuntimeException('The boundary archive checksum differs from release metadata.');
+        }
+        return $checksum;
+    }
+
+    /***********************************************************************************************************************/
     /** \brief Download an HTTPS resource to a local file. \throws RuntimeException if preparation fails. */
     public static function download(string $url,           ///< The HTTPS resource to download.
                         string $destination     ///< The local filename to create in the demo's working directory.

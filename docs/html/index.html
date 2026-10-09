@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.0</span>
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.1</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -111,15 +111,11 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
   <div class="headertitle"><div class="title">LGV_TZ_Lookup </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__r_e_a_d_m_e"></a> </p><div style="float:right"><a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup"><img src="img/GitHub-Mark-64px.png" alt="" style="width:32px" class="inline"/> </a></div> <div style="float:left"> <img src="img/icon.png" alt="" class="inline"/> </div> <div style="clear:both"></div><h1 class="doxsection"><a class="anchor" id="lgv_tz_lookup"></a>
+<div class="textblock"><p><a class="anchor" id="md__r_e_a_d_m_e"></a> <img src="img/icon.png" alt="Little Green Viper" width="64" class="inline"/></p>
+<h1 class="doxsection"><a class="anchor" id="lgv_tz_lookup"></a>
 LGV_TZ_Lookup</h1>
-<p>A Server and PHP Library for Matching Long/Lat to Timezone</p>
-<h2 class="doxsection"><a class="anchor" id="overview"></a>
-Overview</h2>
-<p>This project is a fairly simple PHP project, designed to accept the GeoJSON output of <a href="https://github.com/evansiroky/timezone-boundary-builder">the Timezone Boundary Builder Project</a>, and provide a simple API, for matching longitude/latitude locations with timezones.</p>
-<p>Use the lookup classes directly in a PHP application through Composer, or run the standalone HTTP server described below. Both use the same preloaded boundary database and lookup implementation.</p>
-<p>Send in a long/lat, and get back a string, with <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">the standard TZ time zone designator</a> of the timezone that covers that point.</p>
-<p><a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup">This is the GitHub repo for this project</a></p>
+<p>A small PHP library that turns longitude and latitude into an IANA time zone name, such as <span class="tt">America/New_York</span>. Use it in your application through Composer, or run it as a simple HTTP service.</p>
+<p>Requires <b>PHP 8.0+</b>, <b>PDO</b>, and <b>MySQL or PostgreSQL</b> with a loaded boundary database. Boundary data comes from the <a href="https://github.com/evansiroky/timezone-boundary-builder">Timezone Boundary Builder project</a>.</p>
 <h2 class="doxsection"><a class="anchor" id="what-problem-does-this-solve"></a>
 What Problem Does This Solve?</h2>
 <p>Unfortunately, time zones are not a simple "I'm at this longitude, so it must be this time." They are political constructs.</p>
@@ -127,410 +123,62 @@ What Problem Does This Solve?</h2>
 <p><img src="World_Time_Zones_Map.png" alt="" class="inline" title="Time Zones Of the World"/>    </p>
 <p><a href="https://commons.wikimedia.org/wiki/File:World_Time_Zones_Map.png"><em>Image Source: Wikimedia Commons</em></a></p>
 <p>We address this by using the rendered result of <a href="https://github.com/evansiroky/timezone-boundary-builder">this great project</a>, which is an effort to build a "living document" map of all the world timezones, as a shapefile (a file that can project polygons over a digital map), and locating a geographic point, within those shapes.</p>
-<h2 class="doxsection"><a class="anchor" id="how-this-works"></a>
-How This Works</h2>
-<p>We provide a very basic PHP server that builds a simple database from the data in the massive shapefile (The <a href="https://geojson.org">GeoJSON</a> variant that results from the timezone boundary builder. It can be found in any of <a href="https://github.com/evansiroky/timezone-boundary-builder/releases">the project releases</a>). The database is deliberately "dumb," with a view towards making the project as flexible as possible, and lookups fast and easy.</p>
-<p>Each timezone is described in <a href="https://datatracker.ietf.org/doc/html/rfc7946#section-3.1.6">a GeoJSON polygon</a> (or <a href="https://datatracker.ietf.org/doc/html/rfc7946#section-3.1.7">multipolygon</a>).</p>
-<blockquote class="doxtable">
-<p>NOTE: We are making <em>huge</em> assumptions about the file. We assume that the polygons are very basic, "closed" polygons, and that multipolygons are simply aggregations of simple polygons (as opposed to making "holes," and whatnot). </p>
-</blockquote>
-<p>We build a database of polygons (breaking up multipolygons), with what we term a "domain rect." This is a rectangle that encloses the entire polygon, regardless of the shape of the polygon.</p>
-<p>The "domain rect" is used for a fast "triage" lookup. Its vertices are indexed in the database, so comparisons are zippy. We can quickly find the timezones that may contain our location, and ignore the rest.</p>
-<p>In some cases, the domain rect "triage" may return only one result, so we got it in one. In other cases, we can then do a simple <a href="https://en.m.wikipedia.org/wiki/Winding_number">"Winding Number"</a> lookup of the location, using the un-indexed polygon data for that timezone, and figure out which polygon actually has it. We return the first one.</p>
-<p>From a usage standpoint, you simply send in a longitude/latitude pair, as a simple <a href="https://www.w3schools.com/tags/ref_httpmethods.asp">HTTP GET</a>, and you will receive a "raw" string response, with the <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">TZ</a> name of the timezone that applies to the location.</p>
-<p><span class="tt">http</span>_[<em><span class="tt">s</span></em>]_<span class="tt">://</span>_&lt;YOUR SERVER URL TO THE src DIRECTORY&gt;[<em><span class="tt">/index.php</span></em>]_<span class="tt">?ll=</span>&lt;LONGITUDE&gt;,&lt;LATITUDE&gt;</p>
-<p><span class="tt"><a href="https://tz.example.com?ll=-73.123,44.456">https://tz.example.com?ll=-73.123,44.456</a></span></p>
-<p>The long/lat is sent as a comma-separated pair of floating-point numbers that represent degrees of longitude and latitude.</p>
-<h2 class="doxsection"><a class="anchor" id="dependencies"></a>
-Dependencies</h2>
-<p>Lookup requires PHP 8.0 or later, PDO, and either the PDO MySQL extension (<span class="tt">ext-pdo_mysql</span>) or PDO PostgreSQL extension (<span class="tt">ext-pdo_pgsql</span>), with a populated boundary database. The standalone server can use either database.</p>
-<p>This project uses <a href="https://github.com/salsify/jsonstreamingparser">the streaming JSON parser</a>, in order to parse <a href="https://github.com/evansiroky/timezone-boundary-builder/releases/download/2023b/timezones-with-oceans.geojson.zip">this file</a> (a current release, at the time of this writing), which is <a href="https://geojson.org">a GeoJSON file</a>, containing the calculated timezones, and is created by <a href="https://github.com/evansiroky/timezone-boundary-builder">this project</a>.</p>
-<p>Otherwise, it is a very basic <a href="https://php.net">PHP</a> project (tested against <a href="https://www.php.net/releases/8.2/en.php">PHP 8.2</a>, at the time of this writing).</p>
-<p>The initial release was built for <a href="https://www.mysql.com">MySQL</a>. The current code also supports <a href="https://www.postgresql.org">PostgreSQL</a>, through <a href="https://www.php.net/manual/en/book.pdo.php">PHP PDO</a>. Both use the same simple table and packed polygon format; PostgreSQL does not require PostGIS.</p>
-<p>The <a href="https://github.com/salsify/jsonstreamingparser">streaming JSON parser</a> is required only for boundary-file loading. It is an optional dependency of the Composer library; lookup installations do not install it.</p>
-<h3 class="doxsection"><a class="anchor" id="batteries-not-included"></a>
-Batteries Not Included</h3>
-<p>Well...that's not <em>strictly</em> true. You'll need to download the GeoJSON file from <a href="https://github.com/evansiroky/timezone-boundary-builder/releases">the Timezone Boundary Builder Project releases</a>. It's a big file, and may be updated, as timezones change. You can use either of the files (with or without oceans), but the project tests against the oceans variant.</p>
 <h2 class="doxsection"><a class="anchor" id="composer-library"></a>
 Composer Library</h2>
-<p>The package name is <span class="tt">littlegreenviper/lgv_tz_lookup</span>. Its root <span class="tt">composer.json</span> registers the existing <span class="tt">LGV_TZ_Lookup_*</span> classes for autoloading. Requiring your application's <span class="tt">vendor/autoload.php</span> makes the lookup API available without starting the HTTP server or loading the JSON parser.</p>
-<h3 class="doxsection"><a class="anchor" id="install-from-github"></a>
-Install From GitHub</h3>
-<p>Version <span class="tt">1.4.0</span> includes the Composer library, PostgreSQL support, and the server installer. Once its tag is published, run these commands in <b>your application's directory</b>:</p>
+<p>Run these commands in your application's directory:</p>
 <div class="fragment"><div class="line">composer config repositories.lgv-tz-lookup vcs https://github.com/LittleGreenViper/LGV_TZ_Lookup.git</div>
 <div class="line">composer require littlegreenviper/lgv_tz_lookup:^1.4</div>
-</div><!-- fragment --><p>This uses a <a href="https://getcomposer.org/doc/05-repositories.md#vcs">Composer VCS repository</a>, so Packagist registration is not required. Tags <span class="tt">1.2.0</span> and earlier predate the Composer library manifest. Once the package is registered on Packagist, applications can omit the repository configuration.</p>
-<p>To try a local checkout before pushing, use a path repository instead:</p>
-<div class="fragment"><div class="line">composer config repositories.lgv-tz-lookup path /absolute/path/to/LGV_TZ_Lookup</div>
-<div class="line">composer require littlegreenviper/lgv_tz_lookup:@dev</div>
-</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="look-up-a-time-zone"></a>
-Look Up a Time Zone</h3>
-<p>The <span class="tt">timezones</span> table must already have been populated using the standalone loader or imported from an existing installation. Lookup itself requires only <span class="tt">SELECT</span> access to that table. It does not download boundary data or create the table.</p>
+</div><!-- fragment --><p>Then look up a location:</p>
 <div class="fragment"><div class="line">&lt;?php</div>
-<div class="line"> </div>
 <div class="line">require __DIR__.<span class="stringliteral">&#39;/vendor/autoload.php&#39;</span>;</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_variable" href="composer_8php.html#a7691c0162d89de0b6ba47edcd8ba8878">$database</a> = <span class="keyword">new</span> <a class="code hl_class" href="class_l_g_v___t_z___lookup___database.html">LGV_TZ_Lookup_Database</a>(</div>
-<div class="line">    <span class="stringliteral">&#39;tz_database&#39;</span>,       <span class="comment">// Database name.</span></div>
-<div class="line">    <span class="stringliteral">&#39;tz_reader&#39;</span>,         <span class="comment">// Database user.</span></div>
-<div class="line">    <span class="stringliteral">&#39;your-db-password&#39;</span>,  <span class="comment">// Database password.</span></div>
-<div class="line">    <span class="stringliteral">&#39;mysql&#39;</span>,</div>
-<div class="line">    <span class="stringliteral">&#39;127.0.0.1&#39;</span>,</div>
-<div class="line">    3306</div>
+<div class="line">    <span class="stringliteral">&#39;tz_database&#39;</span>, <span class="stringliteral">&#39;tz_reader&#39;</span>, <span class="stringliteral">&#39;your-db-password&#39;</span>, <span class="stringliteral">&#39;mysql&#39;</span>, <span class="stringliteral">&#39;127.0.0.1&#39;</span></div>
 <div class="line">);</div>
 <div class="line"><a class="code hl_variable" href="composer_8php.html#abfbf677bba4b657eb5425cdc21cdfbbc">$lookup</a> = <span class="keyword">new</span> <a class="code hl_class" href="class_l_g_v___t_z___lookup___query.html">LGV_TZ_Lookup_Query</a>(<a class="code hl_variable" href="composer_8php.html#a7691c0162d89de0b6ba47edcd8ba8878">$database</a>);</div>
 <div class="line"> </div>
-<div class="line">echo <a class="code hl_variable" href="composer_8php.html#abfbf677bba4b657eb5425cdc21cdfbbc">$lookup</a>-&gt;get_tz(-77.036543, 38.895037); <span class="comment">// America/New_York (Washington, DC).</span></div>
+<div class="line">echo <a class="code hl_variable" href="composer_8php.html#abfbf677bba4b657eb5425cdc21cdfbbc">$lookup</a>-&gt;get_tz(-77.036543, 38.895037); <span class="comment">// America/New_York</span></div>
 <div class="ttc" id="aclass_l_g_v___t_z___lookup___database_html"><div class="ttname"><a href="class_l_g_v___t_z___lookup___database.html">LGV_TZ_Lookup_Database</a></div><div class="ttdef"><b>Definition</b> <a href="_l_g_v___t_z___lookup___database_8class_8php_source.html#l00037">LGV_TZ_Lookup_Database.class.php:37</a></div></div>
 <div class="ttc" id="aclass_l_g_v___t_z___lookup___query_html"><div class="ttname"><a href="class_l_g_v___t_z___lookup___query.html">LGV_TZ_Lookup_Query</a></div><div class="ttdef"><b>Definition</b> <a href="_l_g_v___t_z___lookup___query_8class_8php_source.html#l00040">LGV_TZ_Lookup_Query.class.php:40</a></div></div>
 <div class="ttc" id="acomposer_8php_html_a7691c0162d89de0b6ba47edcd8ba8878"><div class="ttname"><a href="composer_8php.html#a7691c0162d89de0b6ba47edcd8ba8878">$database</a></div><div class="ttdeci">$database</div><div class="ttdef"><b>Definition</b> <a href="composer_8php_source.html#l00052">composer.php:52</a></div></div>
 <div class="ttc" id="acomposer_8php_html_abfbf677bba4b657eb5425cdc21cdfbbc"><div class="ttname"><a href="composer_8php.html#abfbf677bba4b657eb5425cdc21cdfbbc">$lookup</a></div><div class="ttdeci">$lookup</div><div class="ttdef"><b>Definition</b> <a href="composer_8php_source.html#l00054">composer.php:54</a></div></div>
-</div><!-- fragment --><p>Pass longitude first, then latitude, as numeric degrees within <span class="tt">[-180, 180]</span> and <span class="tt">[-90, 90]</span>. The result is a time zone name, or an empty string when no match is found. You can reuse the database and lookup objects for multiple coordinates. Pass connection settings from your application's configuration; the standalone server's separate config file and HTTP secret are not used by this API. Creating a library database connection preserves your application's execution time limit.</p>
-<h3 class="doxsection"><a class="anchor" id="using-postgresql"></a>
-Using PostgreSQL</h3>
-<p>Use <span class="tt">pgsql</span> as the driver, and <span class="tt">5432</span> as the port. For example:</p>
-<div class="fragment"><div class="line"><a class="code hl_variable" href="composer_8php.html#a7691c0162d89de0b6ba47edcd8ba8878">$database</a> = <span class="keyword">new</span> <a class="code hl_class" href="class_l_g_v___t_z___lookup___database.html">LGV_TZ_Lookup_Database</a>(</div>
-<div class="line">    <span class="stringliteral">&#39;tz_database&#39;</span>,</div>
-<div class="line">    <span class="stringliteral">&#39;tz_reader&#39;</span>,</div>
-<div class="line">    <span class="stringliteral">&#39;your-db-password&#39;</span>,</div>
-<div class="line">    <span class="stringliteral">&#39;pgsql&#39;</span>,</div>
-<div class="line">    <span class="stringliteral">&#39;127.0.0.1&#39;</span>,</div>
-<div class="line">    5432</div>
-<div class="line">);</div>
-<div class="line"><a class="code hl_variable" href="composer_8php.html#abfbf677bba4b657eb5425cdc21cdfbbc">$lookup</a> = <span class="keyword">new</span> <a class="code hl_class" href="class_l_g_v___t_z___lookup___query.html">LGV_TZ_Lookup_Query</a>(<a class="code hl_variable" href="composer_8php.html#a7691c0162d89de0b6ba47edcd8ba8878">$database</a>);</div>
-<div class="line">echo <a class="code hl_variable" href="composer_8php.html#abfbf677bba4b657eb5425cdc21cdfbbc">$lookup</a>-&gt;get_tz(-77.036543, 38.895037);</div>
-</div><!-- fragment --><p>If you omit the port, it defaults to <span class="tt">3306</span> for MySQL, or <span class="tt">5432</span> for PostgreSQL. Install the PHP extension for the database you use. Composer suggests both extensions; a PostgreSQL application does not need <span class="tt">ext-pdo_mysql</span>.</p>
-<p>The loader creates PostgreSQL's <span class="tt">timezones</span> table, identity column, and indexes, and stores the packed polygons in <span class="tt">BYTEA</span> columns. Load the same GeoJSON boundary file into a new PostgreSQL database. A MySQL SQL dump cannot be imported directly into PostgreSQL.</p>
-<blockquote class="doxtable">
-<p>NOTE: PostgreSQL support is new in <span class="tt">1.4.0</span>; tag <span class="tt">1.3.0</span> supports MySQL. Until the <span class="tt">1.4.0</span> tag is published, use the local Composer path repository above, or the local demo command below. </p>
-</blockquote>
-<p>PostgreSQL polygon reads use <a href="https://www.php.net/manual/en/pdo.constants.php">single-row fetching</a> on PHP 8.5 and later. Earlier PHP versions use a server cursor. Both keep polygon fetching bounded, and return the same binary strings to the lookup code. A lookup that finishes early releases its reader without committing or cancelling an application's transaction.</p>
-<h3 class="doxsection"><a class="anchor" id="optional-boundary-loading"></a>
-Optional Boundary Loading</h3>
-<p>The library's runtime dependencies are PHP, PDO, and the driver for your database. Applications that also need the loader can add its parser explicitly:</p>
-<div class="fragment"><div class="line">composer require salsify/json-streaming-parser:&quot;8.3.*&quot;</div>
-</div><!-- fragment --><p><span class="tt"><a class="el" href="class_l_g_v___t_z___lookup___loader.html">LGV_TZ_Lookup_Loader</a></span> then becomes usable through the same autoloader. Initial database loading and subsequent boundary updates can also be handled separately with the standalone CLI instructions below. The GeoJSON boundary file is obtained separately and is not bundled in the library.</p>
-<p>For development in a repository checkout, running <span class="tt">composer install</span> at the repository root installs the optional parser as a development dependency. Run <span class="tt">composer test</span> for regression checks and <span class="tt">composer test:composer</span> for the autoloading and optional-loader checks. When this library is installed into another application, its development dependencies are not installed.</p>
+</div><!-- fragment --><p>Pass <b>longitude first</b>, then latitude, in degrees. The result is a time zone name, or an empty string if no match is found. You can reuse the lookup object for multiple locations.</p>
+<p>For PostgreSQL, use <span class="tt">pgsql</span> instead of <span class="tt">mysql</span>. Ports default to <span class="tt">3306</span> and <span class="tt">5432</span>, respectively; an optional sixth constructor argument selects another port. Install the PDO extension for your chosen database.</p>
+<h3 class="doxsection"><a class="anchor" id="initial-boundary-loading"></a>
+Initial Boundary Loading</h3>
+<p>Populate the <span class="tt">timezones</span> table once before making lookups, or import it from an existing installation. The <a href="md_docs_2guide.html#loading-boundaries-for-a-library-application">initial loading instructions</a> show how to load the downloaded GeoJSON file into your database. Lookup needs only <span class="tt">SELECT</span> access afterward.</p>
+<p>The streaming JSON parser is an optional dependency used only for loading. The boundary file is downloaded separately and is not bundled with the library.</p>
 <h2 class="doxsection"><a class="anchor" id="one-command-server-deployment"></a>
 One-Command Server Deployment</h2>
-<p>From a checkout, run:</p>
+<p>To run an HTTP service, start the installer from a checkout:</p>
 <div class="fragment"><div class="line">./deploy.sh</div>
-</div><!-- fragment --><p><a href="documentation_guide.html#deployment-command">deploy.sh</a> is the shell entrypoint; <a class="el" href="tools_2deploy_8php.html" title="deploy.php">tools/deploy.php</a> performs the installation and recovery.</p>
-<p>The installer asks for the database driver, host, port, name, user, and password. Password input is hidden. You can use an existing database with no <span class="tt">timezones</span> table, or let the installer create a new database if the user has permission.</p>
-<p>It then asks for your existing web document root, a service subdirectory, a private application directory, and the group that runs PHP. For example, you might use <span class="tt">/var/www/html</span> as the web root, <span class="tt">timezone</span> as the service directory, <span class="tt">/var/www/lgv-tz-server</span> for the private application, and <span class="tt">www-data</span> for the PHP group. The private directory must be outside the web root, and both installation directories must be new.</p>
-<p>By default, it creates a random 256-bit server secret. The final output gives you that secret and an example request. It also saves the secret in the private <span class="tt">config.php</span>, with the database settings. You can answer <span class="tt">n</span> to the secret prompt, or start with:</p>
-<div class="fragment"><div class="line">./deploy.sh --no-secret</div>
-</div><!-- fragment --><p>The installer uses Composer to install a copy of the checkout, downloads the latest full timezone boundaries with oceans, loads them, and runs all 200 known-location tests. Only after those tests pass does it publish <span class="tt"><a class="el" href="index_8php.html">index.php</a></span> in your selected service directory. The existing PHP-enabled web server can then serve requests such as:</p>
-<div class="fragment"><div class="line">https://your-server/timezone/?ll=-77.036543,38.895037&amp;secret=&lt;GENERATED SECRET&gt;</div>
-</div><!-- fragment --><p>If the secret is disabled, omit that query argument. A missing or incorrect secret receives HTTP 403. The final report includes polygon count, test results, mean lookup latency, installation time, and PHP peak memory.</p>
-<p>The compressed and extracted boundaries are deleted after loading. <b>The installed database is retained.</b> An interrupted or failed installation removes its temporary files and rolls back its own tables or newly created database. A random ownership marker prevents cleanup from adopting unrelated tables or directories. If cleanup cannot reach the database, it retains a private recovery directory and prints its location. Retry with:</p>
-<div class="fragment"><div class="line">php tools/deploy.php cleanup &#39;&lt;RECOVERY DIRECTORY&gt;&#39;</div>
-</div><!-- fragment --><p>You'll need PHP 8.0 or later with PDO and the selected database driver, <span class="tt">curl</span>, <span class="tt">zip</span>, <span class="tt">mbstring</span>, <span class="tt">ctype</span>, and <span class="tt">posix</span>; <span class="tt">proc_open</span> and the Unix <span class="tt">stty</span> command must be available. The web server's PHP must also have the selected PDO driver. The installer works with your existing PHP/database services; it does not install or reconfigure them. Choose the correct PHP group so the web worker can read the private configuration and Composer code.</p>
-<p><span class="tt">LGV_TZ_DEPLOY_PHP</span> selects the CLI PHP executable; <span class="tt">LGV_TZ_DEPLOY_MEMORY_LIMIT</span> defaults to <span class="tt">1G</span>; <span class="tt">TMPDIR</span> selects the temporary storage directory. Prompts still read from your terminal when standard input is a pipe.</p>
-<p>Once these installer files are published on GitHub, a server without a checkout can use this single command:</p>
-<div class="fragment"><div class="line">curl -fsSL https://raw.githubusercontent.com/LittleGreenViper/LGV_TZ_Lookup/main/deploy.sh | sh</div>
-</div><!-- fragment --><p>That form also needs command-line <span class="tt">curl</span> and <span class="tt">tar</span>. It fetches the installer from <span class="tt">main</span>, then performs the same prompted installation. To disable the secret, end the command with <span class="tt">sh -s -- --no-secret</span>.</p>
-<h2 class="doxsection"><a class="anchor" id="turnkey-command-line-demo"></a>
-Turnkey Command-line Demo</h2>
-<p>If you'd like to try the Composer package, we have a simple command-line demo. You'll need PHP and a running MySQL or PostgreSQL server. The demo takes care of fetching Composer, installing the package, downloading the boundary data, loading a test database, and running the tests.</p>
-<p>You run it from the repository root, like so:</p>
+</div><!-- fragment --><p>It asks for database and server settings, downloads and loads the latest boundaries, tests the lookups, and installs the endpoint. A random server secret is enabled by default. The final output gives you the secret and a request URL, such as:</p>
+<div class="fragment"><div class="line">https://your-server/timezone/?ll=-77.036543,38.895037&amp;secret=&lt;YOUR SECRET&gt;</div>
+</div><!-- fragment --><p>Use <span class="tt">./deploy.sh --no-secret</span> for public access. You need an existing PHP-enabled web server and database service. See the <a href="md_docs_2guide.html#deploying-a-server">deployment guide</a> for prerequisites, directory choices, and recovery.</p>
+<h2 class="doxsection"><a class="anchor" id="updating-the-boundary-data"></a>
+Updating the Boundary Data</h2>
+<p>Version <b>1.4.1</b> adds a simple updater. From a checkout:</p>
+<div class="fragment"><div class="line">./update.sh --check                         # Print the latest boundary release version.</div>
+<div class="line">./update.sh /absolute/path/to/config.php    # Download and load it into your existing database.</div>
+</div><!-- fragment --><p>Use the same private configuration as your server. New server deployments include <span class="tt">update.sh</span> beside <span class="tt">config.php</span>, so the installed script can run without a path argument.</p>
+<p>The updater reports the boundary version and polygon count, and deletes the downloaded ZIP and GeoJSON afterward. It loads the new data before replacing the live table, so a failed load retains your existing boundaries. Each update command reloads the latest release; <span class="tt">--<a class="el" href="regression_8php.html#a7e830a71bad74ece222eb233f5098a19">check</a></span> lets you decide whether to run it.</p>
+<p>See the <a href="md_docs_2guide.html#updater-details">updater guide</a> for requirements, options, and cleanup recovery.</p>
+<h2 class="doxsection"><a class="anchor" id="try-the-demo"></a>
+Try the Demo</h2>
+<p>From a checkout, with PHP and a running MySQL or PostgreSQL server:</p>
 <div class="fragment"><div class="line">./demo/run.sh</div>
-</div><!-- fragment --><p>That's the whole command. There are no command-line arguments, and you don't need to set up the HTTP server first.</p>
-<p>For PostgreSQL, using the current checkout through Composer, run:</p>
-<div class="fragment"><div class="line">LGV_TZ_DEMO_DRIVER=pgsql LGV_TZ_DEMO_PACKAGE_PATH=. ./demo/run.sh</div>
-</div><!-- fragment --><p>On your initial Homebrew PostgreSQL setup, the demo uses your shell username, port <span class="tt">5432</span>, and an empty password. It connects to the existing <span class="tt">postgres</span> database for administration, and creates a separate database for the test. The user needs <span class="tt">CREATEDB</span> permission. Override the connection settings below if your installation differs.</p>
-<p><span class="tt">LGV_TZ_DEMO_PACKAGE_PATH</span> installs a copy of that checkout into the temporary Composer application. This tests local changes through Composer before they are released. If you omit it, the demo installs the GitHub release selected by <span class="tt">LGV_TZ_DEMO_PACKAGE_VERSION</span>.</p>
-<blockquote class="doxtable">
-<p>NOTE: This is a temporary installation. The demo creates its own database and working directory, and removes them when it finishes. Your existing server configuration, databases, and downloaded boundary file are left alone. </p>
-</blockquote>
-<h3 class="doxsection"><a class="anchor" id="what-happens-during-a-run"></a>
-What Happens During a Run?</h3>
-<p>The demo installs the released library into a temporary Composer application. The tests exercise that installed package. The version that was installed, and the boundary release being tested, are printed at the start of the run.</p>
-<p>Here's what it does:</p>
-<ol type="1">
-<li>Download a temporary Composer executable and verify its checksum. Your installed Composer is not changed or required.</li>
-<li>Find the latest <a href="https://github.com/evansiroky/timezone-boundary-builder/releases/latest">Timezone Boundary Builder release</a>, download <span class="tt">timezones-with-oceans.geojson.zip</span>, verify its checksum when published, and stream its GeoJSON file to disk.</li>
-<li>Load that file with the Composer-installed <span class="tt"><a class="el" href="class_l_g_v___t_z___lookup___loader.html">LGV_TZ_Lookup_Loader</a></span> into a newly created database named <span class="tt">lgv_tz_demo_&lt;random ID&gt;</span>, retaining compact source geometry for independent checks.</li>
-<li>Delete both the downloaded ZIP and the extracted GeoJSON immediately after loading.</li>
-<li>Validate stored geometry against the source and run both the installed package's known-location tests and generated boundary/interior tests through <span class="tt"><a class="el" href="class_l_g_v___t_z___lookup___query.html">LGV_TZ_Lookup_Query</a></span>. Print sample results, any failures, and performance metrics.</li>
-<li>Drop the temporary database and delete the temporary application, Composer executable, and Composer cache when the script exits.</li>
-</ol>
-<p>The boundary file is the <a href="https://geojson.org">GeoJSON</a> variant, with oceans included. That's the format the loader uses. We look up the latest published release on each run, so you don't need to edit a download URL when the boundaries are updated.</p>
-<p>These are pretty big files. On October 9, 2026, the archive was about 53 MiB, and the extracted JSON was about 175 MiB. You'll need temporary disk space for both, as well as space for the database table. Loading can take a while; progress messages tell you which part of the run is underway.</p>
-<h3 class="doxsection"><a class="anchor" id="what-gets-tested"></a>
-What Gets Tested?</h3>
-<p>First, we check what was loaded. Every stored polygon's name, domain rect, point count, and packed exterior-ring data are compared with the decoded GeoJSON. The database server calculates the polygon hashes, so we can check the contents without bringing all of the large blobs back into PHP.</p>
-<p>Next, we run the package's known-location tests. These are the manually selected tests described below, many of which are near places where timezones abut.</p>
-<p>We then generate additional tests for the ten largest polygons. "Largest," here, means the most points to decode. A simple rectangle might cover a large area, but it won't exercise the lookup code like a coastline with hundreds of thousands of points.</p>
-<p>For each selected polygon, we sample edges around its contour and test points about 5 kilometers (3.1 miles) to each side of the boundary. We also test interior points, edges near the decoder's block transitions, and the edge that closes the polygon. The expected timezones are calculated from the downloaded GeoJSON, using an independent ray-casting test that accounts for holes.</p>
-<p>Sometimes, both offset points land in the same timezone, because the boundary winds around them. We report actual crossings separately. Where source polygons overlap, any containing named timezone is accepted; an <span class="tt">Etc/</span> ocean timezone is used if there is no containing named zone.</p>
-<p>Finally, we check that the generated tests actually caused the package to decode every selected large polygon. A name returned by the domain-rect shortcut would not, by itself, demonstrate that the large polygon reader was exercised.</p>
-<blockquote class="doxtable">
-<p>NOTE: These tests check the stored data and sample complex boundaries. They aren't an exhaustive test of every possible long/lat. The number of generated tests can vary with the boundary release. </p>
-</blockquote>
-<h3 class="doxsection"><a class="anchor" id="reading-the-results"></a>
-Reading the Results</h3>
-<p>The demo prints a few passing locations, every failing location, and a summary for each group. For example, here's an excerpt from the October 9, 2026 run, using package <span class="tt">1.3.0</span> and boundary release <span class="tt">2026d</span>:</p>
-<div class="fragment"><div class="line">Source/storage validation: 1355 polygons checked, 0 failures.</div>
-<div class="line">Known location: 200/200 passed.</div>
-<div class="line">Generated boundary: 260/260 passed.</div>
-<div class="line">Generated interior: 30/30 passed.</div>
-<div class="line">Largest polygons decoded in generated tests: 10/10</div>
-<div class="line">Boundary pairs with distinct source zones: 112/130 (112 named-to-named)</div>
-</div><!-- fragment --><p>That run checked all 1,355 stored polygons and passed all 490 lookup tests. The largest polygon had 193,004 points. Both downloaded boundary files, the database, and the temporary Composer application were removed afterward.</p>
-<p>The script returns an exit status of <span class="tt">0</span> only if all checks and cleanup succeed. A setup error, failed lookup, storage mismatch, missing large-polygon coverage, or cleanup problem results in a nonzero status. You can use that status in a command-line build or test job.</p>
-<p>A <span class="tt">FAIL</span> line includes the location's long/lat, expected timezone names, and the name returned by the package. A <span class="tt">FAIL coverage</span> line means the chosen tests did not exercise a selected large polygon. A <span class="tt">Demo error</span> message means setup or a worker operation could not complete.</p>
-<blockquote class="doxtable">
-<p>NOTE: Timezones are political constructs, and the latest boundaries can change. A failing known-location test may need to be reviewed against the new data. Generated expectations are calculated from the current download on each run. </p>
-</blockquote>
-<h3 class="doxsection"><a class="anchor" id="the-metrics"></a>
-The Metrics</h3>
-<p>After the test summaries, you'll get a metrics report:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Measurement  </th><th class="markdownTableHeadNone">What It Tells You  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Phase durations  </td><td class="markdownTableBodyNone">Seconds spent setting up Composer, obtaining the data, extracting it, loading it, preparing the reference checks, and running lookups.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Total before cleanup  </td><td class="markdownTableBodyNone">Elapsed time for the worker through the test report. Cleanup is timed separately.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Data sizes  </td><td class="markdownTableBodyNone">Compressed ZIP size, extracted GeoJSON size, and the stored polygon payload, in MiB. The payload size excludes database indexes and server overhead.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Lookup latency  </td><td class="markdownTableBodyNone">Mean, median, 95th percentile, and slowest API call, in milliseconds. The known locations and generated large-shape tests have separate summaries.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Lookup throughput  </td><td class="markdownTableBodyNone">Calls per second, using only the accumulated time spent in the lookup API. Downloading, loading, and reference calculations are outside this figure.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">PHP memory  </td><td class="markdownTableBodyNone">Loading/reference peaks, and additional memory needed by an individual lookup. The database server, native client buffers, and the separate Composer process are outside these measurements.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Polygon work  </td><td class="markdownTableBodyNone">Rows and bytes actually evaluated across lookup calls. A polygon read more than once is counted each time.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Large-polygon coverage  </td><td class="markdownTableBodyNone">How many selected polygons were decoded, with their IDs, timezone names, point counts, and packed sizes.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Boundary crossings  </td><td class="markdownTableBodyNone">How many sampled pairs fall in different timezones, including named-to-named crossings.  </td></tr>
-</table>
-<p>The lookup calls reuse one database connection. These timings describe the PHP/database lookup API; an HTTP request or a fresh connection will add its own time.</p>
-<p>Loading memory includes the compact source geometry retained for independent checks. We free that reference before measuring lookup memory. PHP 8.2 and later can reset the memory peak between phases and calls; older versions report lifetime peaks instead. Actual times and memory use will depend on the host, the selected polygons, and the boundary release.</p>
-<p>To save a run's output, while preserving its exit status, you can redirect it to a small report file:</p>
-<div class="fragment"><div class="line">./demo/run.sh &gt; /tmp/lgv-tz-demo-results.txt 2&gt;&amp;1</div>
-</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="initial-setup"></a>
-Initial Setup</h3>
-<p>The script uses POSIX <span class="tt">sh</span> and PHP, with no Homebrew-specific paths or GNU-only commands. It requires PHP 8.0 or later with <span class="tt">pdo_mysql</span> or <span class="tt">pdo_pgsql</span>, plus <span class="tt">curl</span>, <span class="tt">zip</span>, <span class="tt">mbstring</span>, and <span class="tt">ctype</span> enabled, and <span class="tt">proc_open</span> available. The selected database server must be running, and the configured user must be able to create and drop a temporary database, create its tables, and insert and read rows. A web server, a database command-line client, and an existing project configuration file are not needed.</p>
-<p>On macOS, Homebrew PHP provides these extensions. If needed, install and start the services with:</p>
-<div class="fragment"><div class="line">brew install php mysql</div>
-<div class="line">brew services start mysql</div>
-</div><!-- fragment --><p>The initial Homebrew MySQL setup uses <span class="tt">root</span> with an empty password. Those are the demo's defaults, so that setup can run <span class="tt">./demo/run.sh</span> immediately.</p>
-<p>If your MySQL setup uses another user or a password, provide the settings through environment variables. For example:</p>
-<div class="fragment"><div class="line">export LGV_TZ_DEMO_HOST=127.0.0.1</div>
-<div class="line">export LGV_TZ_DEMO_USER=demo_user</div>
-<div class="line">export LGV_TZ_DEMO_PASSWORD=&#39;&lt;YOUR DATABASE PASSWORD&gt;&#39;</div>
-<div class="line">./demo/run.sh</div>
-</div><!-- fragment --><p>There is no demo config file. The same environment settings are used for loading, querying, and cleanup. A <span class="tt">localhost</span> connection may use PHP's configured MySQL socket; use <span class="tt">127.0.0.1</span> for a TCP connection, including when selecting a different port.</p>
-<h3 class="doxsection"><a class="anchor" id="changing-the-demo-settings"></a>
-Changing the Demo Settings</h3>
-<p>These are the available settings:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Variable  </th><th class="markdownTableHeadNone">Default  </th><th class="markdownTableHeadNone">Purpose  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_DRIVER</span>  </td><td class="markdownTableBodyNone"><span class="tt">mysql</span>  </td><td class="markdownTableBodyNone">Database backend: <span class="tt">mysql</span> or <span class="tt">pgsql</span>.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_HOST</span>  </td><td class="markdownTableBodyNone"><span class="tt">localhost</span>  </td><td class="markdownTableBodyNone">Database host.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_PORT</span>  </td><td class="markdownTableBodyNone"><span class="tt">3306</span> / <span class="tt">5432</span>  </td><td class="markdownTableBodyNone">Port for MySQL / PostgreSQL. For MySQL, use <span class="tt">127.0.0.1</span> to select TCP.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_USER</span>  </td><td class="markdownTableBodyNone"><span class="tt">root</span> / Shell username  </td><td class="markdownTableBodyNone">MySQL / PostgreSQL user with permissions for the temporary database.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_PASSWORD</span>  </td><td class="markdownTableBodyNone">Empty  </td><td class="markdownTableBodyNone">Database password.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_ADMIN_DATABASE</span>  </td><td class="markdownTableBodyNone"><span class="tt">postgres</span>  </td><td class="markdownTableBodyNone">Existing PostgreSQL database used for CREATE/DROP administration.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_PACKAGE_VERSION</span>  </td><td class="markdownTableBodyNone"><span class="tt">^1.4</span>  </td><td class="markdownTableBodyNone">Composer library version constraint for GitHub installs.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_PACKAGE_PATH</span>  </td><td class="markdownTableBodyNone">Unset  </td><td class="markdownTableBodyNone">Install a local checkout through Composer instead of a release.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_LARGEST_SHAPES</span>  </td><td class="markdownTableBodyNone"><span class="tt">10</span>  </td><td class="markdownTableBodyNone">Number of largest polygons to probe (1-100).  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_MEMORY_LIMIT</span>  </td><td class="markdownTableBodyNone"><span class="tt">1G</span>  </td><td class="markdownTableBodyNone">PHP memory limit for loading the large GeoJSON file.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LGV_TZ_DEMO_PHP</span>  </td><td class="markdownTableBodyNone"><span class="tt">php</span>  </td><td class="markdownTableBodyNone">PHP executable name or absolute path.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">TMPDIR</span>  </td><td class="markdownTableBodyNone">System temporary directory  </td><td class="markdownTableBodyNone">Location for temporary files; allow space for the compressed and extracted boundaries.  </td></tr>
-</table>
-<p>For example, this tests the twenty largest polygons:</p>
-<div class="fragment"><div class="line">LGV_TZ_DEMO_LARGEST_SHAPES=20 ./demo/run.sh</div>
-</div><!-- fragment --><p>This selects a particular released package version:</p>
-<div class="fragment"><div class="line">LGV_TZ_DEMO_PACKAGE_VERSION=1.4.0 ./demo/run.sh</div>
-</div><!-- fragment --><p>The boundary download still uses the latest published release. Selecting a package version does not select an older shapefile.</p>
-<h3 class="doxsection"><a class="anchor" id="what-gets-cleaned-up"></a>
-What Gets Cleaned Up?</h3>
-<p>The ZIP and extracted JSON are deleted as soon as loading finishes, including a failed load. When the worker exits, the shell starts a separate cleanup process to drop that run's database. Only after database cleanup succeeds does it remove the rest of the temporary application, including Composer and its cache.</p>
-<p>This cleanup also runs after Ctrl+C, an ordinary worker error, or a PHP loader memory-limit failure. Those paths were tested on macOS. The script uses POSIX <span class="tt">sh</span> and PHP for Linux/Unix portability; the complete run has been verified on the Homebrew setup.</p>
-<p>If the database server becomes unavailable during cleanup, the large downloads are still deleted, and the working directory is retained with <span class="tt">database.json</span>. The error message prints that directory. Once the database server is available again, you can retry cleanup with the same connection settings:</p>
-<div class="fragment"><div class="line">saved_demo_directory=&#39;&lt;WORKING DIRECTORY PRINTED BY THE DEMO&gt;&#39;</div>
-<div class="line">php demo/demo.php cleanup &quot;$saved_demo_directory&quot; &amp;&amp; rm -rf &quot;$saved_demo_directory&quot;</div>
-</div><!-- fragment --><p>Use the directory printed by the demo. The cleanup worker reads its database name from the record and requires the generated <span class="tt">lgv_tz_demo_</span> naming pattern. If cleanup still fails, the record and working directory remain available for another attempt.</p>
-<h3 class="doxsection"><a class="anchor" id="the-demo-files"></a>
-The Demo Files</h3>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">File  </th><th class="markdownTableHeadNone">Purpose  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="documentation_guide.html#demo-command">demo/run.sh</a>  </td><td class="markdownTableBodyNone">The command you run. Creates the private working directory and handles exit/interruption cleanup.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="demo_2demo_8php.html">demo/demo.php</a>  </td><td class="markdownTableBodyNone">The PHP worker. Installs the package, obtains and loads data, runs tests, and reports metrics. Its separate cleanup mode removes downloads and the database.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="_system_tests_8php.html" title="SystemTests.php">demo/SystemTests.php</a>  </td><td class="markdownTableBodyNone">The independent source-geometry reference, generated test cases, and polygon audit counters.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="tests_2demo_8php.html">tests/demo.php</a>  </td><td class="markdownTableBodyNone">Small reference-geometry and cleanup-guard checks for development.  </td></tr>
-</table>
-<p>If you are working on the demo itself, install the development dependencies at the repository root and run the small checks:</p>
-<div class="fragment"><div class="line">composer install</div>
-<div class="line">composer test:demo</div>
-</div><!-- fragment --><p>Those checks cover holes, ocean fallback, boundary offsets, decoder block transitions, and cleanup guards. They do not download the shapefile or need a running database server. Run <span class="tt">./demo/run.sh</span> for the complete Composer/database system test.</p>
-<h2 class="doxsection"><a class="anchor" id="standalone-server-implementation"></a>
-Standalone Server Implementation</h2>
-<h3 class="doxsection"><a class="anchor" id="initial-installation"></a>
-Initial Installation</h3>
-<p>Once you have a server available, install the contents of the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src"><span class="tt">src</span> subdirectory</a> into a place of your choosing, accessible via HTTP. You should have a URI that points to the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/main/src/index.php"><span class="tt">index.php</span> file</a> in the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/tree/main/src"><span class="tt">src</span> directory</a>.</p>
-<h3 class="doxsection"><a class="anchor" id="database-setup"></a>
-Database Setup</h3>
-<p>You will need a MySQL or PostgreSQL database, with a user able to create the table and indexes, and insert/read rows. Set <span class="tt">$g_dbType</span> to <span class="tt">mysql</span> or <span class="tt">pgsql</span>, and <span class="tt">$g_dbPort</span> to <span class="tt">3306</span> or <span class="tt">5432</span>, respectively.</p>
-<h3 class="doxsection"><a class="anchor" id="config-file"></a>
-Config File</h3>
-<p>A requirement for the server is a configuration file. It should generally be placed outside the HTTP-accesible directory tree, and you will need to modify the line in the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/f9914c89e8484522732100ea82f8b1cab8c667f6/src/index.php#L51"><span class="tt">index.php</span></a> file that looks like this:</p>
-<p><span class="tt">define("__CONFIG_FILE_", __DIR__.'/../../../../TZInfo/config.php');</span></p>
-<p>To point to the configuration file.</p>
-<p>The contents of the configuration file will look like this:</p>
-<div class="fragment"><div class="line">&lt;?php </div>
-<div class="line">    $g_dbName = &quot;&lt;DATABASE NAME&gt;&quot;;</div>
-<div class="line">    $g_dbUserName = &quot;&lt;DATABASE USERNAME&gt;&quot;;</div>
-<div class="line">    $g_dbPassword = &quot;&lt;DATABASE USER PASSWORD&gt;&quot;;</div>
-<div class="line">    $g_dbType = &quot;&lt;DATABASE TYPE&gt;&quot;;</div>
-<div class="line">    $g_dbHost = &quot;&lt;DATABASE HOST&gt;&quot;;</div>
-<div class="line">    $g_dbPort = &quot;&lt;DATABASE PORT&gt;&quot;;</div>
-<div class="line">    $g_server_secret = &quot;&lt;SERVER SECRET&gt;&quot;;</div>
-</div><!-- fragment --><p>with each of the strings changed to match the configuration. Here's an example:</p>
-<div class="fragment"><div class="line">&lt;?php </div>
-<div class="line">    $g_dbName = &quot;HostingHash_TZDB&quot;;</div>
-<div class="line">    $g_dbUserName = &quot;tzUser&quot;;</div>
-<div class="line">    $g_dbPassword = &quot;swordfish&quot;;</div>
-<div class="line">    $g_dbType = &quot;mysql&quot;;</div>
-<div class="line">    $g_dbHost = &quot;127.0.0.1&quot;;</div>
-<div class="line">    $g_dbPort = &quot;3306&quot;;</div>
-<div class="line">    $g_server_secret = &quot;Shh-Dont-Tell-Anyone&quot;;</div>
-</div><!-- fragment --><p>That <span class="tt">$g_server_secret</span> is important, if you don't want "just anyone" accessing the server. If it is set to a string, then every call to the server (including the command line) will need to have a <span class="tt">secret=&lt;SERVER SECRET&gt;</span> query argument added to the regular query, like so:</p>
-<h4 class="doxsection"><a class="anchor" id="http-request"></a>
-HTTP Request:</h4>
-<p><span class="tt"><a href="https://tz.example.com/index.php?secret=Shh-Dont-Tell-Anyone">https://tz.example.com/index.php?secret=Shh-Dont-Tell-Anyone</a>&amp;ll=-73.123,44.456</span></p>
-<h4 class="doxsection"><a class="anchor" id="command-line"></a>
-Command Line:</h4>
-<p><span class="tt">?&gt; php</span>_&lt;PATH TO THE src DIRECTORY&gt;_<span class="tt">/index.php secret=Shh-Dont-Tell-Anyone load</span></p>
-<h3 class="doxsection"><a class="anchor" id="loader-dependency"></a>
-Loader Dependency</h3>
-<p>For a standalone server installed by copying <span class="tt">src</span>, install the loader's JSON parser in that directory:</p>
-<div class="fragment"><div class="line">$&gt; cd &lt;YOUR src DIRECTORY&gt;</div>
-<div class="line">$&gt; composer install</div>
-</div><!-- fragment --><p>That will set up a <span class="tt">vendor</span> subdirectory inside <span class="tt">src</span>. A full repository checkout can instead use <span class="tt">composer install</span> at the repository root; the loader supports both layouts.</p>
-<blockquote class="doxtable">
-<p>NOTE: The dependency is only required for the load and setup. It is not required for subsequent queries. </p>
-</blockquote>
-<h3 class="doxsection"><a class="anchor" id="the-data-file"></a>
-The Data File</h3>
-<p>You'll need to fetch the GeoJSON data file from <a href="https://github.com/evansiroky/timezone-boundary-builder/releases">the Boundary Builder Project Releases Directory</a>. Get the latest release, and look for files named <span class="tt">timezones.geojson.zip</span>, or <span class="tt">timezones-with-oceans.geojson.zip</span>.</p>
-<p>They are pretty big files.</p>
-<p>Unzip the file into the <span class="tt">src</span> directory.</p>
-<blockquote class="doxtable">
-<p>NOTE: We have the project initially set up for the <span class="tt">combined-with-oceans.json</span> file. If you want to use the <span class="tt">combined.json</span> file, instead, then you should edit the <a href="https://github.com/LittleGreenViper/LGV_TZ_Lookup/blob/f9914c89e8484522732100ea82f8b1cab8c667f6/src/index.php#LL113C14-L113C14"><span class="tt">index.php</span></a> file at the line that looks like this: </p>
-</blockquote>
-<div class="fragment"><div class="line">$stream = fopen(<span class="stringliteral">&quot;$path/combined-with-oceans.json&quot;</span>, <span class="charliteral">&#39;r&#39;</span>);</div>
-</div><!-- fragment --><p>so that it looks like this:</p>
-<div class="fragment"><div class="line">$stream = fopen(<span class="stringliteral">&quot;$path/combined.json&quot;</span>, <span class="charliteral">&#39;r&#39;</span>);</div>
-</div><!-- fragment --><blockquote class="doxtable">
-<p>CAUTION: If you do this, some of the tests won't pass! </p>
-</blockquote>
-<h3 class="doxsection"><a class="anchor" id="the-initial-load-and-database-setup"></a>
-The Initial Load and Database Setup</h3>
-<p>You don't need to "prime" the database. The server will take care of creating the table.</p>
-<p>However, the initial load can only be done via command-line, so you'll need to SSH into the server, and run the load from there. You use the syntax indicated above:</p>
-<div class="fragment"><div class="line">$&gt; php &lt;YOUR src DIRECTORY&gt;/index.php secret=&lt;SERVER SECRET&gt; load</div>
-</div><!-- fragment --><p>This can take a while.</p>
-<p>Upon success, the script emits a simple <span class="tt">1</span>. If there was a problem, it emits a <span class="tt">0</span>.</p>
-<p>Once that's done, the standalone server is ready to go. In a server installed directly from <span class="tt">src</span>, you can delete the JSON file and <span class="tt">src/vendor</span> after loading; restore them before another load. Composer applications keep their own <span class="tt">vendor</span> directory for the library's autoloader.</p>
-<p>You won't need to run <span class="tt">load</span> very often, so it shouldn't be in a <span class="tt">cron</span> job, or anything.</p>
-<p>All interactions from then on, are done via HTTP.</p>
-<h3 class="doxsection"><a class="anchor" id="testing"></a>
-Testing</h3>
-<p>We have a set of simple tests that can be run. They send in known coordinates, and ensure that the server returns the proper response.</p>
-<p>You run the tests, like so:</p>
-<p><span class="tt"><a href="https://tz.example.com">https://tz.example.com</a></span>_[<em><span class="tt">/index.php</span></em>]_<span class="tt">?</span>_[<em><span class="tt">secret=</span>&lt;SERVER SECRET&gt;<span class="tt">&amp;</span></em>]_<span class="tt">test</span></p>
-<p>You will get a simple HTML page, with each of the tests, listed. If the test passes, the title will be green. If it fails, the title will be red, and there will be a list of links to failures, at the top of the page.</p>
-<p>Everything should be green (unless you swapped out the JSON file, in which case, you'll need to look for the failures, and validate the tests).</p>
-<h3 class="doxsection"><a class="anchor" id="query-performance"></a>
-Query Performance</h3>
-<p>Queries test the existing packed polygon data in blocks of 1,024 points, rather than expanding entire candidate polygons into nested PHP arrays. Polygon rows are read sequentially without MySQL result buffering, and their cursor is closed when a match is found. Named-zone precedence and the existing single-candidate shortcut are retained. Reads also avoid unnecessary transaction round trips, and ocean fallback does not fetch named polygons again.</p>
-<p>The database schema and polygon encoding are unchanged, so existing installations do not need a database reload for this query update. Loading the boundary file still uses the existing loader.</p>
-<p>On October 7, 2026, a local PHP 8.5.10/MySQL 26.7.0 benchmark used the supplied boundary file, all 200 existing test locations, and 2,000 deterministic random locations. Each version performed 6,600 lookups, with a new database connection for each lookup:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Measurement  </th><th class="markdownTableHeadRight">Original (<span class="tt">0e7894a</span>)  </th><th class="markdownTableHeadRight">Optimized  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Average lookup, including connection  </td><td class="markdownTableBodyRight">2.394 ms  </td><td class="markdownTableBodyRight">0.882 ms  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">95th-percentile lookup  </td><td class="markdownTableBodyRight">15.657 ms  </td><td class="markdownTableBodyRight">5.532 ms  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Peak additional PHP memory per lookup  </td><td class="markdownTableBodyRight">138.750 MiB  </td><td class="markdownTableBodyRight">7.724 MiB  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Peak total PHP memory used  </td><td class="markdownTableBodyRight">142.252 MiB  </td><td class="markdownTableBodyRight">11.385 MiB  </td></tr>
-</table>
-<p>All 200 expected locations passed and all 2,200 results matched the original implementation. The optimized run completed with <span class="tt">memory_limit=16M</span>; the original was measured with <span class="tt">memory_limit=1G</span>. These are local CLI measurements, excluding HTTP/network request overhead and boundary-file loading. Timing depends on the host, database configuration, and locations queried. Raw measurements and the boundary-file checksum are in <a href="query-2026-10-07.json"><span class="tt">tests/benchmarks/query-2026-10-07.json</span></a>.</p>
-<p>Run geometry, lookup-precedence, and PDO regression checks without a database server:</p>
-<div class="fragment"><div class="line">php tests/regression.php</div>
-</div><!-- fragment --><p>To reproduce the database-backed comparison, create an isolated local database. The benchmark accepts only MySQL database names beginning with <span class="tt">lgv_tz_benchmark_</span>. <b><span class="tt">--build</span> replaces the <span class="tt">timezones</span> table in that benchmark database.</b> It does not read the server's production configuration.</p>
-<div class="fragment"><div class="line">mysql -u root -e &#39;CREATE DATABASE lgv_tz_benchmark_local;&#39;</div>
-<div class="line">php -d memory_limit=1G tools/benchmark.php --mysql=lgv_tz_benchmark_local --build</div>
-<div class="line">php tests/regression.php --mysql=lgv_tz_benchmark_local</div>
-<div class="line"> </div>
-<div class="line">task_baseline_dir=$(mktemp -d)</div>
-<div class="line">git archive 0e7894a src/Sources | tar -x -C &quot;$task_baseline_dir&quot;</div>
-<div class="line">php -d memory_limit=1G tools/benchmark.php --mysql=lgv_tz_benchmark_local --source=&quot;$task_baseline_dir/src&quot; --runs=3 --random=2000 --reconnect --results=/tmp/lgv-tz-baseline-results.json</div>
-<div class="line">php -d memory_limit=16M tools/benchmark.php --mysql=lgv_tz_benchmark_local --runs=3 --random=2000 --reconnect --expect=/tmp/lgv-tz-baseline-results.json</div>
-</div><!-- fragment --><p>MySQL benchmark connections default to local <span class="tt">root</span> with no password, as installed by Homebrew. Override these defaults with <span class="tt">LGV_TZ_BENCH_USER</span>, <span class="tt">LGV_TZ_BENCH_PASSWORD</span>, <span class="tt">LGV_TZ_BENCH_HOST</span>, and <span class="tt">LGV_TZ_BENCH_PORT</span> environment variables when needed. Omit <span class="tt">--reconnect</span> to measure queries using one connection. <span class="tt">--expect</span> verifies every location against saved baseline results, and repeated runs must return consistent results.</p>
-<p>If MySQL is unavailable, <span class="tt">--fixture=/tmp/lgv-tz.sqlite --build</span> creates an isolated SQLite fixture from the same boundary file; use that <span class="tt">--fixture</span> argument on subsequent benchmark runs. SQLite results help compare PHP processing, but do not measure production MySQL behavior. Per-lookup peak-memory accounting requires PHP 8.2 or later.</p>
-<h3 class="doxsection"><a class="anchor" id="database-integration-tests"></a>
-Database Integration Tests</h3>
-<p>The focused tests create and remove their own databases. After installing development dependencies, run:</p>
-<div class="fragment"><div class="line">composer test:mysql</div>
-<div class="line">composer test:postgres</div>
-</div><!-- fragment --><p>Run <span class="tt">composer test:deploy:mysql</span> and <span class="tt">composer test:deploy:postgres</span> to check installer rollback, preservation of unrelated data, and ownership refusals. These use small temporary fixtures and do not download boundaries.</p>
-<p>They cover loading and schema reset, binary values (including zero bytes), ocean/named-zone precedence, polygons crossing decoding blocks, early reader cleanup, error recovery, and caller-owned transactions. A 24 MiB binary fixture checks bounded PHP memory; PostgreSQL tests also check the native result-buffer size when the driver exposes it. Override connection defaults with <span class="tt">LGV_TZ_TEST_HOST</span>, <span class="tt">LGV_TZ_TEST_PORT</span>, <span class="tt">LGV_TZ_TEST_USER</span>, <span class="tt">LGV_TZ_TEST_PASSWORD</span>, and <span class="tt">LGV_TZ_TEST_ADMIN_DATABASE</span>.</p>
-<p>The benchmark tool also accepts <span class="tt">--pgsql=lgv_tz_benchmark_NAME</span>. PostgreSQL connections default to your shell username and port <span class="tt">5432</span>, with the same <span class="tt">LGV_TZ_BENCH_*</span> overrides. Create an isolated database first; <span class="tt">--build</span> replaces its <span class="tt">timezones</span> table, just as with MySQL.</p>
-<p>On October 9, 2026, PHP 8.5.10 with MySQL 26.7.0 and PostgreSQL 18.6 returned identical results for 200 known locations and 2,000 seeded random points, using boundary release <span class="tt">2026d</span>. Both ran within a <span class="tt">16M</span> PHP memory limit, reusing one connection per backend:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Database  </th><th class="markdownTableHeadRight">Mean Lookup  </th><th class="markdownTableHeadRight">Peak Extra PHP Memory  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">MySQL  </td><td class="markdownTableBodyRight">1.018 ms  </td><td class="markdownTableBodyRight">8.428 MiB  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">PostgreSQL  </td><td class="markdownTableBodyRight">0.821 ms  </td><td class="markdownTableBodyRight">8.414 MiB  </td></tr>
-</table>
-<p>These are one local run, and are different from the fresh-connection benchmark above. PHP counters exclude native database-client buffers. The complete demo also passed all 490 checks and validated all 1,355 stored polygons on each backend. <a href="postgres-2026-10-09.json">Recorded measurements</a> include the boundary checksum and test setup.</p>
-<h2 class="doxsection"><a class="anchor" id="generating-the-html-documentation"></a>
-Generating the HTML Documentation</h2>
-<p>The HTML documentation uses this README as its starting page, with links to the library, demo, server setup, and performance notes. The API reference includes private/static members, and the source browser includes the package, demo, tests, and benchmark tools.</p>
-<p>You can rebuild it from the project root, like so:</p>
-<div class="fragment"><div class="line">./generate-docs.sh</div>
-</div><!-- fragment --><p>You'll need Doxygen and PHP. The script looks for Doxygen in your PATH, and also recognizes the installed macOS Doxygen application. If you have it somewhere else, set <span class="tt">DOXYGEN</span> to its executable path. Graphviz's <span class="tt">dot</span> is optional; when available, it adds diagrams to the reference pages. The configuration and HTML layout were verified with Doxygen 1.18.0.</p>
-<p>The build uses <a href="documentation_guide.html#doxygen-configuration">docs/Doxyfile</a>, and writes the generated pages to <span class="tt">docs/html</span>. It first builds in a temporary directory, copies the README images, and checks local page links, anchors, styles, scripts, and images. Existing generated documentation is replaced after those steps succeed. Old generated pages are removed as part of that replacement.</p>
-<p>For a local preview, you can serve the docs directory:</p>
-<div class="fragment"><div class="line">python3 -m http.server 8000 --directory docs</div>
-</div><!-- fragment --><p>Open <a href="http://localhost:8000/">http://localhost:8000/</a>. The documentation uses static browser-side search and navigation, so it doesn't need the project's PHP server or MySQL database.</p>
-<p>For GitHub Pages, commit the generated <span class="tt">docs</span> directory and select <b>Deploy from a branch</b>, using the **/docs** publishing folder, in the repository's Pages settings. The <span class="tt">.nojekyll</span> markers preserve generated filenames, and <span class="tt">docs/index.html</span> opens the documentation landing page. See <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site">GitHub's publishing-source instructions</a> for the settings.</p>
-<blockquote class="doxtable">
-<p>NOTE: If you use Doxywizard directly, use <span class="tt">docs</span> as the working directory. The root shell script handles the complete build, image copying, link checks, and stale-page cleanup. </p>
-</blockquote>
+</div><!-- fragment --><p>The demo installs the library, downloads boundaries, creates a temporary database, and runs the lookup tests. It removes that database and its downloads afterward. See <a href="md_docs_2guide.html#turnkey-command-line-demo">demo setup and options</a>, including how to test a local checkout or select PostgreSQL.</p>
+<h2 class="doxsection"><a class="anchor" id="more-information"></a>
+More Information</h2>
+<ul>
+<li><a href="md_docs_2guide.html">Detailed usage guide</a>: loading, server setup, updates, demos, and development.</li>
+<li><a href="https://littlegreenviper.github.io/LGV_TZ_Lookup/">API documentation</a>: classes and source reference.</li>
+<li><a class="el" href="md__c_h_a_n_g_e_l_o_g.html" title="CHANGELOG">Changelog</a>: release history.</li>
+</ul>
+<p>For development, run <span class="tt">composer install</span> and <span class="tt">composer test</span> in the repository root. Rebuild the HTML documentation with <span class="tt">./generate-docs.sh</span>; <a href="md_docs_2guide.html#generating-the-html-documentation">build instructions</a> cover prerequisites and previewing.</p>
 <h2 class="doxsection"><a class="anchor" id="license"></a>
 License</h2>
-<p>This is an <a href="https://opensource.org/license/mit/">MIT-Licensed</a> project. </p>
+<p><a href="https://opensource.org/license/mit/">MIT</a>, © Little Green Viper Software Development LLC. </p>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->

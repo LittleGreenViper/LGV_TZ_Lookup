@@ -1,3 +1,11 @@
+**1.4.1** *October 9, 2026*
+
+- Added a simple boundary updater that reports the latest shapefile release, downloads and reloads the full GeoJSON boundaries with oceans, and deletes the downloaded files afterward.
+- Added a `--check` mode to report the latest boundary version without loading it or connecting to the database.
+- Updates load into a staging table and replace the live MySQL or PostgreSQL table only after parsing succeeds; failed loads retain existing boundaries.
+- New server deployments include the updater beside the private configuration, with interruption cleanup and documentation.
+- Simplified the README around the Composer lookup and main commands; moved detailed setup, demo metrics, and development instructions into a linked usage guide.
+
 **1.4.0** *October 9, 2026*
 
 - Added PostgreSQL lookup/loading support alongside MySQL, with binary-safe storage, bounded polygon reads, and backend-selectable Composer demos and integration tests.
