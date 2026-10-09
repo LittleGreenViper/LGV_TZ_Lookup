@@ -1,0 +1,7 @@
+<map id="demoConnection" name="demoConnection">
+<area shape="rect" id="Node000001" title="This opens the administrative MySQL connection used to create, inspect, and drop the demo database." alt="" coords="5,29,125,55"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="37,31,31,21,34,11,46,5,65,3,89,6,99,15,95,19,86,11,65,8,47,10,38,15,36,20,41,28"/>
+<area shape="rect" id="Node000002" href="$demo_2demo_8php.html#ae500e25b814b78dd63bf379011d131bc" title="This reads a demo setting from the environment." alt="" coords="173,29,300,55"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="126,39,160,39,160,45,126,45"/>
+<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="208,31,202,21,205,11,217,5,237,3,260,6,270,15,267,19,258,11,237,8,219,10,209,15,207,20,213,28"/>
+</map>

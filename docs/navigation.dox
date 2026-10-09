@@ -1,0 +1,70 @@
+/**
+\page documentation_guide Building and Browsing the Documentation
+
+The README is the documentation's starting page. Its contents include the Composer library, command-line demo,
+standalone server, and performance notes. Use **Guides** to jump directly to those sections.
+
+## Where Should I Start?
+
+| What You Want To Do | Where To Look |
+| --- | --- |
+| Install the library and make a lookup | [Composer Library](index.html#composer-library) and LGV_TZ_Lookup_Query. |
+| Download current data and run a complete test | [Command-line Demo](index.html#turnkey-command-line-demo). |
+| Run the HTTP service | [Standalone Server](index.html#standalone-server-implementation). |
+| Understand storage and loading | LGV_TZ_Lookup_Database, LGV_TZ_Lookup_Entity, and LGV_TZ_Lookup_Loader. |
+| Understand the independent demo checks | DemoSourceGeometry, DemoInspectingListener, and DemoTrackedDatabase. |
+| Read implementation details | **API Reference** includes public/private members; **Source and Tests** includes annotated source. |
+| Read release history | [CHANGELOG](../CHANGELOG.md). |
+
+The source browser includes the package, HTTP entrypoint, demo, regression checks, and benchmark tools.
+Downloaded boundary data and third-party vendor code are excluded from the documentation input.
+
+## Generate the HTML
+
+Run this from the project root:
+
+\code{.sh}
+./generate-docs.sh
+\endcode
+
+The script uses Doxygen from PATH, or the installed macOS Doxygen application. Set DOXYGEN to an executable path
+if you use another installation. Graphviz's dot is optional; available installations add diagrams to the reference.
+
+The output is written to docs/html. The script builds in a temporary directory first, then replaces old generated
+output, so obsolete pages do not linger after source or filename changes. README images are copied with it,
+and local links, images, scripts, styles, and HTML anchors are checked before the old output is replaced.
+
+## Preview and GitHub Pages
+
+For a local HTTP preview, run this from the project root:
+
+\code{.sh}
+python3 -m http.server 8000 --directory docs
+\endcode
+
+Open http://localhost:8000/. Browser search and navigation use static files and need no PHP server.
+
+For GitHub Pages, commit the generated docs directory and select **Deploy from a branch**, with the publishing
+folder set to `/docs`, in the repository's Pages settings. docs/index.html opens the generated landing page.
+The .nojekyll marker keeps the generated files available as static documentation. See the
+[GitHub Pages publishing instructions](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+for the repository settings.
+
+## Demo Command
+
+This is the shell entrypoint for the demo; its PHP worker and geometry helpers have their own source/reference pages.
+
+\verbinclude run.sh
+
+## Doxygen Configuration
+
+These are the project settings used by the root build script. Paths are relative to the docs directory.
+
+\verbinclude Doxyfile
+
+## Build Script Source
+
+This is the root shell command that performs the complete build, asset copying, link checks, and output replacement.
+
+\verbinclude generate-docs.sh
+*/

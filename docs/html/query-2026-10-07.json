@@ -1,0 +1,94 @@
+{
+    "date": "2026-10-07",
+    "baseline_commit": "0e7894a95f6470352452b3e17d3a5c28ef7a5b3f",
+    "php_version": "8.5.10",
+    "mysql_version": "26.7.0",
+    "opcache_cli": false,
+    "dataset_sha256": "41d5de38a1399d723393f1f134d6b7c470bb2848852cde25640fbf66cccb4924",
+    "polygons": 1319,
+    "polygon_bytes": 123810992,
+    "random_seed": 20261007,
+    "known_locations": 200,
+    "random_locations": 2000,
+    "results_identical": true,
+    "baseline_memory_limit": "1G",
+    "optimized_memory_limit": "16M",
+    "baseline": {
+        "mode": "query",
+        "backend": "mysql",
+        "reconnect": true,
+        "cases": 2200,
+        "lookups": 6600,
+        "seconds": 15.803564708,
+        "mean_ms": 2.3938028657575767,
+        "median_ms": 0.478708,
+        "p95_ms": 15.656584,
+        "max_ms": 56.11125,
+        "max_extra_php_mib": 138.74972534179688,
+        "peak_php_mib": 142.25196075439453,
+        "peak_reserved_php_mib": 148.171875,
+        "statements": null,
+        "failures": [],
+        "slowest": [
+            {
+                "title": "Random 1256",
+                "milliseconds": 53.736
+            },
+            {
+                "title": "Random 1780",
+                "milliseconds": 39.68275
+            },
+            {
+                "title": "Random 1979",
+                "milliseconds": 35.679875
+            },
+            {
+                "title": "Random 1986",
+                "milliseconds": 33.40025
+            },
+            {
+                "title": "Random 1961",
+                "milliseconds": 33.2195
+            }
+        ]
+    },
+    "optimized": {
+        "mode": "query",
+        "backend": "mysql",
+        "reconnect": true,
+        "cases": 2200,
+        "lookups": 6600,
+        "seconds": 5.82108675,
+        "mean_ms": 0.8815236746969694,
+        "median_ms": 0.174125,
+        "p95_ms": 5.532083,
+        "max_ms": 19.646416,
+        "max_extra_php_mib": 7.724449157714844,
+        "peak_php_mib": 11.385330200195312,
+        "peak_reserved_php_mib": 13.703125,
+        "statements": null,
+        "failures": [],
+        "slowest": [
+            {
+                "title": "Delhi, India",
+                "milliseconds": 19.646416
+            },
+            {
+                "title": "Random 49",
+                "milliseconds": 16.907125
+            },
+            {
+                "title": "Benton Harbor, Michigan",
+                "milliseconds": 15.4395
+            },
+            {
+                "title": "Random 48",
+                "milliseconds": 14.6505
+            },
+            {
+                "title": "Random 1025",
+                "milliseconds": 13.568542
+            }
+        ]
+    }
+}

@@ -1,13 +1,11 @@
 var searchData=
 [
-  ['_5f_5fconstruct_0',['__construct',['../a00035.html#ae79d59d40c9e65a64244b5be95c389ce',1,'LGV_TZ_Lookup_Database\__construct()'],['../a00039.html#a3a61d3c0273c70ed57c6b53038aae999',1,'LGV_TZ_Lookup_Entity\__construct()'],['../a00043.html#a1df33f4b9ca42c2b1fcc224e057e4c2f',1,'LGV_TZ_Lookup_Loader\__construct()'],['../a00047.html#acf7c847e7f79454a4273c677c28e6226',1,'LGV_TZ_Lookup_PDO\__construct()'],['../a00051.html#a1df33f4b9ca42c2b1fcc224e057e4c2f',1,'LGV_TZ_Lookup_Query\__construct()']]],
-  ['_5farray_5fflatten_1',['_array_flatten',['../a00035.html#a590109b25952d7d06d5d8e97108ad5c0',1,'LGV_TZ_Lookup_Database']]],
-  ['_5fconvert_5fto_5fids_2',['_convert_to_ids',['../a00051.html#a29a882e042bc431f23295bf616845cb1',1,'LGV_TZ_Lookup_Query']]],
-  ['_5fextract_5fentity_3',['_extract_entity',['../a00043.html#a318c372f18846dbeab2b3649887522d9',1,'LGV_TZ_Lookup_Loader']]],
-  ['_5ffilter_5fout_5fetc_4',['_filter_out_etc',['../a00051.html#a052a4ff2072a54ceea244839b20fc412',1,'LGV_TZ_Lookup_Query']]],
-  ['_5fisleft_5',['_isLeft',['../a00051.html#a84b059740f086f27fa3268c4e7a79a8e',1,'LGV_TZ_Lookup_Query']]],
-  ['_5fprocess_5fentity_6',['_process_entity',['../a00043.html#a72e87fc88c53984c5ac2396eb27112b0',1,'LGV_TZ_Lookup_Loader']]],
-  ['_5fsort_5fby_5fdomainsize_7',['_sort_by_domainSize',['../a00035.html#a5e0fc8ddc11cf3c8016a1a9f356d4268',1,'LGV_TZ_Lookup_Database']]],
-  ['_5fupdate_5fcoords_8',['_update_coords',['../a00043.html#ad7a0a448538211e5c6f5f5a858072c68',1,'LGV_TZ_Lookup_Loader']]],
-  ['_5fwn_5fpnpoly_9',['_wn_PnPoly',['../a00051.html#ae927af5507968faf0b9a4730e419c2b0',1,'LGV_TZ_Lookup_Query']]]
+  ['_5f_5fconstruct_0',['__construct',['../class_l_g_v___t_z___lookup___database.html#ae0d92fafb4c94663b1bd84bb95c1bd39',1,'LGV_TZ_Lookup_Database\\__construct()'],['../class_l_g_v___t_z___lookup___entity.html#a5a48bb926c3508fae0bcc3e588358d05',1,'LGV_TZ_Lookup_Entity\\__construct()'],['../class_l_g_v___t_z___lookup___loader.html#a3066ff747aef669e860c048790220c5c',1,'LGV_TZ_Lookup_Loader\\__construct()'],['../class_l_g_v___t_z___lookup___p_d_o.html#ab52f5f6a8e72ac2d20a42bb7b5443839',1,'LGV_TZ_Lookup_PDO\\__construct()'],['../class_l_g_v___t_z___lookup___query.html#a1b51635ed521b0e4724865ec6c6e3518',1,'LGV_TZ_Lookup_Query\\__construct()'],['../class_demo_inspecting_listener.html#a4843b3c6c629e76916e91b4acae0d607',1,'DemoInspectingListener\\__construct()'],['../class_s_q_lite_statements.html#a0dcb24e3d51de5d977608b9713763c24',1,'SQLiteStatements\\__construct()'],['../class_s_q_lite_database.html#a85f571f3220866e689b7cb5f5f0a22d4',1,'SQLiteDatabase\\__construct()']]],
+  ['_5farray_5fflatten_1',['_array_flatten',['../class_l_g_v___t_z___lookup___database.html#a874202739f9a474aa4fce96afb6ac9d3',1,'LGV_TZ_Lookup_Database']]],
+  ['_5fextract_5fentity_2',['_extract_entity',['../class_l_g_v___t_z___lookup___loader.html#a31b95c55dda062d4644b9909b75f64d9',1,'LGV_TZ_Lookup_Loader']]],
+  ['_5ffind_5fin_5fpolygons_3',['_find_in_polygons',['../class_l_g_v___t_z___lookup___query.html#a58fe91f7ed7c2ff01466d1e68d9e2bc6',1,'LGV_TZ_Lookup_Query']]],
+  ['_5fprocess_5fentity_4',['_process_entity',['../class_l_g_v___t_z___lookup___loader.html#adaa7bf4556f270a121713a82290738ea',1,'LGV_TZ_Lookup_Loader']]],
+  ['_5fsort_5fby_5fdomainsize_5',['_sort_by_domainSize',['../class_l_g_v___t_z___lookup___database.html#ad6aaa26963407618367a34766d3a0efe',1,'LGV_TZ_Lookup_Database']]],
+  ['_5fupdate_5fcoords_6',['_update_coords',['../class_l_g_v___t_z___lookup___loader.html#a6edcb9f84c0f212cc3b0da4ed97bd56b',1,'LGV_TZ_Lookup_Loader']]],
+  ['_5fwn_5fpackedpoly_7',['_wn_PackedPoly',['../class_l_g_v___t_z___lookup___query.html#a243e945836e3cab5ab685297d76e3e2b',1,'LGV_TZ_Lookup_Query']]]
 ];

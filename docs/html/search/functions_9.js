@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['parse_0',['parse',['../a00210.html#a38d99acc70a1d8fd8f94455743b2d237',1,'JsonStreamingParser::Parser']]],
-  ['preparedstatement_1',['preparedStatement',['../a00142.html#a21dcb240eb367478316b63359415183c',1,'LGV_TZ_Lookup_PDO']]],
-  ['processescapecharacter_2',['processEscapeCharacter',['../a00210.html#aa4f1e86b99132fcc52fbe0bfcdd59610',1,'JsonStreamingParser::Parser']]],
-  ['processunicodecharacter_3',['processUnicodeCharacter',['../a00210.html#a1f238575aeec9d4572560006a7e84eea',1,'JsonStreamingParser::Parser']]]
+  ['referencecontains_0',['referenceContains',['../regression_8php.html#a2c8719ae9f24a20855e4118255f5ee8b',1,'regression.php']]],
+  ['reset_5fdatabase_1',['reset_database',['../class_l_g_v___t_z___lookup___database.html#acf390d8f14a950cf66b0768c51be4d9c',1,'LGV_TZ_Lookup_Database\\reset_database()'],['../class_s_q_lite_database.html#a23900e3d2a6f1a7436b1a086a56982ed',1,'SQLiteDatabase\\reset_database()']]],
+  ['ringcontains_2',['ringContains',['../class_demo_source_geometry.html#acadde633701d3d52c18142d560ed573e',1,'DemoSourceGeometry']]]
 ];

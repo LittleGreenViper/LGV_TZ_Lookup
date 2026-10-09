@@ -1,9 +1,12 @@
 var searchData=
 [
-  ['test_5fserver_0',['test_server',['../a00026.html#a5fdb5cb9a08a7933dd607dfc4df5f231',1,'LGV_TZ_Lookup_Test.php']]],
-  ['testlocations_2ephp_1',['TestLocations.php',['../a00008.html',1,'']]],
-  ['throwparseerror_2',['throwParseError',['../a00210.html#a7ff0503211b5625445e4d13cafdd3131',1,'JsonStreamingParser::Parser']]],
-  ['try_3',['try',['../a00041.html#abe4cc9788f52e49485473dc699537388',1,'try:&#160;example.php'],['../a00038.html#abe4cc9788f52e49485473dc699537388',1,'try:&#160;example_corruptedjson.php'],['../a00035.html#abe4cc9788f52e49485473dc699537388',1,'try:&#160;example_geojson.php']]],
-  ['type_5farray_4',['TYPE_ARRAY',['../a00202.html#a11563c517f16ce832ff4fed40928a12b',1,'JsonStreamingParser::Listener::SimpleObjectQueueListener']]],
-  ['type_5fobject_5',['TYPE_OBJECT',['../a00202.html#a2365fd1fb1e6d6e994238955ce32a8ec',1,'JsonStreamingParser::Listener::SimpleObjectQueueListener']]]
+  ['packedring_0',['packedRing',['../regression_8php.html#a843712e2b8e20bdd0108042a90129946',1,'regression.php']]],
+  ['pages_1',['Preview and GitHub Pages',['../documentation_guide.html#preview-and-github-pages',1,'']]],
+  ['pdo_5finstance_2',['pdo_instance',['../composer_8php.html#aa620248032b60a99e34471d42592f886',1,'composer.php']]],
+  ['performance_3',['Query Performance',['../index.html#query-performance',1,'']]],
+  ['polygonrequests_4',['polygonRequests',['../regression_8php.html#aa3c9505d67e6e31aa391404977669689',1,'regression.php']]],
+  ['preparedrows_5',['preparedRows',['../class_l_g_v___t_z___lookup___p_d_o.html#a4ed647ea7227d1c66a27a403c38c7c49',1,'LGV_TZ_Lookup_PDO\\preparedRows()'],['../class_s_q_lite_statements.html#a4561ac5c651d23a4c3313d7b50fb843c',1,'SQLiteStatements\\preparedRows()']]],
+  ['preparedstatement_6',['preparedStatement',['../class_l_g_v___t_z___lookup___p_d_o.html#afd264b5c885ddf759c184c14868ce323',1,'LGV_TZ_Lookup_PDO\\preparedStatement()'],['../class_s_q_lite_statements.html#a643b4711af68a1ca6408103a2c5f6b45',1,'SQLiteStatements\\preparedStatement()']]],
+  ['preview_20and_20github_20pages_7',['Preview and GitHub Pages',['../documentation_guide.html#preview-and-github-pages',1,'']]],
+  ['problem_20does_20this_20solve_8',['What Problem Does This Solve?',['../index.html#what-problem-does-this-solve',1,'']]]
 ];

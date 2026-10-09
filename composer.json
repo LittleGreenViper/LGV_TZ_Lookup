@@ -29,7 +29,8 @@
     },
     "scripts": {
         "test": "@php tests/regression.php",
-        "test:composer": "@php tests/composer.php --with-loader"
+        "test:composer": "@php tests/composer.php --with-loader",
+        "test:demo": "@php tests/demo.php"
     },
     "archive": {
         "exclude": [

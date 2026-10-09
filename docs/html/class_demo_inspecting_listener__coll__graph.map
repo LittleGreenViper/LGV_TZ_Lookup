@@ -1,0 +1,11 @@
+<map id="DemoInspectingListener" name="DemoInspectingListener">
+<area shape="rect" id="Node000001" title="This forwards parser events to the installed loader and observes the decoded source features." alt="" coords="521,67,684,93"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="237,5,419,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="433,38,498,51,556,65,555,70,497,56,432,44"/>
+<area shape="rect" id="Node000003" href="$class_l_g_v___t_z___lookup___loader.html" title=" " alt="" coords="245,70,411,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="425,79,521,78,521,83,425,84"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,63,188,103"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="202,80,244,80,244,85,202,85"/>
+<area shape="rect" id="Node000005" href="$class_demo_source_geometry.html" title="This retains a compact reference copy of each polygon in the decoded GeoJSON." alt="" coords="251,121,405,146"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="418,121,497,108,562,90,564,95,498,113,419,126"/>
+</map>

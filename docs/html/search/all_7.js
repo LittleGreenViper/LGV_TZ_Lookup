@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['store_5fentity_0',['store_entity',['../a00035.html#a0f996b035d884e5021695ac7ac36cabd',1,'LGV_TZ_Lookup_Database']]]
+  ['file_0',['File',['../index.html#config-file',1,'Config File'],['../index.html#the-data-file',1,'The Data File']]],
+  ['files_1',['The Demo Files',['../index.html#the-demo-files',1,'']]],
+  ['finalize_2dhtml_2ephp_2',['finalize-html.php',['../finalize-html_8php.html',1,'']]],
+  ['finally_3',['finally',['../tests_2demo_8php.html#add54dddec4f0266c6fab8d04bf7d9136',1,'demo.php']]],
+  ['from_20github_4',['Install From GitHub',['../index.html#install-from-github',1,'']]]
 ];

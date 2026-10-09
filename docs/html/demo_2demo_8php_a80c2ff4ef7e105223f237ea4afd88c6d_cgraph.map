@@ -1,0 +1,7 @@
+<map id="demoCleanup" name="demoCleanup">
+<area shape="rect" id="Node000001" title="This removes the downloads and drops the database owned by this demo run." alt="" coords="5,29,108,55"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="27,31,20,21,24,11,36,5,57,3,82,6,92,15,89,19,79,11,57,8,38,10,28,15,25,20,31,28"/>
+<area shape="rect" id="Node000002" href="$demo_2demo_8php.html#a1dd8cfc89668632a9696e27b01245ceb" title="This removes the compressed boundary archive and the extracted GeoJSON." alt="" coords="156,29,324,55"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="108,39,142,39,142,45,108,45"/>
+<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="210,31,204,21,207,11,219,5,240,3,265,6,275,15,272,19,263,11,240,8,221,10,211,15,209,20,214,28"/>
+</map>

@@ -1,18 +1,13 @@
 var searchData=
 [
-  ['idlelistener_0',['IdleListener',['../a00178.html',1,'JsonStreamingParser::Listener']]],
-  ['idlelistener_2ephp_1',['IdleListener.php',['../a00074.html',1,'']]],
-  ['if_2',['if',['../a00029.html#a26d062d8da79dc83e81e01fd4d82c715',1,'autoload.php']]],
-  ['index_2ephp_3',['index.php',['../a00005.html',1,'']]],
-  ['initializeincludeclosure_4',['initializeIncludeClosure',['../a00158.html#ace0ec924c2f6a2bd41550ec232f5d585',1,'Composer::Autoload::ClassLoader']]],
-  ['inmemorylistener_5',['InMemoryListener',['../a00182.html',1,'JsonStreamingParser::Listener']]],
-  ['inmemorylistener_2ephp_6',['InMemoryListener.php',['../a00071.html',1,'']]],
-  ['insertvalue_7',['insertValue',['../a00182.html#a5b1078bbe025769670c034f38503e0ee',1,'JsonStreamingParser::Listener::InMemoryListener']]],
-  ['installed_2ephp_8',['installed.php',['../a00110.html',1,'']]],
-  ['installedversions_9',['InstalledVersions',['../a00162.html',1,'Composer']]],
-  ['installedversions_2ephp_10',['InstalledVersions.php',['../a00107.html',1,'']]],
-  ['isclassmapauthoritative_11',['isClassMapAuthoritative',['../a00158.html#a5187f29c880def2863b3592d2cce5844',1,'Composer::Autoload::ClassLoader']]],
-  ['isdigit_12',['isDigit',['../a00214.html#a75b4baabe1844f925e026f5d76c03f5c',1,'JsonStreamingParser::ParserHelper']]],
-  ['ishexcharacter_13',['isHexCharacter',['../a00214.html#a67bfaf49abe0b90aec867e7460965103',1,'JsonStreamingParser::ParserHelper']]],
-  ['isinstalled_14',['isInstalled',['../a00162.html#ac9863ed3d65259cb0a9a5bcc5afffa7e',1,'Composer::InstalledVersions']]]
+  ['generate_20the_20html_0',['Generate the HTML',['../documentation_guide.html#generate-the-html',1,'']]],
+  ['generating_20the_20html_20documentation_1',['Generating the HTML Documentation',['../index.html#generating-the-html-documentation',1,'']]],
+  ['get_5ftz_2',['get_tz',['../class_l_g_v___t_z___lookup___query.html#abcfe29e90d5cbf2e001942d00f68c1bf',1,'LGV_TZ_Lookup_Query']]],
+  ['get_5ftz_5fentities_3',['get_tz_entities',['../class_l_g_v___t_z___lookup___database.html#a60a092f9e626bf45f215c10d81131e54',1,'LGV_TZ_Lookup_Database']]],
+  ['get_5ftz_5fids_4',['get_tz_ids',['../class_l_g_v___t_z___lookup___database.html#ab17af20558f66a9e12337ded8dd3e12d',1,'LGV_TZ_Lookup_Database']]],
+  ['get_5ftz_5fpolygons_5',['get_tz_polygons',['../class_l_g_v___t_z___lookup___database.html#aa174e8bcf0b0ded2529140a5bb01e768',1,'LGV_TZ_Lookup_Database\\get_tz_polygons()'],['../class_demo_tracked_database.html#a9700a3fabc0d36e8cec3225bec7bf0da',1,'DemoTrackedDatabase\\get_tz_polygons()'],['../class_tracking_database.html#ae32ea0236ddd6da69a0cbe0b5e1f934e',1,'TrackingDatabase\\get_tz_polygons()']]],
+  ['gets_20cleaned_20up_6',['What Gets Cleaned Up?',['../index.html#what-gets-cleaned-up',1,'']]],
+  ['gets_20tested_7',['What Gets Tested?',['../index.html#what-gets-tested',1,'']]],
+  ['github_8',['Install From GitHub',['../index.html#install-from-github',1,'']]],
+  ['github_20pages_9',['Preview and GitHub Pages',['../documentation_guide.html#preview-and-github-pages',1,'']]]
 ];

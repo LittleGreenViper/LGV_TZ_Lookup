@@ -1,0 +1,7 @@
+<map id="DemoSourceGeometry\casesForLargest" name="DemoSourceGeometry\casesForLargest">
+<area shape="rect" id="Node000001" title="This generates boundary and interior tests for the largest polygons." alt="" coords="5,37,160,77"/>
+<area shape="rect" id="Node000002" href="$class_demo_source_geometry.html#a4bb350f6f40a4ddd25dbaacbf00770c1" title="This selects the most detailed polygons, using exterior&#45;ring point counts." alt="" coords="208,5,363,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,43,194,37,195,42,161,48"/>
+<area shape="rect" id="Node000003" href="$class_demo_source_geometry.html#afedc110a3f828f20f4d806762def5d19" title="This finds all acceptable time zone names at a point, using the source geometry." alt="" coords="208,69,363,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,67,195,72,194,78,160,72"/>
+</map>

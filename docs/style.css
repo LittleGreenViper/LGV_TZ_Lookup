@@ -1,0 +1,58 @@
+/* Small additions to Doxygen's own responsive light/dark theme. */
+:root {
+    --side-nav-width: 300px;
+}
+
+.contents {
+    padding: 0.8rem 1.4rem 2rem;
+    line-height: 1.6;
+}
+
+.contents .textblock {
+    max-width: 72rem;
+}
+
+.contents h1, .contents h2, .contents h3 {
+    scroll-margin-top: 1rem;
+}
+
+.contents img:not(.formula), .contents .image img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* The README's large world map must stay inside the available content column. */
+.contents .textblock img[src$="World_Time_Zones_Map.png"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
+}
+
+div.fragment {
+    padding: 0.5rem;
+    border-radius: 0.35rem;
+    overflow-x: auto;
+}
+
+table.markdownTable {
+    margin: 1rem 0;
+}
+
+#projectlogo img {
+    max-height: 48px;
+    width: auto;
+}
+
+.textblock img[src$="GitHub-Mark-64px.png"] {
+    background: #fff;
+    border-radius: 50%;
+    padding: 4px;
+}
+
+@media (max-width: 768px) {
+    .contents {
+        padding: 0.6rem 0.8rem 1.4rem;
+    }
+}

@@ -1,3 +1,10 @@
+**Unreleased** *October 9, 2026*
+
+- Added a portable command-line Composer demo that downloads the latest boundaries, loads a temporary MySQL database, runs location tests, and removes the data and database afterward.
+- Added independent source/storage validation and boundary/interior probes for the largest polygons, with phase timings, lookup latency, memory, data-size and coverage metrics.
+- Documented demo setup, results, metrics, cleanup recovery, and helper APIs, with matching MIT license notices.
+- Improved HTML documentation coverage and navigation, with the README landing page and a root generate-docs.sh build script.
+
 **1.3.0** *October 9, 2026*
 
 - Added Composer library packaging and lookup usage instructions. Boundary-file loading remains optional.

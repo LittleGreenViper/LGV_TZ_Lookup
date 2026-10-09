@@ -1,0 +1,5 @@
+<map id="DemoSourceGeometry\zonesAt" name="DemoSourceGeometry\zonesAt">
+<area shape="rect" id="Node000001" title="This finds all acceptable time zone names at a point, using the source geometry." alt="" coords="208,5,363,45"/>
+<area shape="rect" id="Node000002" href="$class_demo_source_geometry.html#aeca2db6e9ca0efc7467b32a377b3ac5b" title="This generates boundary and interior tests for the largest polygons." alt="" coords="5,5,160,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,28,161,28,161,23,194,23"/>
+</map>

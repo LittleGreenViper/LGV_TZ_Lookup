@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['idlelistener_0',['IdleListener',['../a00178.html',1,'JsonStreamingParser::Listener']]],
-  ['inmemorylistener_1',['InMemoryListener',['../a00182.html',1,'JsonStreamingParser::Listener']]],
-  ['installedversions_2',['InstalledVersions',['../a00162.html',1,'Composer']]]
+  ['sqlitedatabase_0',['SQLiteDatabase',['../class_s_q_lite_database.html',1,'']]],
+  ['sqlitestatements_1',['SQLiteStatements',['../class_s_q_lite_statements.html',1,'']]]
 ];
