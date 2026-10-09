@@ -30,7 +30,7 @@ var menudata={children:[
 {text:"Server Deployment",url:"index.html#one-command-server-deployment"},
 {text:"Update Boundaries",url:"index.html#updating-the-boundary-data"},
 {text:"Command-line Demo",url:"index.html#try-the-demo"},
-{text:"Standalone Server",url:"md_docs_2guide.html#standalone-server-implementation"},
+{text:"Server Installation",url:"md_docs_2guide.html#step-by-step-server-installation"},
 {text:"Performance",url:"md_docs_2guide.html#query-performance"},
 {text:"Generate HTML Docs",url:"md_docs_2guide.html#generating-the-html-documentation"},
 {text:"Build and Browse Docs",url:"documentation_guide.html"}]},

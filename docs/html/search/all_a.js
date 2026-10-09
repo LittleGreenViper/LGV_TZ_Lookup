@@ -1,13 +1,11 @@
 var searchData=
 [
-  ['i_20start_0',['Where Should I Start?',['../documentation_guide.html#where-should-i-start',1,'']]],
-  ['if_1',['if',['../src_2index_8php.html#ae30818dca132a9dc043a0e9a728a1b85',1,'if:&#160;index.php'],['../_l_g_v___t_z___lookup___loader_8class_8php.html#a05e9a67b5a536d62ff3e24a8b8bd62bb',1,'if:&#160;LGV_TZ_Lookup_Loader.class.php'],['../composer_8php.html#a3bb9edd48f9a0b7c75fba4357ffa9618',1,'if:&#160;composer.php'],['../regression_8php.html#ac3397dbe65a6d8a0fb66e763ed4a09e0',1,'if:&#160;regression.php'],['../benchmark_8php.html#ac961b1413ce146cb38bf6caeb66f0138',1,'if:&#160;benchmark.php'],['../benchmark_8php.html#a7fe225a0ccc115a12ba0b536b60fac8e',1,'if:&#160;benchmark.php'],['../finalize-html_8php.html#a86921697de60e5580fca3c1610e84310',1,'if:&#160;finalize-html.php']]],
-  ['implementation_2',['Standalone Server Implementation',['../md_docs_2guide.html#standalone-server-implementation',1,'']]],
-  ['index_2ephp_3',['index.php',['../index_8php.html',1,'(Global Namespace)'],['../src_2index_8php.html',1,'(Global Namespace)']]],
-  ['information_4',['More Information',['../index.html#more-information',1,'']]],
-  ['initial_20boundary_20load_5',['Initial Boundary Load',['../md_docs_2guide.html#initial-boundary-load',1,'']]],
-  ['initial_20boundary_20loading_6',['Initial Boundary Loading',['../index.html#initial-boundary-loading',1,'']]],
-  ['initial_20setup_7',['Initial Setup',['../md_docs_2guide.html#initial-setup',1,'']]],
-  ['install_8',['install',['../class_l_g_v___t_z___lookup___setup.html#a36339d82750e877493d897586fe4a41d',1,'LGV_TZ_Lookup_Setup']]],
-  ['integration_20tests_9',['Database Integration Tests',['../md_docs_2guide.html#database-integration-tests',1,'']]]
+  ['_5f_5fconstruct_0',['__construct',['../class_l_g_v___t_z___lookup___database.html#ab341b28f50b5eb3ddde2093eefeea9d1',1,'LGV_TZ_Lookup_Database\\__construct()'],['../class_l_g_v___t_z___lookup___entity.html#a5a48bb926c3508fae0bcc3e588358d05',1,'LGV_TZ_Lookup_Entity\\__construct()'],['../class_l_g_v___t_z___lookup___loader.html#a3066ff747aef669e860c048790220c5c',1,'LGV_TZ_Lookup_Loader\\__construct()'],['../class_l_g_v___t_z___lookup___p_d_o.html#ab52f5f6a8e72ac2d20a42bb7b5443839',1,'LGV_TZ_Lookup_PDO\\__construct()'],['../class_l_g_v___t_z___lookup___query.html#a1b51635ed521b0e4724865ec6c6e3518',1,'LGV_TZ_Lookup_Query\\__construct()'],['../class_demo_inspecting_listener.html#a4843b3c6c629e76916e91b4acae0d607',1,'DemoInspectingListener\\__construct()'],['../class_database_test_statement.html#ad40ddd6e28c7fd332ffd611b3caf429e',1,'DatabaseTestStatement\\__construct()'],['../class_s_q_lite_statements.html#a0dcb24e3d51de5d977608b9713763c24',1,'SQLiteStatements\\__construct()'],['../class_s_q_lite_database.html#a85f571f3220866e689b7cb5f5f0a22d4',1,'SQLiteDatabase\\__construct()']]],
+  ['_5farray_5fflatten_1',['_array_flatten',['../class_l_g_v___t_z___lookup___database.html#a874202739f9a474aa4fce96afb6ac9d3',1,'LGV_TZ_Lookup_Database']]],
+  ['_5fextract_5fentity_2',['_extract_entity',['../class_l_g_v___t_z___lookup___loader.html#a31b95c55dda062d4644b9909b75f64d9',1,'LGV_TZ_Lookup_Loader']]],
+  ['_5ffind_5fin_5fpolygons_3',['_find_in_polygons',['../class_l_g_v___t_z___lookup___query.html#a58fe91f7ed7c2ff01466d1e68d9e2bc6',1,'LGV_TZ_Lookup_Query']]],
+  ['_5fprocess_5fentity_4',['_process_entity',['../class_l_g_v___t_z___lookup___loader.html#adaa7bf4556f270a121713a82290738ea',1,'LGV_TZ_Lookup_Loader']]],
+  ['_5fsort_5fby_5fdomainsize_5',['_sort_by_domainSize',['../class_l_g_v___t_z___lookup___database.html#ad6aaa26963407618367a34766d3a0efe',1,'LGV_TZ_Lookup_Database']]],
+  ['_5fupdate_5fcoords_6',['_update_coords',['../class_l_g_v___t_z___lookup___loader.html#a6edcb9f84c0f212cc3b0da4ed97bd56b',1,'LGV_TZ_Lookup_Loader']]],
+  ['_5fwn_5fpackedpoly_7',['_wn_PackedPoly',['../class_l_g_v___t_z___lookup___query.html#a243e945836e3cab5ab685297d76e3e2b',1,'LGV_TZ_Lookup_Query']]]
 ];

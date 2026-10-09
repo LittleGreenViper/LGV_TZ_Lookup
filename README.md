@@ -66,6 +66,18 @@ https://your-server/timezone/?ll=-77.036543,38.895037&secret=<YOUR SECRET>
 
 Use `./deploy.sh --no-secret` for public access. You need an existing PHP-enabled web server and database service. See the [deployment guide](docs/guide.md#deploying-a-server) for prerequisites, directory choices, and recovery.
 
+### What to Copy to the Server
+
+Run `./deploy.sh` **on the server** to have the installer create the public endpoint and private application. You can transfer a checkout first, or use the guide's download command.
+
+For a manual transfer, run `composer install` at the repository root, then copy these items into one **private application directory outside the web root**, preserving their relative paths:
+
+- `composer.json`, `composer.lock`, `vendor/`, and `LICENSE`.
+- `src/Sources/`, `src/index.php`, `src/LGV_TZ_Lookup_Test.php`, and `src/TestLocations.php`.
+- `update.sh`, `tools/update.php`, and `tools/Setup.php`.
+
+Follow the [step-by-step installation guide for MySQL or PostgreSQL](docs/guide.md#step-by-step-server-installation) to create the database, copy the files, configure the private application and public endpoint, load boundaries, and verify the service. The [exact file list and server layout](docs/guide.md#step-4-copy-the-application-files) show where each item belongs. Composer files and `vendor/` belong only at the application root. Keep `vendor/` for future boundary updates. Documentation, demos, development tests, and downloaded boundary files are not part of the server copy.
+
 ## Updating the Boundary Data
 
 Version **1.4.1** adds a simple updater. From a checkout:

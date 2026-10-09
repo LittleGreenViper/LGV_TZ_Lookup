@@ -228,6 +228,7 @@ var NAVTREEINDEX0 =
 "index.html#updating-the-boundary-data":[0,3],
 "index.html#updating-the-boundary-data":[1,3],
 "index.html#what-problem-does-this-solve":[0,0],
+"index.html#what-to-copy-to-the-server":[0,2,0],
 "index_8php.html":[3,0,5],
 "index_8php_source.html":[3,0,5],
 "markdown-filter_8php.html":[3,0,1,1],
@@ -243,11 +244,10 @@ var NAVTREEINDEX0 =
 "md_docs_2guide.html#generating-the-html-documentation":[1,7],
 "md_docs_2guide.html#generating-the-html-documentation":[5,8],
 "md_docs_2guide.html#how-the-lookup-works":[5,9],
-"md_docs_2guide.html#initial-boundary-load":[5,5,1],
 "md_docs_2guide.html#initial-setup":[5,4,4],
 "md_docs_2guide.html#loading-boundaries-for-a-library-application":[5,0],
-"md_docs_2guide.html#private-configuration":[5,5,0],
 "md_docs_2guide.html#query-performance":[1,6],
 "md_docs_2guide.html#query-performance":[5,6],
-"md_docs_2guide.html#reading-the-results":[5,4,2]
+"md_docs_2guide.html#reading-the-results":[5,4,2],
+"md_docs_2guide.html#step-1-check-the-server-prerequisites":[5,5,0]
 };

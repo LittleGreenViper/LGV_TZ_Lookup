@@ -134,9 +134,9 @@ function updateRun(string $work, string $config, bool $check = false, ?callable 
     $config = realpath($config);
     if ($config === false) { throw new RuntimeException('The private configuration file was not found.'); }
     $settings = updateSettings($config);
-    // Installed servers keep their Composer application next to config.php; also support repository/src-only installs.
+    // Installed servers keep their Composer application next to config.php; manual copies use root dependencies.
     foreach ([dirname($config).'/app/vendor/autoload.php', dirname($config).'/vendor/autoload.php',
-        dirname(__DIR__).'/vendor/autoload.php', dirname(__DIR__).'/src/vendor/autoload.php'] as $autoload) {
+        dirname(__DIR__).'/vendor/autoload.php'] as $autoload) {
         if (is_file($autoload)) { require_once $autoload; }
     }
     if (!class_exists('LGV_TZ_Lookup_Database')) {

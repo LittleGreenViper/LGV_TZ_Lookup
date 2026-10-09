@@ -7,7 +7,8 @@ Start with the [README](../README.md) for installation and a basic lookup. This 
 - [Server deployment](#deploying-a-server)
 - [Updating boundary data](#updater-details)
 - [Command-line demo and metrics](#turnkey-command-line-demo)
-- [Manual server installation](#standalone-server-implementation)
+- [Step-by-step server installation (MySQL or PostgreSQL)](#step-by-step-server-installation)
+- [Exactly what to copy to the server](#step-4-copy-the-application-files)
 - [Performance and database tests](#query-performance)
 - [Building the documentation](#generating-the-html-documentation)
 - [How the lookup works](#how-the-lookup-works)
@@ -131,7 +132,7 @@ New deployments install the updater beside `config.php`. On those servers, run:
 /var/www/lgv-tz-server/update.sh
 ```
 
-The second command defaults to the configuration beside the script. It always reloads the latest full `timezones-with-oceans.geojson.zip` release, even if you have loaded it before. The boundary release version is separate from this project's `1.4.1` version. Existing Composer installations need library version `1.4.1` or later and the optional streaming parser; a repository checkout can use its root or `src` Composer dependencies.
+The second command defaults to the configuration beside the script. It always reloads the latest full `timezones-with-oceans.geojson.zip` release, even if you have loaded it before. The boundary release version is separate from this project's `1.4.1` version. Existing Composer installations need library version `1.4.1` or later and the optional streaming parser; repository checkouts and manual server copies use the single Composer installation at their root.
 
 The updater prints the latest version before loading, verifies the downloaded archive's size and SHA-256 digest when supplied, streams the extracted GeoJSON through the existing loader, and reports the loaded version and polygon count. It loads a staging table first, then replaces `timezones` atomically. Failed downloads, malformed files, and empty loads retain the existing table. The database user needs permissions to create, insert, rename, and drop tables. Other application tables and the server configuration are preserved.
 
@@ -341,13 +342,158 @@ composer test:demo
 
 Those checks cover holes, ocean fallback, boundary offsets, decoder block transitions, and cleanup guards. They do not download the shapefile or need a running database server. Run `./demo/run.sh` for the complete Composer/database system test.
 
-## Standalone Server Implementation
+## Step-by-Step Server Installation
 
-The prompted installer above is the easiest way to run an HTTP service. For a manual installation, put the contents of `src` in your PHP-enabled web directory and create a MySQL or PostgreSQL database.
+Follow the same installation steps for **MySQL or PostgreSQL**; choose the matching database commands in step 3 and settings in step 5. These examples put the database on the same server as PHP, the private application at `/var/www/lgv-tz-server`, and the public endpoint at `/var/www/html/timezone`. Substitute your own paths and hostname throughout.
 
-### Private Configuration
+The prompted [installer](#deploying-a-server) can automate copying, configuration, loading, and verification. Run `./deploy.sh` on the destination server, with the database credentials from step 3, then follow its prompts. The steps below describe the complete manual installation and exactly what to transfer.
 
-Keep `config.php` outside the web document root. For example:
+### Step 1: Check the Server Prerequisites
+
+Install and start a MySQL or PostgreSQL server, and have an existing web server configured to execute PHP. Install PHP 8.0+ for both command-line use and the web server, with these extensions:
+
+| Requirement | MySQL | PostgreSQL |
+| --- | --- | --- |
+| PHP database extension | `pdo_mysql` | `pdo_pgsql` |
+| PHP configuration value | `mysql` | `pgsql` |
+| Default database port | `3306` | `5432` |
+| Other PHP extensions | PDO, `curl`, `zip`, `mbstring`, `ctype` | Same |
+
+On the server, check the command-line PHP installation:
+
+```bash
+php --version
+php -m
+php -r 'echo "PDO drivers: ".implode(", ", PDO::getAvailableDrivers()).PHP_EOL;'
+```
+
+The driver list must include `mysql` or `pgsql`, as appropriate. Check that the web server's PHP uses the same version and database extension; it may use a different PHP configuration from the command line. Have command-line `unzip` available for the initial boundary extraction. The application installer and updater use the PHP `zip` extension.
+
+### Step 2: Prepare Dependencies on Your Development Machine
+
+Prepare the dependencies **on your development machine, from the repository root**:
+
+```bash
+composer install
+```
+
+This creates the root `composer.lock` and `vendor/`. The parser is a development dependency of the library, but is needed on a server that loads or updates boundaries, so include the dependencies from this normal install. `composer install --no-dev` omits the parser. The preparation machine needs Composer and PHP 8.0+ with PDO, `pdo_sqlite`, `mbstring`, and `ctype`; the manual runtime server does not need SQLite or an installed Composer executable.
+
+### Step 3: Create the Database and Application User on the Server
+
+Use a new database named `tz_database` and a user named `tz_user`, or substitute your own names consistently. Replace `your-db-password` with your chosen database password. If your existing installation already has a populated `timezones` table, preserve that database, user, and configuration, and skip steps 3 and 7.
+
+**MySQL:** open an administrative session, for example:
+
+```bash
+mysql --user=root --password
+```
+
+On systems where the administrative account uses operating-system authentication, use `sudo mysql` instead. Run:
+
+```sql
+CREATE DATABASE tz_database CHARACTER SET utf8mb4;
+CREATE USER 'tz_user'@'127.0.0.1' IDENTIFIED BY 'your-db-password';
+GRANT SELECT, INSERT, CREATE, DROP, ALTER, INDEX
+    ON tz_database.* TO 'tz_user'@'127.0.0.1';
+```
+
+Exit with `exit`. This account is for PHP connecting over TCP to `127.0.0.1`, matching the configuration below. For a database on another machine, grant access from the PHP server's address and use the database server's address in `config.php`. See [MySQL account and privilege setup](https://dev.mysql.com/doc/refman/8.0/en/creating-accounts.html) and [account host names](https://dev.mysql.com/doc/refman/8.0/en/account-names.html).
+
+**PostgreSQL:** open an administrative session. On a typical Linux installation:
+
+```bash
+sudo -u postgres psql
+```
+
+If your installation uses a different administrator, connect with that account instead. Run:
+
+```sql
+CREATE ROLE tz_user LOGIN PASSWORD 'your-db-password';
+CREATE DATABASE tz_database OWNER tz_user;
+```
+
+Exit with `\q`. The application role owns the new database and the tables it creates. See [PostgreSQL role creation](https://www.postgresql.org/docs/current/sql-createrole.html) and [database ownership](https://www.postgresql.org/docs/current/sql-createdatabase.html).
+
+**For either database, test the application credentials over TCP before continuing.** Run the command for your backend; enter the password when prompted:
+
+```bash
+# MySQL
+mysql --host=127.0.0.1 --port=3306 --user=tz_user --password tz_database
+
+# PostgreSQL
+psql --host=127.0.0.1 --port=5432 --username=tz_user --password --dbname=tz_database
+```
+
+You should reach the database prompt. Exit with `exit` for MySQL or `\q` for PostgreSQL. If PostgreSQL rejects the TCP connection, check the server's [host authentication configuration](https://www.postgresql.org/docs/current/auth-pg-hba-conf.html) for this user and database before continuing.
+
+### Step 4: Copy the Application Files
+
+Create your private application directory outside the web document root, and your public service directory. For the example paths, run on the server:
+
+```bash
+sudo mkdir -p /var/www/lgv-tz-server /var/www/html/timezone
+```
+
+Copy **only these repository items**, keeping the relative paths, into `/var/www/lgv-tz-server/` (or your chosen private directory outside the web document root):
+
+| Copy from the repository root | Purpose |
+| --- | --- |
+| `composer.json` and `composer.lock` | Dependency manifest and installed version record. |
+| `vendor/` (entire directory) | Composer autoloader and streaming JSON parser. |
+| `src/Sources/` (entire directory) | All five lookup, database, entity, PDO, and loader classes. |
+| `src/index.php` | Service handler and command-line initial loader. |
+| `src/LGV_TZ_Lookup_Test.php` and `src/TestLocations.php` | Required by the handler for its built-in location tests. |
+| `update.sh` | Boundary update command. |
+| `tools/update.php` and `tools/Setup.php` | Updater and download/extraction helpers. |
+| `LICENSE` | License for the copied project code. |
+
+To transfer that exact set over SSH, run these commands **on your development machine, from the repository root**, replacing `deploy-user` and `your-server`:
+
+```bash
+tar -czf /tmp/lgv-tz-server-files.tar.gz \
+    composer.json composer.lock LICENSE vendor \
+    src/Sources src/index.php src/LGV_TZ_Lookup_Test.php src/TestLocations.php \
+    update.sh tools/update.php tools/Setup.php
+scp /tmp/lgv-tz-server-files.tar.gz deploy-user@your-server:/tmp/
+```
+
+Then extract it **on the server**:
+
+```bash
+sudo tar -xzf /tmp/lgv-tz-server-files.tar.gz -C /var/www/lgv-tz-server
+```
+
+Create the two server-specific files described below: private `config.php` and public `index.php`. The complete manual layout is:
+
+```text
+/var/www/lgv-tz-server/                 # Outside the web document root
+    composer.json
+    composer.lock
+    LICENSE
+    config.php                        # Create with your database settings
+    vendor/                           # The one Composer dependency directory
+    src/
+        index.php
+        LGV_TZ_Lookup_Test.php
+        TestLocations.php
+        Sources/                      # All five .class.php files
+    update.sh
+    tools/
+        update.php
+        Setup.php
+
+/var/www/html/timezone/                # Public service directory
+    index.php                         # Create using the wrapper below
+```
+
+The root repository `index.php` is a redirect for browsing a checkout; the public file in this layout is the wrapper below. Omit `.git/`, `docs/`, `demo/`, `tests/`, `spec/`, `img/`, `icon.png`, `README.md`, `CHANGELOG.md`, `deploy.sh`, `generate-docs.sh`, and the other `tools/` files from this manual runtime copy. Boundary ZIP/GeoJSON files are temporary loading inputs. An existing server with a populated `timezones` table does not need another initial load; use the updater when you want fresh boundaries.
+
+Keep the relative `src/` and `vendor/` layout intact. Run Composer only in the application root if you later regenerate dependencies. For an existing installation that used `src/composer.json`, `src/composer.lock`, or `src/vendor/`, remove those obsolete copies after placing the root dependencies and updating the entrypoint paths.
+
+### Step 5: Create the Private Configuration
+
+Create `/var/www/lgv-tz-server/config.php` on the server with the database name, user, and password from step 3. Start with this MySQL example:
 
 ```php
 <?php
@@ -360,50 +506,110 @@ $g_dbPort = 3306;
 $g_server_secret = 'your-server-secret';
 ```
 
-Use `pgsql` and port `5432` for PostgreSQL. In `src/index.php`, point `__CONFIG_FILE_` at that private file:
+For PostgreSQL, change only these two lines:
 
 ```php
-define('__CONFIG_FILE_', '/absolute/path/to/config.php');
+$g_dbType = 'pgsql';
+$g_dbPort = 5432;
+```
+
+Choose a server secret for `$g_server_secret`. You can generate one on the server with:
+
+```bash
+php -r 'echo bin2hex(random_bytes(32)).PHP_EOL;'
+```
+
+In the copied `/var/www/lgv-tz-server/src/index.php`, replace the existing `__CONFIG_FILE_` definition with the path to your private configuration:
+
+```php
+define('__CONFIG_FILE_', '/var/www/lgv-tz-server/config.php');
 ```
 
 A nonempty server secret must be supplied as the `secret` query parameter. An empty or omitted secret allows public access. The Composer lookup API uses your application's settings and does not use this HTTP secret.
 
-### Initial Boundary Load
+### Step 6: Create the Public Endpoint and Set Permissions
 
-Install the optional parser in the copied `src` directory:
+Create `/var/www/html/timezone/index.php` with these contents, changing the private path if needed:
+
+```php
+<?php
+ini_set('display_errors', '0');
+try {
+    require '/var/www/lgv-tz-server/vendor/autoload.php';
+    require '/var/www/lgv-tz-server/src/index.php';
+} catch (Throwable $error) {
+    http_response_code(503);
+    error_log('Timezone service: '.$error->getMessage());
+    echo 'Timezone service unavailable.';
+}
+```
+
+Allow the web server's PHP user to traverse the private directory and read the code, `vendor/`, and `config.php`. For example, with PHP running in group `www-data`, run these commands as the deployment user, substituting the actual PHP group if different:
 
 ```bash
-cd /path/to/src
-composer install
+sudo chown -R "$(id -un):www-data" /var/www/lgv-tz-server
+sudo chmod 0750 /var/www/lgv-tz-server
+find /var/www/lgv-tz-server/vendor /var/www/lgv-tz-server/src /var/www/lgv-tz-server/tools -type d -exec chmod 0755 {} +
+find /var/www/lgv-tz-server/vendor /var/www/lgv-tz-server/src /var/www/lgv-tz-server/tools -type f -exec chmod 0644 {} +
+chmod 0640 /var/www/lgv-tz-server/config.php
+chmod 0755 /var/www/lgv-tz-server/update.sh
+sudo chmod 0755 /var/www/html/timezone
+sudo chmod 0644 /var/www/html/timezone/index.php
 ```
 
-Download the full `timezones-with-oceans.geojson.zip` release and extract `combined-with-oceans.json` into that directory. Then run:
+The public directory must be served by your existing PHP-enabled web server. Keep configuration passwords and the server secret when replacing code on an existing installation.
+
+### Step 7: Load the Initial Boundaries
+
+On the server, open the [latest Timezone Boundary Builder release](https://github.com/evansiroky/timezone-boundary-builder/releases/latest) and download the asset named **`timezones-with-oceans.geojson.zip`** into `/var/www/lgv-tz-server/src/`. Extract it there:
 
 ```bash
-php /path/to/src/index.php secret=your-server-secret load
+cd /var/www/lgv-tz-server/src
+unzip timezones-with-oceans.geojson.zip
 ```
 
-The loader creates the `timezones` table and indexes. It prints `1` on success or `0` on a caught loading error. This command replaces the table and is available only through the CLI. For subsequent updates, use the repository's `update.sh` with the same private configuration.
+Confirm that `combined-with-oceans.json` is in that directory. The copied root `vendor/` already includes the parser. Run the private handler directly, replacing `your-server-secret` with the value in `config.php`:
 
-The loader also supports a repository checkout with Composer installed at its root. If you use the boundaries without oceans, change the input filename in `src/index.php` to `combined.json`; some known-location tests will then have different results.
+```bash
+php -d memory_limit=1G /var/www/lgv-tz-server/src/index.php secret=your-server-secret load
+```
 
-After a successful initial load, a manual `src` installation can delete its GeoJSON file and parser-only `src/vendor` directory. Restore the parser before updating. Composer applications keep their `vendor` directory for library autoloading.
+The loader creates the `timezones` table and indexes. **Wait for it to print `1` before continuing.** A `0` means a caught loading error; an exception or PHP error also means the load did not finish. Check the configuration, PHP extensions, input filename, permissions, and memory limit before retrying. This command replaces the table and is available only through the CLI.
 
-### Requests and Tests
+After a successful initial load, delete the downloaded ZIP and GeoJSON:
 
-A lookup returns the time zone name as plain text:
+```bash
+rm /var/www/lgv-tz-server/src/timezones-with-oceans.geojson.zip /var/www/lgv-tz-server/src/combined-with-oceans.json
+```
+
+**Keep the root `vendor/` directory** for autoloading and future updates. If you use the boundaries without oceans, change the input filename in `src/index.php` to `combined.json`; some known-location tests will then have different results.
+
+### Step 8: Verify the Service
+
+Visit this URL, substituting your hostname and server secret:
 
 ```text
-https://tz.example.com/?ll=-77.036543,38.895037&secret=your-server-secret
+https://tz.example.com/timezone/?ll=-77.036543,38.895037&secret=your-server-secret
 ```
 
-The built-in known-location tests return an HTML page with green passes and red failures:
+The response should be the plain text **`America/New_York`**. Then run the built-in known-location tests:
 
 ```text
-https://tz.example.com/?test&secret=your-server-secret
+https://tz.example.com/timezone/?test&secret=your-server-secret
 ```
 
-Review failures against the boundary release you loaded, especially if you chose a different dataset variant.
+The tests return an HTML page with green passes and red failures. Review failures against the boundary release you loaded, especially if you chose a different dataset variant. A 403 response indicates an incorrect or missing secret. A 503 response indicates a PHP/configuration/database error; check the web server's PHP error log.
+
+### Step 9: Update Boundary Data Later
+
+For either backend, run the copied updater on the server as the deployment user. It defaults to the private `config.php` at the application root:
+
+```bash
+/var/www/lgv-tz-server/update.sh --check   # Report the latest boundary release.
+/var/www/lgv-tz-server/update.sh           # Download and replace the boundaries.
+```
+
+The updater uses the database backend from `config.php`, retains the existing table if loading fails, and deletes its downloaded files. See [updater details](#updater-details) for cleanup recovery. Keep `config.php`, the root Composer files, `vendor/`, and the copied updater when refreshing the application code.
 
 ## Query Performance
 

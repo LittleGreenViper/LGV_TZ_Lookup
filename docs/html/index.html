@@ -155,6 +155,16 @@ One-Command Server Deployment</h2>
 </div><!-- fragment --><p>It asks for database and server settings, downloads and loads the latest boundaries, tests the lookups, and installs the endpoint. A random server secret is enabled by default. The final output gives you the secret and a request URL, such as:</p>
 <div class="fragment"><div class="line">https://your-server/timezone/?ll=-77.036543,38.895037&amp;secret=&lt;YOUR SECRET&gt;</div>
 </div><!-- fragment --><p>Use <span class="tt">./deploy.sh --no-secret</span> for public access. You need an existing PHP-enabled web server and database service. See the <a href="md_docs_2guide.html#deploying-a-server">deployment guide</a> for prerequisites, directory choices, and recovery.</p>
+<h3 class="doxsection"><a class="anchor" id="what-to-copy-to-the-server"></a>
+What to Copy to the Server</h3>
+<p>Run <span class="tt">./deploy.sh</span> <b>on the server</b> to have the installer create the public endpoint and private application. You can transfer a checkout first, or use the guide's download command.</p>
+<p>For a manual transfer, run <span class="tt">composer install</span> at the repository root, then copy these items into one <b>private application directory outside the web root</b>, preserving their relative paths:</p>
+<ul>
+<li><span class="tt">composer.json</span>, <span class="tt">composer.lock</span>, <span class="tt">vendor/</span>, and <span class="tt">LICENSE</span>.</li>
+<li><span class="tt">src/Sources/</span>, <span class="tt"><a class="el" href="src_2index_8php.html">src/index.php</a></span>, <span class="tt"><a class="el" href="_l_g_v___t_z___lookup___test_8php.html">src/LGV_TZ_Lookup_Test.php</a></span>, and <span class="tt"><a class="el" href="_test_locations_8php.html">src/TestLocations.php</a></span>.</li>
+<li><span class="tt">update.sh</span>, <span class="tt"><a class="el" href="tools_2update_8php.html" title="Report the latest boundary release, or replace an existing installation&#39;s boundaries.">tools/update.php</a></span>, and <span class="tt"><a class="el" href="_setup_8php.html" title="These are shared Composer, download, and extraction helpers for the demo and installer.">tools/Setup.php</a></span>.</li>
+</ul>
+<p>Follow the <a href="md_docs_2guide.html#step-by-step-server-installation">step-by-step installation guide for MySQL or PostgreSQL</a> to create the database, copy the files, configure the private application and public endpoint, load boundaries, and verify the service. The <a href="md_docs_2guide.html#step-4-copy-the-application-files">exact file list and server layout</a> show where each item belongs. Composer files and <span class="tt">vendor/</span> belong only at the application root. Keep <span class="tt">vendor/</span> for future boundary updates. Documentation, demos, development tests, and downloaded boundary files are not part of the server copy.</p>
 <h2 class="doxsection"><a class="anchor" id="updating-the-boundary-data"></a>
 Updating the Boundary Data</h2>
 <p>Version <b>1.4.1</b> adds a simple updater. From a checkout:</p>

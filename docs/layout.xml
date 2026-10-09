@@ -10,7 +10,7 @@
       <tab type="user" title="Server Deployment" url="index.html#one-command-server-deployment"/>
       <tab type="user" title="Update Boundaries" url="index.html#updating-the-boundary-data"/>
       <tab type="user" title="Command-line Demo" url="index.html#try-the-demo"/>
-      <tab type="user" title="Standalone Server" url="md_docs_2guide.html#standalone-server-implementation"/>
+      <tab type="user" title="Server Installation" url="md_docs_2guide.html#step-by-step-server-installation"/>
       <tab type="user" title="Performance" url="md_docs_2guide.html#query-performance"/>
       <tab type="user" title="Generate HTML Docs" url="md_docs_2guide.html#generating-the-html-documentation"/>
       <tab type="user" title="Build and Browse Docs" url="@ref documentation_guide"/>

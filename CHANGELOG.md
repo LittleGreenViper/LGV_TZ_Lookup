@@ -5,6 +5,7 @@
 - Updates load into a staging table and replace the live MySQL or PostgreSQL table only after parsing succeeds; failed loads retain existing boundaries.
 - New server deployments include the updater beside the private configuration, with interruption cleanup and documentation.
 - Simplified the README around the Composer lookup and main commands; moved detailed setup, demo metrics, and development instructions into a linked usage guide.
+- Consolidated Composer files and dependencies at the repository root, removed the redundant `src` installation, and documented the exact files and directory layout for copying the service to a server.
 
 **1.4.0** *October 9, 2026*
 

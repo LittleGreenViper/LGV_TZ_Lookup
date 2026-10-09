@@ -1,8 +1,15 @@
 var NAVTREEINDEX1 =
 {
-"md_docs_2guide.html#requests-and-tests":[5,5,2],
-"md_docs_2guide.html#standalone-server-implementation":[1,5],
-"md_docs_2guide.html#standalone-server-implementation":[5,5],
+"md_docs_2guide.html#step-2-prepare-dependencies-on-your-development-machine":[5,5,1],
+"md_docs_2guide.html#step-3-create-the-database-and-application-user-on-the-server":[5,5,2],
+"md_docs_2guide.html#step-4-copy-the-application-files":[5,5,3],
+"md_docs_2guide.html#step-5-create-the-private-configuration":[5,5,4],
+"md_docs_2guide.html#step-6-create-the-public-endpoint-and-set-permissions":[5,5,5],
+"md_docs_2guide.html#step-7-load-the-initial-boundaries":[5,5,6],
+"md_docs_2guide.html#step-8-verify-the-service":[5,5,7],
+"md_docs_2guide.html#step-9-update-boundary-data-later":[5,5,8],
+"md_docs_2guide.html#step-by-step-server-installation":[1,5],
+"md_docs_2guide.html#step-by-step-server-installation":[5,5],
 "md_docs_2guide.html#the-demo-files":[5,4,7],
 "md_docs_2guide.html#the-metrics":[5,4,3],
 "md_docs_2guide.html#turnkey-command-line-demo":[5,4],

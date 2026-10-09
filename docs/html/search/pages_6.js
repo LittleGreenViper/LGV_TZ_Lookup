@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['happens_20during_20a_20run_0',['What Happens During a Run?',['../md_docs_2guide.html#what-happens-during-a-run',1,'']]],
-  ['how_20the_20lookup_20works_1',['How the Lookup Works',['../md_docs_2guide.html#how-the-lookup-works',1,'']]],
-  ['html_2',['Generate the HTML',['../documentation_guide.html#generate-the-html',1,'']]],
-  ['html_20documentation_3',['Generating the HTML Documentation',['../md_docs_2guide.html#generating-the-html-documentation',1,'']]]
+  ['7_3a_20load_20the_20initial_20boundaries_0',['Step 7: Load the Initial Boundaries',['../md_docs_2guide.html#step-7-load-the-initial-boundaries',1,'']]]
 ];

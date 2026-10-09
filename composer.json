@@ -41,7 +41,7 @@
     },
     "archive": {
         "exclude": [
-            "/vendor", "/src/vendor", "/src/combined.json", "/src/combined-with-oceans.json",
+            "/vendor", "/src/combined.json", "/src/combined-with-oceans.json",
             "/tests", "/tools", "/docs", "/spec", "/img", "/icon.png"
         ]
     }

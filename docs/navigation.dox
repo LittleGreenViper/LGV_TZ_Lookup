@@ -14,7 +14,7 @@ Use **Guides** to jump directly to either level of documentation.
 | Install a service on a server | [One-Command Deployment](index.html#one-command-server-deployment). |
 | Report the latest boundary version or reload a database | [Updating the Boundary Data](index.html#updating-the-boundary-data). |
 | Download current data and run a complete test | [Command-line Demo](index.html#try-the-demo). |
-| Run the HTTP service manually | [Standalone Server](md_docs_2guide.html#standalone-server-implementation). |
+| Install the HTTP service with MySQL or PostgreSQL | [Step-by-Step Server Installation](md_docs_2guide.html#step-by-step-server-installation). |
 | Read benchmarks and integration-test instructions | [Performance](md_docs_2guide.html#query-performance). |
 | Understand storage and loading | LGV_TZ_Lookup_Database, LGV_TZ_Lookup_Entity, and LGV_TZ_Lookup_Loader. |
 | Understand the independent demo checks | DemoSourceGeometry, DemoInspectingListener, and DemoTrackedDatabase. |

@@ -29,16 +29,11 @@
  
 declare(strict_types = 1);
 
-// Composer consumers already have an autoloader. Also support the original src-only server installation,
-// and a repository checkout with Composer installed at its root.
+// Composer consumers already have an autoloader. Direct server loads use the repository root's dependencies.
 if (!class_exists(\JsonStreamingParser\Listener\GeoJsonListener::class)) {
-    foreach ([__DIR__.'/../vendor/autoload.php', __DIR__.'/../../vendor/autoload.php'] as $autoload) {
-        if (is_file($autoload)) {
-            require_once $autoload;
-            if (class_exists(\JsonStreamingParser\Listener\GeoJsonListener::class)) {
-                break;
-            }
-        }
+    $autoload = __DIR__.'/../../vendor/autoload.php';
+    if (is_file($autoload)) {
+        require_once $autoload;
     }
 }
 if (!class_exists(\JsonStreamingParser\Listener\GeoJsonListener::class)) {

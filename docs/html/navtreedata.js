@@ -30,7 +30,9 @@ var NAVTREE =
       [ "Composer Library", "index.html#composer-library", [
         [ "Initial Boundary Loading", "index.html#initial-boundary-loading", null ]
       ] ],
-      [ "One-Command Server Deployment", "index.html#one-command-server-deployment", null ],
+      [ "One-Command Server Deployment", "index.html#one-command-server-deployment", [
+        [ "What to Copy to the Server", "index.html#what-to-copy-to-the-server", null ]
+      ] ],
       [ "Updating the Boundary Data", "index.html#updating-the-boundary-data", null ],
       [ "Try the Demo", "index.html#try-the-demo", null ],
       [ "More Information", "index.html#more-information", null ],
@@ -42,7 +44,7 @@ var NAVTREE =
       [ "Server Deployment", "index.html#one-command-server-deployment", null ],
       [ "Update Boundaries", "index.html#updating-the-boundary-data", null ],
       [ "Command-line Demo", "index.html#try-the-demo", null ],
-      [ "Standalone Server", "md_docs_2guide.html#standalone-server-implementation", null ],
+      [ "Server Installation", "md_docs_2guide.html#step-by-step-server-installation", null ],
       [ "Performance", "md_docs_2guide.html#query-performance", null ],
       [ "Generate HTML Docs", "md_docs_2guide.html#generating-the-html-documentation", null ],
       [ "Build and Browse Docs", "documentation_guide.html", null ]
@@ -81,10 +83,16 @@ var NAVTREE =
         [ "What Gets Cleaned Up?", "md_docs_2guide.html#what-gets-cleaned-up", null ],
         [ "The Demo Files", "md_docs_2guide.html#the-demo-files", null ]
       ] ],
-      [ "Standalone Server Implementation", "md_docs_2guide.html#standalone-server-implementation", [
-        [ "Private Configuration", "md_docs_2guide.html#private-configuration", null ],
-        [ "Initial Boundary Load", "md_docs_2guide.html#initial-boundary-load", null ],
-        [ "Requests and Tests", "md_docs_2guide.html#requests-and-tests", null ]
+      [ "Step-by-Step Server Installation", "md_docs_2guide.html#step-by-step-server-installation", [
+        [ "Step 1: Check the Server Prerequisites", "md_docs_2guide.html#step-1-check-the-server-prerequisites", null ],
+        [ "Step 2: Prepare Dependencies on Your Development Machine", "md_docs_2guide.html#step-2-prepare-dependencies-on-your-development-machine", null ],
+        [ "Step 3: Create the Database and Application User on the Server", "md_docs_2guide.html#step-3-create-the-database-and-application-user-on-the-server", null ],
+        [ "Step 4: Copy the Application Files", "md_docs_2guide.html#step-4-copy-the-application-files", null ],
+        [ "Step 5: Create the Private Configuration", "md_docs_2guide.html#step-5-create-the-private-configuration", null ],
+        [ "Step 6: Create the Public Endpoint and Set Permissions", "md_docs_2guide.html#step-6-create-the-public-endpoint-and-set-permissions", null ],
+        [ "Step 7: Load the Initial Boundaries", "md_docs_2guide.html#step-7-load-the-initial-boundaries", null ],
+        [ "Step 8: Verify the Service", "md_docs_2guide.html#step-8-verify-the-service", null ],
+        [ "Step 9: Update Boundary Data Later", "md_docs_2guide.html#step-9-update-boundary-data-later", null ]
       ] ],
       [ "Query Performance", "md_docs_2guide.html#query-performance", null ],
       [ "Database Integration Tests", "md_docs_2guide.html#database-integration-tests", null ],
@@ -99,7 +107,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_l_g_v___t_z___lookup___database_8class_8php.html",
-"md_docs_2guide.html#requests-and-tests"
+"md_docs_2guide.html#step-2-prepare-dependencies-on-your-development-machine"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

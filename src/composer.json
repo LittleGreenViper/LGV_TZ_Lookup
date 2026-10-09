@@ -1,5 +1,0 @@
-{
-    "require": {
-        "salsify/json-streaming-parser": "8.3.*"
-    }
-}

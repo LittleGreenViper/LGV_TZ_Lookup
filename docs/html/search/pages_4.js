@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['files_0',['The Demo Files',['../md_docs_2guide.html#the-demo-files',1,'']]],
-  ['for_20a_20library_20application_1',['Loading Boundaries for a Library Application',['../md_docs_2guide.html#loading-boundaries-for-a-library-application',1,'']]]
+  ['5_3a_20create_20the_20private_20configuration_0',['Step 5: Create the Private Configuration',['../md_docs_2guide.html#step-5-create-the-private-configuration',1,'']]]
 ];
