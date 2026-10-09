@@ -78,6 +78,7 @@ var menudata={children:[
 {text:"Functions and Variables",url:"globals.html",children:[
 {text:"All",url:"globals.html",children:[
 {text:"$",url:"globals.html#index__24"},
+{text:"_",url:"globals.html#index__5F"},
 {text:"c",url:"globals.html#index_c"},
 {text:"d",url:"globals.html#index_d"},
 {text:"e",url:"globals.html#index_e"},
@@ -96,6 +97,7 @@ var menudata={children:[
 {text:"u",url:"globals_func.html#index_u"}]},
 {text:"Variables",url:"globals_vars.html",children:[
 {text:"$",url:"globals_vars.html#index__24"},
+{text:"_",url:"globals_vars.html#index__5F"},
 {text:"d",url:"globals_vars.html#index_d"},
 {text:"e",url:"globals_vars.html#index_e"},
 {text:"f",url:"globals_vars.html#index_f"},

@@ -1,3 +1,9 @@
+**1.4.2** *October 9, 2026*
+
+- The server installer asks for the selected web directory's public URL and prints complete service, lookup, and test URLs, preserving nested URL prefixes; clarified the web directory and service subdirectory in the installation guide.
+- Rerunning the installer against a matching installer-owned service refreshes the code and updater while preserving the populated boundary database, private configuration, and secret. Failed or interrupted refreshes restore the previous directories.
+- Built-in location tests report total time, individual lookup times, average, median, 95th percentile, slowest lookup, and PHP request peak memory.
+
 **1.4.1** *October 9, 2026*
 
 - Added a simple boundary updater that reports the latest shapefile release, downloads and reloads the full GeoJSON boundaries with oceans, and deletes the downloaded files afterward.

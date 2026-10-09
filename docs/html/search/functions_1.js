@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['call_5fserver_0',['call_server',['../src_2index_8php.html#a501cb619e17e9b3108d9bbd10221a648',1,'index.php']]],
+  ['call_5fserver_0',['call_server',['../src_2index_8php.html#a501cb619e17e9b3108d9bbd10221a648',1,'call_server( $inQuery, $inIsCLI):&#160;index.php'],['../server_8php.html#a05470a9754c89cd14069bbf7e6789485',1,'call_server(string $query, bool $cli):&#160;server.php']]],
   ['casesforlargest_1',['casesForLargest',['../class_demo_source_geometry.html#aeca2db6e9ca0efc7467b32a377b3ac5b',1,'DemoSourceGeometry']]],
   ['check_2',['check',['../regression_8php.html#a7e830a71bad74ece222eb233f5098a19',1,'regression.php']]],
   ['composercheck_3',['composerCheck',['../composer_8php.html#aa2fdeb436e5bb3969077933017df2b60',1,'composer.php']]],

@@ -1,7 +1,9 @@
 <map id="call_server" name="call_server">
-<area shape="rect" id="Node000001" title=" " alt="" coords="140,29,225,55"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="205,18,198,11,183,8,169,10,162,14,160,20,164,28,160,30,155,21,158,11,167,5,183,3,201,6,209,14"/>
-<area shape="rect" id="Node000002" href="$_l_g_v___t_z___lookup___test_8php.html#a5fdb5cb9a08a7933dd607dfc4df5f231" title=" " alt="" coords="5,29,92,55"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="126,45,92,45,92,39,126,39"/>
-<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="71,18,64,11,49,8,35,10,28,14,26,20,30,28,26,30,21,21,24,11,33,5,49,3,67,6,75,14"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="140,43,225,68"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="205,31,198,24,183,21,169,23,162,28,160,34,164,41,160,44,155,34,158,25,167,18,183,16,201,19,209,28"/>
+<area shape="rect" id="Node000002" href="$server_8php.html#a05470a9754c89cd14069bbf7e6789485" title="Exercise the report with known lookup results, including one optional failure." alt="" coords="6,5,91,31"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="126,42,91,32,92,27,128,37"/>
+<area shape="rect" id="Node000003" href="$_l_g_v___t_z___lookup___test_8php.html#a5fdb5cb9a08a7933dd607dfc4df5f231" title=" " alt="" coords="5,79,92,104"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="127,73,93,82,91,77,126,68"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="71,67,64,60,49,57,35,59,28,64,26,70,30,77,26,80,21,70,24,61,33,54,49,52,67,55,75,64"/>
 </map>

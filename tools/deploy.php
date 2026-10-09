@@ -124,6 +124,23 @@ function deployAsk($terminal, string $label, string $default = '', bool $hidden 
 }
 
 /***************************************************************************************************************************/
+/** \brief Build the browser URL from the selected web directory's URL and the new service subdirectory. */
+function deployServiceUrl(string $webUrl, string $endpoint): string {
+    $webUrl = trim($webUrl);
+    $parts = parse_url($webUrl);
+    if (filter_var($webUrl, FILTER_VALIDATE_URL) === false || !is_array($parts) ||
+        !in_array(strtolower($parts['scheme'] ?? ''), ['http', 'https'], true) ||
+        isset($parts['user']) || isset($parts['pass']) || isset($parts['query']) || isset($parts['fragment']) ||
+        str_contains($webUrl, '\\')) {
+        throw new InvalidArgumentException('Enter the full http:// or https:// URL of the web directory, without credentials, a query, or a fragment.');
+    }
+    if (!preg_match('/^[a-zA-Z0-9_-]+$/D', $endpoint)) {
+        throw new InvalidArgumentException('Use a simple service directory name.');
+    }
+    return rtrim($webUrl, '/').'/'.$endpoint.'/';
+}
+
+/***************************************************************************************************************************/
 /** \brief This removes a directory tree without following symlinks. */
 function deployRemoveTree(string $directory): void {
     if (!is_dir($directory) || is_link($directory)) { return; }
@@ -133,6 +150,205 @@ function deployRemoveTree(string $directory): void {
         if (!$ok) { throw new RuntimeException('Could not remove '.$file->getPathname()); }
     }
     if (!rmdir($directory)) { throw new RuntimeException('Could not remove '.$directory); }
+}
+
+/***************************************************************************************************************************/
+/** \brief Verify an existing installer-owned pair of directories and its unchanged database configuration. */
+function deployExistingInstallation(string $private, string $public, array $settings): array {
+    foreach ([$private, $public] as $directory) {
+        if (!is_dir($directory) || is_link($directory) || !is_file($directory.'/.lgv-tz-install-owner') ||
+            is_link($directory.'/.lgv-tz-install-owner')) {
+            throw new RuntimeException('Existing directories are not a matching installer-owned service; choose new paths.');
+        }
+    }
+    $token = trim(file_get_contents($private.'/.lgv-tz-install-owner'));
+    if (!preg_match('/^[a-f0-9]{64}$/D', $token) || !hash_equals($token, trim(file_get_contents($public.'/.lgv-tz-install-owner')))) {
+        throw new RuntimeException('Installation directory ownership differs; refusing to refresh.');
+    }
+    foreach (['app', 'tools'] as $directory) {
+        if (!is_dir($private.'/'.$directory) || is_link($private.'/'.$directory)) {
+            throw new RuntimeException('Existing installation contains an unsupported linked directory; refusing to refresh.');
+        }
+    }
+    if (!is_file($public.'/index.php') || is_link($public.'/index.php')) {
+        throw new RuntimeException('Existing public entry point is missing or linked; refusing to refresh.');
+    }
+    foreach (['config.php', 'installation.json', 'app/vendor/autoload.php', 'update.sh', 'tools/update.php', 'tools/Setup.php'] as $file) {
+        if (!is_file($private.'/'.$file) || is_link($private.'/'.$file)) {
+            throw new RuntimeException('Existing installation is incomplete; refusing to refresh.');
+        }
+    }
+    $configuration = (static function(string $file): array {
+        require $file;
+        return ['settings' => ['database' => $g_dbName ?? '', 'user' => $g_dbUserName ?? '', 'password' => $g_dbPassword ?? '',
+            'driver' => strtolower($g_dbType ?? 'mysql'), 'host' => $g_dbHost ?? '127.0.0.1',
+            'port' => (int)($g_dbPort ?? (($g_dbType ?? 'mysql') === 'pgsql' ? 5432 : 3306))],
+            'secret' => $g_server_secret ?? ''];
+    })($private.'/config.php');
+    foreach (['database', 'user', 'password', 'driver', 'host', 'port'] as $key) {
+        if ($settings[$key] !== $configuration['settings'][$key]) {
+            throw new RuntimeException('Database settings differ from the existing private configuration; use the original settings to refresh.');
+        }
+    }
+    $metadata = json_decode(file_get_contents($private.'/installation.json'), true, 512, JSON_THROW_ON_ERROR);
+    if (!is_array($metadata) || ($metadata['driver'] ?? '') !== $settings['driver'] || !is_string($configuration['secret'])) {
+        throw new RuntimeException('Existing installation metadata is invalid; refusing to refresh.');
+    }
+    return ['token' => $token, 'metadata' => $metadata, 'secret' => $configuration['secret']];
+}
+
+/***************************************************************************************************************************/
+/** \brief Copy an installation for staging, preserving additional files, permissions, and symbolic links. */
+function deployCopyTree(string $source, string $destination): void {
+    $mode = fileperms($source) & 0777;
+    if (!mkdir($destination, $mode) || !chmod($destination, $mode)) { throw new RuntimeException('Could not stage the installation.'); }
+    foreach (new DirectoryIterator($source) as $entry) {
+        if ($entry->isDot()) { continue; }
+        $target = $destination.'/'.$entry->getFilename();
+        if ($entry->isLink()) { $ok = symlink(readlink($entry->getPathname()), $target); }
+        elseif ($entry->isDir()) { deployCopyTree($entry->getPathname(), $target); continue; }
+        else { $ok = copy($entry->getPathname(), $target) && chmod($target, $entry->getPerms() & 0777); }
+        if (!$ok) { throw new RuntimeException('Could not stage '.$entry->getFilename()); }
+    }
+}
+
+/***************************************************************************************************************************/
+/** \brief Generate the public entry point with the chosen private configuration and package paths. */
+function deployEndpointCode(string $private, string $relativePackage, string $licenseHeader): string {
+    return $licenseHeader.
+        "define('__CONFIG_FILE_', ".var_export($private.'/config.php', true).");\n".
+        "ini_set('display_errors', '0');\ntry {\n    require ".var_export($private.'/app/vendor/autoload.php', true).";\n".
+        '    require '.var_export($private.$relativePackage.'/src/index.php', true).";\n} catch (Throwable \$error) {\n".
+        "    http_response_code(503);\n    error_log('Timezone service: '.\$error->getMessage());\n    echo 'Timezone service unavailable.';\n}\n";
+}
+
+/***************************************************************************************************************************/
+/** \brief Restore prior directories after an interrupted refresh, or remove backups after publication. Never changes database tables. */
+function deployRefreshCleanup(string $work, array $state): void {
+    $verify = static function(string $path, string $token): void {
+        if (is_link($path) || !is_dir($path) || !is_file($path.'/.lgv-tz-install-owner') || is_link($path.'/.lgv-tz-install-owner') ||
+            !hash_equals($token, trim(file_get_contents($path.'/.lgv-tz-install-owner')))) {
+            throw new RuntimeException('Refresh directory ownership differs; refusing recovery for '.$path);
+        }
+    };
+    foreach (['private', 'public'] as $key) {
+        $backup = $state[$key.'_backup'];
+        if (!file_exists($backup) && !is_link($backup)) { continue; }
+        $verify($backup, $state['previous_token']);
+        if (empty($state['published'])) {
+            if (file_exists($state[$key]) || is_link($state[$key])) {
+                $verify($state[$key], $state['token']);
+                deployRemoveTree($state[$key]);
+            }
+            if (!rename($backup, $state[$key])) { throw new RuntimeException('Could not restore the prior installation.'); }
+        } else {
+            $verify($state[$key], $state['token']);
+            deployRemoveTree($backup);
+        }
+    }
+    foreach (['private_stage', 'public_stage'] as $key) {
+        if (!file_exists($state[$key]) && !is_link($state[$key])) { continue; }
+        $verify($state[$key], $state['token']);
+        deployRemoveTree($state[$key]);
+    }
+    unlink($work.'/deployment.json');
+}
+
+/***************************************************************************************************************************/
+/** \brief Refresh owned installed code using existing polygons, retaining the configuration and secret. */
+function deployRefresh(string $work, array $settings, string $private, string $public, int $group,
+    string $serviceUrl, array $existing, callable $install): void {
+    $connection = deployConnection($settings);
+    deployLock($connection);
+    if (deployTableExists($connection, 'lgv_tz_install_guard')) {
+        throw new RuntimeException('An installation recovery table remains; finish its cleanup before refreshing.');
+    }
+    $count = (int)$connection->query('SELECT COUNT(*) FROM timezones')->fetchColumn();
+    if ($count === 0) { throw new RuntimeException('The existing boundary table is empty; refusing to refresh.'); }
+    $suffix = bin2hex(random_bytes(12));
+    $state = ['refresh' => true, 'token' => bin2hex(random_bytes(32)), 'previous_token' => $existing['token'],
+        'private' => $private, 'public' => $public, 'private_stage' => dirname($private).'/.lgv-tz-install-'.$suffix,
+        'public_stage' => dirname($public).'/.lgv-tz-install-'.$suffix,
+        'private_backup' => dirname($private).'/.lgv-tz-previous-'.$suffix,
+        'public_backup' => dirname($public).'/.lgv-tz-previous-'.$suffix, 'published' => false];
+    deploySave($work, $state);
+    foreach (['private', 'public'] as $key) {
+        // Establish ownership before copying, so cleanup can always identify even an incomplete stage.
+        if (!mkdir($state[$key.'_stage'], 0700) ||
+            file_put_contents($state[$key.'_stage'].'/.lgv-tz-install-owner', $state['token']) === false) {
+            throw new RuntimeException('Could not create refresh staging directories.');
+        }
+        foreach (new DirectoryIterator($state[$key]) as $entry) {
+            if ($entry->isDot() || $entry->getFilename() === '.lgv-tz-install-owner') { continue; }
+            $target = $state[$key.'_stage'].'/'.$entry->getFilename();
+            if ($entry->isLink()) { $ok = symlink(readlink($entry->getPathname()), $target); }
+            elseif ($entry->isDir()) { deployCopyTree($entry->getPathname(), $target); continue; }
+            else { $ok = copy($entry->getPathname(), $target) && chmod($target, $entry->getPerms() & 0777); }
+            if (!$ok) { throw new RuntimeException('Could not stage the existing installation.'); }
+        }
+    }
+    $privateStage = $state['private_stage'];
+    $publicStage = $state['public_stage'];
+    echo "Refreshing installed code; keeping the existing boundaries, configuration, and secret.\n";
+    deployRemoveTree($privateStage.'/app');
+    mkdir($privateStage.'/app', 0755);
+    $install($privateStage.'/app', $settings['driver'], dirname(__DIR__));
+    $package = Composer\InstalledVersions::getInstallPath(LGV_TZ_Lookup_Setup::PACKAGE);
+    $database = new LGV_TZ_Lookup_Database($settings['database'], $settings['user'], $settings['password'],
+        $settings['driver'], $settings['host'], $settings['port']);
+    require $package.'/src/TestLocations.php';
+    $lookup = new LGV_TZ_Lookup_Query($database);
+    $failures = 0;
+    foreach ($test_locations_param_array as $case) {
+        $lng = $case['params']['lng']; $lat = $case['params']['lat'];
+        while ($lng < -180) { $lng += 360; } while ($lng > 180) { $lng -= 360; }
+        while ($lat < -90) { $lat += 180; } while ($lat > 90) { $lat -= 180; }
+        if ($lookup->get_tz($lng, $lat) !== $case['result']) { ++$failures; }
+    }
+    if ($failures) { throw new RuntimeException($failures.' known-location tests failed; the existing installation was retained.'); }
+    foreach (['update.php', 'Setup.php'] as $file) {
+        if (!copy(__DIR__.'/'.$file, $privateStage.'/tools/'.$file)) { throw new RuntimeException('Could not refresh updater code.'); }
+    }
+    if (!copy(dirname(__DIR__).'/update.sh', $privateStage.'/update.sh')) { throw new RuntimeException('Could not refresh the updater command.'); }
+    $source = file_get_contents(__FILE__);
+    $license = explode("/***************************************************************************************************************************/\n/**\n    \\file", $source, 2)[0];
+    $relativePackage = substr($package, strlen($privateStage));
+    if (file_put_contents($publicStage.'/index.php', deployEndpointCode($private, $relativePackage, $license)) === false) {
+        throw new RuntimeException('Could not write the refreshed public entry point.');
+    }
+    foreach (['composer.phar', 'composer.sha256'] as $file) { if (is_file($privateStage.'/app/'.$file)) { unlink($privateStage.'/app/'.$file); } }
+    foreach (['composer-cache', 'composer-home'] as $dir) { if (is_dir($privateStage.'/app/'.$dir)) { deployRemoveTree($privateStage.'/app/'.$dir); } }
+    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($privateStage.'/app', FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
+    foreach ($files as $file) {
+        if (!$file->isLink() && !chmod($file->getPathname(), $file->isDir() || ($file->getPerms() & 0111) ? 0755 : 0644)) {
+            throw new RuntimeException('Could not set refreshed code permissions.');
+        }
+    }
+    if (!chgrp($privateStage, $group) || !chgrp($privateStage.'/config.php', $group) ||
+        !chmod($privateStage, 0750) || !chmod($privateStage.'/config.php', 0640) ||
+        !chmod($privateStage.'/update.sh', 0755) || !chmod($publicStage, 0755) || !chmod($publicStage.'/index.php', 0644)) {
+        throw new RuntimeException('Could not set refreshed installation permissions.');
+    }
+    $metadata = $existing['metadata'];
+    $metadata['service_url'] = $serviceUrl;
+    $metadata['known_location_checks'] = count($test_locations_param_array);
+    if (file_put_contents($privateStage.'/installation.json', json_encode($metadata, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)) === false) {
+        throw new RuntimeException('Could not write refreshed installation metadata.');
+    }
+    foreach (['private', 'public'] as $key) {
+        if (!rename($state[$key], $state[$key.'_backup']) || !rename($state[$key.'_stage'], $state[$key])) {
+            throw new RuntimeException('Could not publish refreshed code; recovery will restore the prior installation.');
+        }
+    }
+    $state['published'] = true;
+    deploySave($work, $state);
+    deployRefreshCleanup($work, $state);
+    $secretQuery = $existing['secret'] === '' ? '' : '&secret='.rawurlencode($existing['secret']);
+    echo 'Refreshed installed code; retained '.$count.' polygons; '.count($test_locations_param_array)." known locations passed.\n";
+    echo 'Public endpoint: '.$public.'/index.php'."\nPrivate configuration: ".$private.'/config.php'."\n";
+    echo 'Service URL: '.$serviceUrl."\n";
+    echo 'Example request: '.$serviceUrl.'?ll=-77.036543,38.895037'.$secretQuery."\n";
+    echo 'Test request: '.$serviceUrl.'?test'.$secretQuery."\n";
 }
 
 /***************************************************************************************************************************/
@@ -148,6 +364,7 @@ function deployCleanup(string $work): void {
     $file = $work.'/deployment.json';
     if (!is_file($file)) { return; }
     $state = json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR);
+    if (!empty($state['refresh'])) { deployRefreshCleanup($work, $state); return; }
     if (!empty($state['guard_created'])) {
         $connection = deployConnection($state['settings']);
         deployLock($connection);
@@ -190,11 +407,11 @@ function deployCleanup(string $work): void {
 /***************************************************************************************************************************/
 /**
     \brief This gathers settings, loads and tests the Composer package, then publishes the endpoint.
-    The web document root must exist. The public endpoint and private application directories must be new;
+    The selected web directory must exist. Existing installer-owned directories can be refreshed without reloading boundaries;
     private files must be outside the web document root. Existing timezones tables are refused before loading.
     \throws Exception if setup, validation, or publication fails.
 */
-function deployRun(string $work, bool $noSecret = false, $terminal = null): void {
+function deployRun(string $work, bool $noSecret = false, $terminal = null, ?callable $install = null): void {
     $started = hrtime(true);
     foreach (['curl', 'zip', 'mbstring', 'ctype', 'pdo', 'posix'] as $extension) {
         if (!extension_loaded($extension)) { throw new RuntimeException('The PHP '.$extension.' extension is required.'); }
@@ -220,10 +437,11 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
     $settings['password'] = deployAsk($terminal, 'Database password (input hidden; empty is allowed)', '', true);
     $settings['admin_database'] = $driver === 'pgsql' ? deployAsk($terminal, 'Administrative database (used if creating a database)', 'postgres') : '';
     $create = strtolower(deployAsk($terminal, 'Create the database if it does not exist? (y/n)', 'y')) === 'y';
-    $webRoot = realpath(deployAsk($terminal, 'Existing web document root', getcwd()));
-    if (false === $webRoot || !is_dir($webRoot) || !is_writable($webRoot)) { throw new RuntimeException('The web document root must be an existing writable directory.'); }
-    $endpoint = deployAsk($terminal, 'Service subdirectory', 'timezone');
-    if (!preg_match('/^[a-zA-Z0-9_-]+$/D', $endpoint)) { throw new RuntimeException('Use a simple service directory name.'); }
+    $webRoot = realpath(deployAsk($terminal, 'Existing web directory (filesystem path; parent of the new service)', getcwd()));
+    if (false === $webRoot || !is_dir($webRoot) || !is_writable($webRoot)) { throw new RuntimeException('The web directory must be an existing writable directory.'); }
+    $webUrl = deployAsk($terminal, 'Public URL of that directory (e.g. https://example.com/path)');
+    $endpoint = deployAsk($terminal, 'Service subdirectory (appended to the path and URL above)', 'timezone');
+    $serviceUrl = deployServiceUrl($webUrl, $endpoint);
     $private = deployAsk($terminal, 'Private application directory (outside the web root)', dirname($webRoot).'/lgv-tz-server');
     $parent = realpath(dirname($private));
     if (false === $parent || !is_writable($parent) || in_array(basename($private), ['.', '..', ''], true)) {
@@ -238,12 +456,16 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
         throw new RuntimeException('The private application directory must be outside the web document root.');
     }
     $public = $webRoot.'/'.$endpoint;
-    if (file_exists($private) || is_link($private) || file_exists($public) || is_link($public)) {
-        throw new RuntimeException('Installation directories already exist; choose new paths.');
-    }
+    $existing = file_exists($private) || is_link($private) || file_exists($public) || is_link($public)
+        ? deployExistingInstallation($private, $public, $settings) : null;
     $groupName = deployAsk($terminal, 'Group that runs PHP (for private-file access)', posix_getgrgid(posix_getegid())['name']);
     $group = posix_getgrnam($groupName);
     if (false === $group) { throw new RuntimeException('The PHP group does not exist.'); }
+    $install = $install ?? [LGV_TZ_Lookup_Setup::class, 'install'];
+    if ($existing !== null) {
+        deployRefresh($work, $settings, $private, $public, $group['gid'], $serviceUrl, $existing, $install);
+        return;
+    }
     $secret = !$noSecret && strtolower(deployAsk($terminal, 'Require a server secret? (y/n)', 'y')) !== 'n' ? bin2hex(random_bytes(32)) : '';
     $token = bin2hex(random_bytes(32));
     $privateStage = $parent.'/.lgv-tz-install-'.bin2hex(random_bytes(12));
@@ -282,7 +504,7 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
     $state['guard_created'] = true;
     deploySave($work, $state);
     mkdir($privateStage.'/app', 0755);
-    LGV_TZ_Lookup_Setup::install($privateStage.'/app', $driver, dirname(__DIR__));
+    $install($privateStage.'/app', $driver, dirname(__DIR__));
     $package = Composer\InstalledVersions::getInstallPath(LGV_TZ_Lookup_Setup::PACKAGE);
     echo "Downloading the latest timezone boundaries...\n";
     $release = LGV_TZ_Lookup_Setup::latestBoundaries($work);
@@ -331,11 +553,7 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
         throw new RuntimeException('Could not install the boundary update command.');
     }
     $relativePackage = substr($package, strlen($privateStage));
-    $endpointCode = $licenseHeader.
-        "define('__CONFIG_FILE_', ".var_export($private.'/config.php', true).");\n".
-        "ini_set('display_errors', '0');\ntry {\n    require ".var_export($private.'/app/vendor/autoload.php', true).";\n".
-        '    require '.var_export($private.$relativePackage.'/src/index.php', true).";\n} catch (Throwable \$error) {\n".
-        "    http_response_code(503);\n    error_log('Timezone service: '.\$error->getMessage());\n    echo 'Timezone service unavailable.';\n}\n";
+    $endpointCode = deployEndpointCode($private, $relativePackage, $licenseHeader);
     file_put_contents($publicStage.'/index.php', $endpointCode);
     chmod($publicStage.'/index.php', 0644);
     chmod($publicStage.'/.lgv-tz-install-owner', 0644);
@@ -350,7 +568,8 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
     }
     chmod($privateStage.'/app', 0755);
     file_put_contents($privateStage.'/installation.json', json_encode(['release' => $release['version'], 'archive_sha256' => $checksum,
-        'polygons' => $count, 'driver' => $driver, 'known_location_checks' => count($test_locations_param_array)], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
+        'polygons' => $count, 'driver' => $driver, 'known_location_checks' => count($test_locations_param_array),
+        'service_url' => $serviceUrl], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
     chmod($privateStage, 0750);
     chmod($publicStage, 0755);
     if (!rename($privateStage, $private) || !rename($publicStage, $public)) { throw new RuntimeException('Could not publish the installation directories.'); }
@@ -359,9 +578,12 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null): void
     printf("\nInstalled %d polygons; %d/%d known locations passed (%.3f ms mean lookup).\n", $count, count($test_locations_param_array), count($test_locations_param_array), $lookupSeconds * 1000 / count($test_locations_param_array));
     printf("Installation: %.2f s; PHP peak %.2f MiB.\n", (hrtime(true) - $started) / 1e9, memory_get_peak_usage() / 1048576);
     echo 'Public endpoint: '.$public."/index.php\nPrivate configuration: ".$private."/config.php\n";
+    echo 'Service URL: '.$serviceUrl."\n";
     echo 'Boundary updater: '.$private."/update.sh (use --check to report the latest release).\n";
     echo $secret === '' ? "Server secret: disabled.\n" : 'Server secret: '.$secret."\n";
-    echo 'Example request: /'.$endpoint.'/?ll=-77.036543,38.895037'.($secret === '' ? '' : '&secret='.$secret)."\n";
+    $secretQuery = $secret === '' ? '' : '&secret='.rawurlencode($secret);
+    echo 'Example request: '.$serviceUrl.'?ll=-77.036543,38.895037'.$secretQuery."\n";
+    echo 'Test request: '.$serviceUrl.'?test'.$secretQuery."\n";
     echo "Boundary downloads deleted. The installed database is retained.\n";
 }
 

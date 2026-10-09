@@ -71,7 +71,11 @@ var NAVTREE =
     [ "Detailed Usage Guide", "md_docs_2guide.html", [
       [ "Loading Boundaries for a Library Application", "md_docs_2guide.html#loading-boundaries-for-a-library-application", null ],
       [ "Composer Details", "md_docs_2guide.html#composer-details", null ],
-      [ "Deploying a Server", "md_docs_2guide.html#deploying-a-server", null ],
+      [ "Deploying a Server", "md_docs_2guide.html#deploying-a-server", [
+        [ "Choosing the Web Directory and Service Subdirectory", "md_docs_2guide.html#choosing-the-web-directory-and-service-subdirectory", null ],
+        [ "Completing the Installation", "md_docs_2guide.html#completing-the-installation", null ]
+      ] ],
+      [ "Upgrading an Existing Installation", "md_docs_2guide.html#upgrading-an-existing-installation", null ],
       [ "Updater Details", "md_docs_2guide.html#updater-details", null ],
       [ "Turnkey Command-line Demo", "md_docs_2guide.html#turnkey-command-line-demo", [
         [ "What Happens During a Run?", "md_docs_2guide.html#what-happens-during-a-run", null ],
@@ -107,7 +111,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_l_g_v___t_z___lookup___database_8class_8php.html",
-"md_docs_2guide.html#step-2-prepare-dependencies-on-your-development-machine"
+"md_docs_2guide.html#query-performance"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

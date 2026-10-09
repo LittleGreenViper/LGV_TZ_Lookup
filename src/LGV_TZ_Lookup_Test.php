@@ -29,12 +29,35 @@
 declare(strict_types = 1);
 
 /***************************************************************************************************************************/
+/** \brief Summarize request lookup timings and the PHP request's peak memory. */
+function test_server_performance(array $nanoseconds, int|float $elapsed, int $peakMemory): string {
+    sort($nanoseconds, SORT_NUMERIC);
+    $samples = count($nanoseconds);
+    if ($samples === 0) { return ''; }
+    $middle = intdiv($samples, 2);
+    $median = $samples % 2 ? $nanoseconds[$middle] : ($nanoseconds[$middle - 1] + $nanoseconds[$middle]) / 2;
+    $p95 = $nanoseconds[(int)ceil($samples * 0.95) - 1];
+    return '<section><h2>Performance</h2><ul>'.
+        '<li>Lookups measured: '.$samples.'</li>'.
+        sprintf('<li>Total test time: %.3f s</li>', $elapsed / 1e9).
+        sprintf('<li>Average lookup: %.3f ms</li>', array_sum($nanoseconds) / $samples / 1e6).
+        sprintf('<li>Median lookup: %.3f ms</li>', $median / 1e6).
+        sprintf('<li>95th-percentile lookup: %.3f ms</li>', $p95 / 1e6).
+        sprintf('<li>Slowest lookup: %.3f ms</li>', $nanoseconds[$samples - 1] / 1e6).
+        sprintf('<li>PHP request peak memory: %.2f MiB</li>', $peakMemory / 1048576).
+        '</ul><p>Lookup timings include configuration loading, authentication, the database connection, and the query. '.
+        'They exclude HTTP transport and browser rendering. Peak memory includes this PHP request and its test results; '.
+        'database server memory is outside this measurement.</p></section>';
+}
+
+/***************************************************************************************************************************/
 /**
 This is a basic tester. It runs a list of long/lat pairs through the server, and compares the results, with the expected ones.
 
 \returns: HTML of the results.
  */
 function test_server() {
+    $started = hrtime(true);
     /***********************************************************************************************************************/
     /**
     This is a simple generator for query strings, based on the given long/lat.
@@ -67,13 +90,17 @@ function test_server() {
     function _callTestServer(   $inTitle,   ///< The title to display
                                 $inLng,     ///< The longitude to use
                                 $inLat,     ///< The latitude to use
-                                $inResult   ///< The expected result
+                                $inResult,   ///< The expected result
+                                array &$timings ///< Lookup duration samples in nanoseconds.
                             ) {
         global $count;
         global $failures;
         $count++;
         $queryString = _testllGen($inLng, $inLat);
+        $lookupStarted = hrtime(true);
         $result = call_server($queryString, false);
+        $duration = hrtime(true) - $lookupStarted;
+        $timings[] = $duration;
         $style = $result == $inResult ? "pass" : "fail";
         $failAddendum = "";
         if ($result != $inResult) {
@@ -83,7 +110,8 @@ function test_server() {
         }
         $ret = "<strong class=\"$style\" id=\"test-$count\">$inTitle</strong>";
         $ret .= "<ul><li>Longitude: $inLng</li><li>Latitude: $inLat</li>";
-        $ret .= "<li>Result: &quot;$result&quot;$failAddendum</li></ul>";
+        $ret .= "<li>Result: &quot;$result&quot;$failAddendum</li>";
+        $ret .= sprintf('<li>Lookup time: %.3f ms</li></ul>', $duration / 1e6);
         
         return $ret;
     }
@@ -93,6 +121,7 @@ function test_server() {
     $ret = '';
     $count = 0;
     $failures = [];
+    $timings = [];
     
     include __DIR__.'/TestLocations.php';   // This establishes the $test_locations_param_array
     
@@ -100,7 +129,7 @@ function test_server() {
         $orig_longitude = isset($test['params']['lng']) ? $test['params']['lng'] : NULL;
         $orig_latitude = isset($test['params']['lat']) ? $test['params']['lat'] : NULL;
         
-        $ret .= _callTestServer($test['title'], $orig_longitude, $orig_latitude, $test['result']);
+        $ret .= _callTestServer($test['title'], $orig_longitude, $orig_latitude, $test['result'], $timings);
     }
     
     if (!empty($failures)) {
@@ -115,5 +144,5 @@ function test_server() {
         $ret = '<h2 class="pass">All Tests ('.$count.') Passed!</h2>'.$ret;
     }
     
-    return $ret;
+    return $ret.test_server_performance($timings, hrtime(true) - $started, memory_get_peak_usage(true));
 };

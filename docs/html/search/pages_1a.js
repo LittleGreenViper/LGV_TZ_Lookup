@@ -5,6 +5,7 @@ var searchData=
   ['update_20command_2',['Update Command',['../documentation_guide.html#update-command',1,'']]],
   ['updater_20details_3',['Updater Details',['../md_docs_2guide.html#updater-details',1,'']]],
   ['updating_20the_20boundary_20data_4',['Updating the Boundary Data',['../index.html#updating-the-boundary-data',1,'']]],
-  ['usage_20guide_5',['Detailed Usage Guide',['../md_docs_2guide.html',1,'']]],
-  ['user_20on_20the_20server_6',['Step 3: Create the Database and Application User on the Server',['../md_docs_2guide.html#step-3-create-the-database-and-application-user-on-the-server',1,'']]]
+  ['upgrading_20an_20existing_20installation_5',['Upgrading an Existing Installation',['../md_docs_2guide.html#upgrading-an-existing-installation',1,'']]],
+  ['usage_20guide_6',['Detailed Usage Guide',['../md_docs_2guide.html',1,'']]],
+  ['user_20on_20the_20server_7',['Step 3: Create the Database and Application User on the Server',['../md_docs_2guide.html#step-3-create-the-database-and-application-user-on-the-server',1,'']]]
 ];

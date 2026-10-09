@@ -32,6 +32,7 @@
         "test": "@php tests/regression.php",
         "test:composer": "@php tests/composer.php --with-loader",
         "test:demo": "@php tests/demo.php",
+        "test:server": ["@php tests/server.php", "@php tests/server.php --failure"],
         "test:mysql": "@php tests/databases.php --driver=mysql",
         "test:postgres": "@php tests/databases.php --driver=pgsql",
         "test:deploy:mysql": "@php tests/deploy.php --driver=mysql",

@@ -4,7 +4,7 @@ var indexSectionsWithContent =
   1: "dlst",
   2: "bcdfgilmnrstu",
   3: "_cdegikloprstuvwz",
-  4: "$defipt",
+  4: "$_defipt",
   5: "123456789abcdefghilmopqrstuvwy"
 };
 

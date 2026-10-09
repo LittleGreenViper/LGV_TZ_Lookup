@@ -13,6 +13,7 @@ var searchData=
   ['updaterun_10',['updateRun',['../tools_2update_8php.html#ae56bbfb1df6519aa573f0903fee61351',1,'update.php']]],
   ['updatesettings_11',['updateSettings',['../tools_2update_8php.html#a3084e6e2b793fb27d3904ad5f5a3bca4',1,'update.php']]],
   ['updating_20the_20boundary_20data_12',['Updating the Boundary Data',['../index.html#updating-the-boundary-data',1,'']]],
-  ['usage_20guide_13',['Detailed Usage Guide',['../md_docs_2guide.html',1,'']]],
-  ['user_20on_20the_20server_14',['Step 3: Create the Database and Application User on the Server',['../md_docs_2guide.html#step-3-create-the-database-and-application-user-on-the-server',1,'']]]
+  ['upgrading_20an_20existing_20installation_13',['Upgrading an Existing Installation',['../md_docs_2guide.html#upgrading-an-existing-installation',1,'']]],
+  ['usage_20guide_14',['Detailed Usage Guide',['../md_docs_2guide.html',1,'']]],
+  ['user_20on_20the_20server_15',['Step 3: Create the Database and Application User on the Server',['../md_docs_2guide.html#step-3-create-the-database-and-application-user-on-the-server',1,'']]]
 ];

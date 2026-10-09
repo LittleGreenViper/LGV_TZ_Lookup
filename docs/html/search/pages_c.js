@@ -15,8 +15,9 @@ var searchData=
   ['detailed_20usage_20guide_12',['Detailed Usage Guide',['../md_docs_2guide.html',1,'']]],
   ['details_13',['Details',['../md_docs_2guide.html#composer-details',1,'Composer Details'],['../md_docs_2guide.html#updater-details',1,'Updater Details']]],
   ['development_20machine_14',['Step 2: Prepare Dependencies on Your Development Machine',['../md_docs_2guide.html#step-2-prepare-dependencies-on-your-development-machine',1,'']]],
-  ['documentation_15',['Documentation',['../documentation_guide.html',1,'Building and Browsing the Documentation'],['../md_docs_2guide.html#generating-the-html-documentation',1,'Generating the HTML Documentation']]],
-  ['does_20this_20solve_16',['What Problem Does This Solve?',['../index.html#what-problem-does-this-solve',1,'']]],
-  ['doxygen_20configuration_17',['Doxygen Configuration',['../documentation_guide.html#doxygen-configuration',1,'']]],
-  ['during_20a_20run_18',['What Happens During a Run?',['../md_docs_2guide.html#what-happens-during-a-run',1,'']]]
+  ['directory_20and_20service_20subdirectory_15',['Choosing the Web Directory and Service Subdirectory',['../md_docs_2guide.html#choosing-the-web-directory-and-service-subdirectory',1,'']]],
+  ['documentation_16',['Documentation',['../documentation_guide.html',1,'Building and Browsing the Documentation'],['../md_docs_2guide.html#generating-the-html-documentation',1,'Generating the HTML Documentation']]],
+  ['does_20this_20solve_17',['What Problem Does This Solve?',['../index.html#what-problem-does-this-solve',1,'']]],
+  ['doxygen_20configuration_18',['Doxygen Configuration',['../documentation_guide.html#doxygen-configuration',1,'']]],
+  ['during_20a_20run_19',['What Happens During a Run?',['../md_docs_2guide.html#what-happens-during-a-run',1,'']]]
 ];

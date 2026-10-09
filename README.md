@@ -64,7 +64,11 @@ It asks for database and server settings, downloads and loads the latest boundar
 https://your-server/timezone/?ll=-77.036543,38.895037&secret=<YOUR SECRET>
 ```
 
+Enter an existing web directory's filesystem path and the public URL that maps to that directory. The installer appends the service subdirectory (default `timezone`) to both. It prints the complete service, lookup, and test URLs, including any existing URL prefix. Use those URLs to access the installed service.
+
 Use `./deploy.sh --no-secret` for public access. You need an existing PHP-enabled web server and database service. See the [deployment guide](docs/guide.md#deploying-a-server) for prerequisites, directory choices, and recovery.
+
+Starting with **1.4.2**, rerun the updated `./deploy.sh` with the same database settings, public service directory, and private directory to refresh an installer-owned service. It retains the existing boundaries, configuration, and secret. See [upgrading an existing installation](docs/guide.md#upgrading-an-existing-installation). The printed test URL now includes lookup timing and PHP memory metrics.
 
 ### What to Copy to the Server
 

@@ -8,6 +8,6 @@ var searchData=
   ['initial_20boundary_20loading_5',['Initial Boundary Loading',['../index.html#initial-boundary-loading',1,'']]],
   ['initial_20setup_6',['Initial Setup',['../md_docs_2guide.html#initial-setup',1,'']]],
   ['install_7',['install',['../class_l_g_v___t_z___lookup___setup.html#a36339d82750e877493d897586fe4a41d',1,'LGV_TZ_Lookup_Setup']]],
-  ['installation_8',['Step-by-Step Server Installation',['../md_docs_2guide.html#step-by-step-server-installation',1,'']]],
+  ['installation_8',['Installation',['../md_docs_2guide.html#completing-the-installation',1,'Completing the Installation'],['../md_docs_2guide.html#step-by-step-server-installation',1,'Step-by-Step Server Installation'],['../md_docs_2guide.html#upgrading-an-existing-installation',1,'Upgrading an Existing Installation']]],
   ['integration_20tests_9',['Database Integration Tests',['../md_docs_2guide.html#database-integration-tests',1,'']]]
 ];

@@ -30,7 +30,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="icon.png"/></td>
   <td id="projectalign">
-   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.1</span>
+   <div id="projectname">LGV_TZ_Lookup<span id="projectnumber">&#160;1.4.2</span>
    </div>
    <div id="projectbrief">Time zone lookup for PHP applications and HTTP clients</div>
   </td>
@@ -154,7 +154,9 @@ One-Command Server Deployment</h2>
 <div class="fragment"><div class="line">./deploy.sh</div>
 </div><!-- fragment --><p>It asks for database and server settings, downloads and loads the latest boundaries, tests the lookups, and installs the endpoint. A random server secret is enabled by default. The final output gives you the secret and a request URL, such as:</p>
 <div class="fragment"><div class="line">https://your-server/timezone/?ll=-77.036543,38.895037&amp;secret=&lt;YOUR SECRET&gt;</div>
-</div><!-- fragment --><p>Use <span class="tt">./deploy.sh --no-secret</span> for public access. You need an existing PHP-enabled web server and database service. See the <a href="md_docs_2guide.html#deploying-a-server">deployment guide</a> for prerequisites, directory choices, and recovery.</p>
+</div><!-- fragment --><p>Enter an existing web directory's filesystem path and the public URL that maps to that directory. The installer appends the service subdirectory (default <span class="tt">timezone</span>) to both. It prints the complete service, lookup, and test URLs, including any existing URL prefix. Use those URLs to access the installed service.</p>
+<p>Use <span class="tt">./deploy.sh --no-secret</span> for public access. You need an existing PHP-enabled web server and database service. See the <a href="md_docs_2guide.html#deploying-a-server">deployment guide</a> for prerequisites, directory choices, and recovery.</p>
+<p>Starting with <b>1.4.2</b>, rerun the updated <span class="tt">./deploy.sh</span> with the same database settings, public service directory, and private directory to refresh an installer-owned service. It retains the existing boundaries, configuration, and secret. See <a href="md_docs_2guide.html#upgrading-an-existing-installation">upgrading an existing installation</a>. The printed test URL now includes lookup timing and PHP memory metrics.</p>
 <h3 class="doxsection"><a class="anchor" id="what-to-copy-to-the-server"></a>
 What to Copy to the Server</h3>
 <p>Run <span class="tt">./deploy.sh</span> <b>on the server</b> to have the installer create the public endpoint and private application. You can transfer a checkout first, or use the guide's download command.</p>

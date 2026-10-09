@@ -1,0 +1,13 @@
+<map id="deployRefresh" name="deployRefresh">
+<area shape="rect" id="Node000001" title="Refresh owned installed code using existing polygons, retaining the configuration and secret." alt="" coords="5,103,112,128"/>
+<area shape="poly" id="edge5_Node000001_Node000001" title=" " alt="" coords="31,104,25,94,28,85,40,78,59,76,81,79,91,88,88,92,79,84,59,81,41,83,32,88,30,94,35,101"/>
+<area shape="rect" id="Node000002" href="$tools_2deploy_8php.html#a0fc8457b194b2fffaaccf80161d04576" title="This opens the configured application or administrative database." alt="" coords="161,29,287,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,100,159,64,174,57,176,62,161,68,86,105"/>
+<area shape="rect" id="Node000003" href="$tools_2deploy_8php.html#a46ca6e59730ca52a37ac10142ebfa216" title="This prevents two installers from loading the same database concurrently." alt="" coords="180,103,268,128"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="112,113,166,113,166,118,112,118"/>
+<area shape="rect" id="Node000004" href="$tools_2deploy_8php.html#aba97a74bb6032ad9511613e5c70c7c10" title="This checks for an existing table without attempting to create or replace it." alt="" coords="160,176,288,201"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="89,126,183,168,181,173,87,131"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="196,31,190,21,194,11,205,5,224,3,247,6,256,15,253,19,244,11,224,8,207,10,198,15,196,20,201,28"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="196,104,190,94,194,85,205,78,224,76,247,79,256,88,253,92,244,84,224,81,207,83,198,88,196,94,201,101"/>
+<area shape="poly" id="edge7_Node000004_Node000004" title=" " alt="" coords="196,177,190,168,194,158,205,152,224,149,247,153,256,161,253,165,244,158,224,155,207,157,198,161,196,167,201,174"/>
+</map>

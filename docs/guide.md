@@ -5,6 +5,7 @@ Start with the [README](../README.md) for installation and a basic lookup. This 
 - [Loading boundaries for a library application](#loading-boundaries-for-a-library-application)
 - [Composer details](#composer-details)
 - [Server deployment](#deploying-a-server)
+- [Upgrading an existing installation](#upgrading-an-existing-installation)
 - [Updating boundary data](#updater-details)
 - [Command-line demo and metrics](#turnkey-command-line-demo)
 - [Step-by-step server installation (MySQL or PostgreSQL)](#step-by-step-server-installation)
@@ -73,9 +74,37 @@ From a checkout, run:
 
 [deploy.sh](../deploy.sh) is the shell entrypoint; [tools/deploy.php](../tools/deploy.php) performs the installation and recovery.
 
-The installer asks for the database driver, host, port, name, user, and password. Password input is hidden. You can use an existing database with no `timezones` table, or let the installer create a new database if the user has permission.
+The installer asks for the database driver, host, port, name, user, and password. Password input is hidden. For a new installation, use a database with no `timezones` table, or let the installer create a new database if the user has permission. For a rerun over an installed service, use the existing settings and paths as described under [upgrading an existing installation](#upgrading-an-existing-installation).
 
-It then asks for your existing web document root, a service subdirectory, a private application directory, and the group that runs PHP. For example, you might use `/var/www/html` as the web root, `timezone` as the service directory, `/var/www/lgv-tz-server` for the private application, and `www-data` for the PHP group. The private directory must be outside the web root, and both installation directories must be new.
+### Choosing the Web Directory and Service Subdirectory
+
+The installer asks for an **existing web directory on disk**, the **public URL that maps to that directory**, and a **new service subdirectory**. It creates the service subdirectory inside the selected directory and appends that same name to the URL. A command-line installer cannot infer your domain or URL prefix from a filesystem path, so enter the matching URL explicitly.
+
+The web server's **document root** is the directory mapped to the site's root URL. For example, `/var/www/html` might map to `https://example.com/`. You can select that root or an existing served directory beneath it. If you select a nested directory, include its full URL prefix in the URL answer. The suggested filesystem path is your current working directory; check it before accepting it.
+
+For example, these answers reproduce a shared-hosting layout with a checkout in a nested web directory:
+
+| Installer setting | Example answer |
+| --- | --- |
+| Existing web directory (filesystem path) | `/home/account/public_html/recovrr/timezones` |
+| Public URL of that directory | `https://example.com/recovrr/timezones` |
+| New service subdirectory | `timezone` |
+| Private application directory | `/home/account/timezones` |
+| Group that runs PHP | `account` |
+
+The result is:
+
+```text
+Public endpoint: /home/account/public_html/recovrr/timezones/timezone/index.php
+Private configuration: /home/account/timezones/config.php
+Service URL: https://example.com/recovrr/timezones/timezone/
+```
+
+Accepting the default `timezone` **adds a `/timezone/` directory**. To create a service at `https://example.com/recovrr/timezones/`, select `/home/account/public_html/recovrr` as the existing directory, enter `https://example.com/recovrr` as its public URL, and enter `timezones` as the service subdirectory. For a new installation, the resulting service directory and private application directory must both be new. Version 1.4.2 can refresh existing directories only when both belong to the same previous installer deployment; it refuses unrelated directories or a source checkout as the service target.
+
+The private application directory must be outside the site's actual document root, such as outside all of `public_html`, including when you selected a nested web directory. The installer writes the chosen private configuration path into the generated public entry point automatically. Use the printed **Service URL** and **Test request** to access the installed service. The checkout's `src/index.php` is a separate entry point with its own configuration default.
+
+### Completing the Installation
 
 By default, it creates a random 256-bit server secret. The final output gives you that secret and an example request. It also saves the secret in the private `config.php`, with the database settings. You can answer `n` to the secret prompt, or start with:
 
@@ -83,13 +112,16 @@ By default, it creates a random 256-bit server secret. The final output gives yo
 ./deploy.sh --no-secret
 ```
 
-The installer uses Composer to install a copy of the checkout, downloads the latest full timezone boundaries with oceans, loads them, and runs all 200 known-location tests. Only after those tests pass does it publish `index.php` in your selected service directory. The existing PHP-enabled web server can then serve requests such as:
+The installer uses Composer to install a copy of the checkout, downloads the latest full timezone boundaries with oceans, loads them, and runs all 200 known-location tests. Only after those tests pass does it publish `index.php` in your selected service directory. The final output includes complete lookup and test URLs, preserving the public URL prefix you entered. For the example above:
 
 ```text
-https://your-server/timezone/?ll=-77.036543,38.895037&secret=<GENERATED SECRET>
+Example request: https://example.com/recovrr/timezones/timezone/?ll=-77.036543,38.895037&secret=<GENERATED SECRET>
+Test request: https://example.com/recovrr/timezones/timezone/?test&secret=<GENERATED SECRET>
 ```
 
 If the secret is disabled, omit that query argument. A missing or incorrect secret receives HTTP 403. The final report includes polygon count, test results, mean lookup latency, installation time, and PHP peak memory.
+
+The browser test report includes a Performance section with the lookup count, total test time, average, median, 95th-percentile and slowest lookup times, and PHP request peak memory. Each location also shows its lookup time. Browser-test lookup timings include configuration loading, authentication, a new database connection, and the query; the installer's known-location loop reuses its connection, so its mean timing measures different work. HTTP transport and browser rendering are outside these server-side timings. PHP request memory includes the generated results page and excludes the database server's memory.
 
 The compressed and extracted boundaries are deleted after loading. **The installed database is retained.** An interrupted or failed installation removes its temporary files and rolls back its own tables or newly created database. A random ownership marker prevents cleanup from adopting unrelated tables or directories. If cleanup cannot reach the database, it retains a private recovery directory and prints its location. Retry with:
 
@@ -108,6 +140,35 @@ curl -fsSL https://raw.githubusercontent.com/LittleGreenViper/LGV_TZ_Lookup/main
 ```
 
 That form also needs command-line `curl` and `tar`. It fetches the installer from `main`, then performs the same prompted installation. To disable the secret, end the command with `sh -s -- --no-secret`.
+
+## Upgrading an Existing Installation
+
+Use **the 1.4.2 or later checkout's `deploy.sh`** on the server. Leave the populated database, the installed public directory, and the private directory—including `config.php`—in place. Refresh mode recognizes the matching `.lgv-tz-install-owner` records in both directories and checks that the entered database settings match the private configuration. It preserves that configuration file byte for byte and keeps the existing secret, including when `--no-secret` is supplied; that option controls new installations only.
+
+1. Transfer the updated source checkout, or update your existing source checkout. This is the directory containing `deploy.sh`, `composer.json`, `src/`, and `tools/`; keep it separate from the installed private application and public service subdirectory.
+2. From the updated checkout, run `./deploy.sh` as the same deployment user. Enter the existing database settings. Answer `n` to creating a database.
+3. Enter the same existing web directory, its corresponding public URL, the same service subdirectory, and the same private application directory. Choose the PHP group used by the original deployment. On a rerun, there is no new-secret prompt.
+4. The installer prints `Refreshing installed code; keeping the existing boundaries, configuration, and secret.` It installs and tests the updated package against the existing polygons, then publishes the refreshed code and updater. It does not download boundaries, reload the table, or change database contents.
+5. Wait for `Refreshed installed code` and use the printed complete **Test request** URL. Check the test results and the Performance section. Use the private `update.sh` separately when you want to refresh boundary data.
+
+For the shared-hosting layout above, use these directory answers on every rerun:
+
+```text
+Existing web directory: /home/account/public_html/recovrr/timezones
+Public URL of that directory: https://example.com/recovrr/timezones
+Service subdirectory: timezone
+Private application directory: /home/account/timezones
+```
+
+This refreshes `/home/account/public_html/recovrr/timezones/timezone/index.php`. It preserves `/home/account/timezones/config.php` and prints `https://example.com/recovrr/timezones/timezone/` as the service URL.
+
+Code is prepared and tested in staging directories before publication. Additional public/private files are carried forward. The directory switch can briefly interrupt requests. If copying, dependency installation, or lookup validation fails, the old service remains. If publication is interrupted, the shell's cleanup restores the prior directories without altering the database. If cleanup cannot finish, it prints a recovery directory; retry using the **updated checkout**:
+
+```bash
+php tools/deploy.php cleanup '<RECOVERY DIRECTORY>'
+```
+
+Manual installations without the installer ownership records cannot use this refresh mode. Follow the manual copy instructions to update those installations while preserving their configuration and populated database.
 
 ## Updater Details
 
@@ -346,7 +407,7 @@ Those checks cover holes, ocean fallback, boundary offsets, decoder block transi
 
 Follow the same installation steps for **MySQL or PostgreSQL**; choose the matching database commands in step 3 and settings in step 5. These examples put the database on the same server as PHP, the private application at `/var/www/lgv-tz-server`, and the public endpoint at `/var/www/html/timezone`. Substitute your own paths and hostname throughout.
 
-The prompted [installer](#deploying-a-server) can automate copying, configuration, loading, and verification. Run `./deploy.sh` on the destination server, with the database credentials from step 3, then follow its prompts. The steps below describe the complete manual installation and exactly what to transfer.
+The prompted [installer](#deploying-a-server) automates copying, configuration, loading, and verification. With that route, check the prerequisites in step 1, prepare the database credentials in step 3, run `./deploy.sh` on the destination server, and follow [the web directory and service subdirectory instructions](#choosing-the-web-directory-and-service-subdirectory). The installer prints the final service URL and writes the private configuration path automatically. The complete numbered steps below describe **manual installation**, including the files to transfer and the public entry point to create yourself.
 
 ### Step 1: Check the Server Prerequisites
 
@@ -434,6 +495,8 @@ Create your private application directory outside the web document root, and you
 ```bash
 sudo mkdir -p /var/www/lgv-tz-server /var/www/html/timezone
 ```
+
+Here `/var/www/html` is the existing web document root, and `timezone` is the service subdirectory. If that root is served at `https://example.com/`, the service URL is `https://example.com/timezone/`. Adapt the filesystem directory and its matching URL together for a nested site. This manual layout uses the same parent-directory-plus-service-subdirectory relationship as the installer.
 
 Copy **only these repository items**, keeping the relative paths, into `/var/www/lgv-tz-server/` (or your chosen private directory outside the web document root):
 
@@ -600,6 +663,8 @@ https://tz.example.com/timezone/?test&secret=your-server-secret
 
 The tests return an HTML page with green passes and red failures. Review failures against the boundary release you loaded, especially if you chose a different dataset variant. A 403 response indicates an incorrect or missing secret. A 503 response indicates a PHP/configuration/database error; check the web server's PHP error log.
 
+The Performance section reports total test time, average, median, 95th-percentile and slowest lookup times, and PHP request peak memory. Each location has its own lookup duration. Use the same endpoint and boundary database when comparing releases. Timings include the per-location database connection and query; HTTP/network and browser time are excluded.
+
 ### Step 9: Update Boundary Data Later
 
 For either backend, run the copied updater on the server as the deployment user. It defaults to the private `config.php` at the application root:
@@ -661,6 +726,8 @@ composer test:postgres
 ```
 
 Run `composer test:deploy:mysql` and `composer test:deploy:postgres` to check installer rollback, preservation of unrelated data, and ownership refusals. These use small temporary fixtures and do not download boundaries.
+
+Those deployment checks also verify refreshing a populated installation, preserving its configuration and secret, interrupted-publication recovery, and the complete printed URL. Add `--real-composer` to `php tests/deploy.php --driver=pgsql` (or `mysql`) to exercise an actual Composer installation of the small local package fixture. Run `composer test:server` for deterministic performance-summary checks and passing/failing location-report fixtures without a database server.
 
 They cover loading and schema reset, binary values (including zero bytes), ocean/named-zone precedence, polygons crossing decoding blocks, early reader cleanup, error recovery, and caller-owned transactions. A 24 MiB binary fixture checks bounded PHP memory; PostgreSQL tests also check the native result-buffer size when the driver exposes it. Override connection defaults with `LGV_TZ_TEST_HOST`, `LGV_TZ_TEST_PORT`, `LGV_TZ_TEST_USER`, `LGV_TZ_TEST_PASSWORD`, and `LGV_TZ_TEST_ADMIN_DATABASE`.
 

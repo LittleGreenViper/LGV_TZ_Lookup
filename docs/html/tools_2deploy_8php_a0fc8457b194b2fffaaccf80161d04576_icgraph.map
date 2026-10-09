@@ -1,4 +1,7 @@
 <map id="deployConnection" name="deployConnection">
-<area shape="rect" id="Node000001" title="This opens the configured application or administrative database." alt="" coords="5,29,132,55"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="90,18,83,11,69,8,56,10,49,14,48,20,52,28,47,30,43,21,45,11,54,5,69,3,86,6,94,14"/>
+<area shape="rect" id="Node000001" title="This opens the configured application or administrative database." alt="" coords="160,29,287,55"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="252,19,243,11,223,8,206,10,197,15,196,20,201,28,196,31,190,21,193,11,205,5,223,3,246,6,255,15"/>
+<area shape="rect" id="Node000002" href="$tools_2deploy_8php.html#ae4684d07a620d98a2bad6c377a61f20b" title="Refresh owned installed code using existing polygons, retaining the configuration and secret." alt="" coords="5,29,112,55"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="146,45,112,45,112,39,146,39"/>
+<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="87,19,79,11,59,8,42,10,33,15,31,20,36,28,31,31,26,21,29,11,40,5,59,3,81,6,91,15"/>
 </map>
