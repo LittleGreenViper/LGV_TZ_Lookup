@@ -72,6 +72,81 @@ $admin->exec('CREATE DATABASE '.deployIdentifier($name, $driver));
 $work = sys_get_temp_dir().'/lgv-tz-deploy-test-'.bin2hex(random_bytes(8));
 mkdir($work, 0700);
 try {
+    // Fresh installations can use directories prepared by the operator. Publication and rollback preserve ownership.
+    foreach (['before-publication', 'interrupted', 'interrupted-before-stage', 'interrupted-both',
+        'published', 'new-file', 'public-new-file', 'changed-identity'] as $scenario) {
+        $caseWork = $work.'/empty-'.$scenario;
+        mkdir($caseWork, 0700);
+        $privateTarget = $caseWork.'/private'; $publicTarget = $caseWork.'/public';
+        mkdir($privateTarget, 0750); mkdir($publicTarget, 0700);
+        $empty = deployEmptyDirectories(['private' => $privateTarget, 'public' => $publicTarget]);
+        deployCheck(['private', 'public'], array_keys($empty), 'Recognize pre-existing empty destinations');
+        $token = bin2hex(random_bytes(32));
+        $directoryState = ['private' => $privateTarget, 'public' => $publicTarget,
+            'private_stage' => $caseWork.'/private-stage', 'public_stage' => $caseWork.'/public-stage',
+            'token' => $token, 'published' => false, 'empty_directories' => $empty];
+        foreach (['private_stage', 'public_stage'] as $key) {
+            mkdir($directoryState[$key], 0700);
+            file_put_contents($directoryState[$key].'/.lgv-tz-install-owner', $token);
+            file_put_contents($directoryState[$key].'/fixture.txt', 'installed file');
+        }
+        deploySave($caseWork, $directoryState);
+        $privatePermissions = fileperms($privateTarget) & 0777;
+        $privateOwner = fileowner($privateTarget); $privateGroup = filegroup($privateTarget);
+        if ($scenario === 'interrupted') {
+            // Stop after the private directory switched, while the original public directory is still in place.
+            rename($privateTarget, $empty['private']['backup']);
+            rename($directoryState['private_stage'], $privateTarget);
+        } elseif ($scenario === 'interrupted-before-stage') {
+            rename($privateTarget, $empty['private']['backup']);
+        } elseif ($scenario === 'interrupted-both') {
+            deployPublishDirectories($directoryState);
+        } elseif ($scenario === 'published') {
+            deployPublishDirectories($directoryState);
+            $directoryState['published'] = true;
+            deploySave($caseWork, $directoryState);
+        } elseif ($scenario === 'new-file' || $scenario === 'public-new-file') {
+            $noteTarget = $scenario === 'new-file' ? $privateTarget : $publicTarget;
+            file_put_contents($noteTarget.'/.operator-note', 'keep this new file');
+            try { deployPublishDirectories($directoryState); throw new RuntimeException('Expected changed-directory refusal.'); }
+            catch (RuntimeException $error) { deployCheck(true, str_contains($error->getMessage(), 'changed during'), 'Refuse publication after a hidden file appears'); }
+        } elseif ($scenario === 'changed-identity') {
+            rename($privateTarget, $caseWork.'/original-private');
+            mkdir($privateTarget, 0700);
+            try { deployPublishDirectories($directoryState); throw new RuntimeException('Expected replaced-directory refusal.'); }
+            catch (RuntimeException $error) { deployCheck(true, str_contains($error->getMessage(), 'changed during'), 'Refuse an empty directory replaced during installation'); }
+            // The replacement belongs to someone else. Recovery refuses it without deleting it.
+            try { deployCleanup($caseWork); throw new RuntimeException('Expected replacement ownership refusal.'); }
+            catch (RuntimeException $error) { deployCheck(true, str_contains($error->getMessage(), 'ownership differs'), 'Cleanup preserves the replacement directory'); }
+            deployCheck(true, is_dir($privateTarget), 'Replacement directory survives');
+            rmdir($privateTarget); rename($caseWork.'/original-private', $privateTarget);
+        }
+        deployCleanup($caseWork);
+        deployCheck(false, is_file($caseWork.'/deployment.json'), 'Cleanup completes for empty destinations');
+        deployCheck([], glob($caseWork.'/.lgv-tz-empty-*'), 'No empty-directory backups left');
+        if ($scenario === 'published') {
+            deployCheck('installed file', file_get_contents($privateTarget.'/fixture.txt'), 'Publish into the selected private directory');
+            deployCheck('installed file', file_get_contents($publicTarget.'/fixture.txt'), 'Publish into the selected public directory');
+        } else {
+            deployCheck(true, deploySameDirectory($privateTarget, $empty['private']), 'Preserve the original private directory inode');
+            deployCheck(true, deploySameDirectory($publicTarget, $empty['public']), 'Preserve the original public directory inode');
+            deployCheck($privatePermissions, fileperms($privateTarget) & 0777, 'Preserve original private directory permissions');
+            deployCheck($privateOwner, fileowner($privateTarget), 'Preserve original private directory owner');
+            deployCheck($privateGroup, filegroup($privateTarget), 'Preserve original private directory group');
+            deployCheck(false, is_file($privateTarget.'/.lgv-tz-install-owner'), 'Do not leave installation ownership in the original empty directory');
+            if ($scenario === 'new-file' || $scenario === 'public-new-file') {
+                deployCheck('keep this new file', file_get_contents($noteTarget.'/.operator-note'), 'Preserve a file added during setup');
+            }
+        }
+    }
+
+    // An unrelated nonempty directory is not classified as a fresh destination, including hidden files and links.
+    mkdir($work.'/nonempty', 0700); file_put_contents($work.'/nonempty/.hidden', 'keep');
+    deployCheck([], deployEmptyDirectories(['private' => $work.'/nonempty']), 'Nonempty directories are not treated as fresh targets');
+    symlink($work.'/nonempty', $work.'/linked');
+    try { deployEmptyDirectories(['private' => $work.'/linked']); throw new RuntimeException('Expected linked-target refusal.'); }
+    catch (RuntimeException $error) { deployCheck(true, str_contains($error->getMessage(), 'file or link'), 'Refuse linked destination directories'); }
+
     $connection = deployConnection($settings);
     $connection->exec('CREATE TABLE unrelated (value INTEGER)');
     $connection->exec('INSERT INTO unrelated VALUES (42)');
@@ -142,6 +217,34 @@ try {
     deployCheck([], glob($work.'/web/*'), 'Refused installation publishes no endpoint');
     deployCheck(false, is_dir($work.'/installer-private'), 'Refused installation leaves no private application');
     deployCheck(false, is_file($work.'/fresh-run/deployment.json'), 'Refused installation cleanup completes');
+
+    // The same real prompt flow must accept an existing empty private directory and empty public service directory.
+    mkdir($work.'/installer-private', 0750); mkdir($work.'/web/service', 0755);
+    $originalEmpty = deployEmptyDirectories(['private' => $work.'/installer-private', 'public' => $work.'/web/service']);
+    $terminal = fopen('php://memory', 'w+b');
+    fwrite($terminal, implode("\n", $answers)."\n"); rewind($terminal);
+    try { deployRun($work.'/fresh-run', true, $terminal); throw new RuntimeException('Expected existing-table refusal.'); }
+    catch (RuntimeException $error) { deployCheck(true, str_contains($error->getMessage(), 'already contains'), 'Empty destinations reach database validation'); }
+    finally { fclose($terminal); }
+    deployCleanup($work.'/fresh-run');
+    foreach (['private' => $work.'/installer-private', 'public' => $work.'/web/service'] as $key => $path) {
+        deployCheck(true, deploySameDirectory($path, $originalEmpty[$key]), 'Preserve pre-existing empty '.$key.' directory on early failure');
+        deployCheck(true, deployDirectoryIsEmpty($path), 'Early failure leaves '.$key.' directory empty');
+    }
+    $connection->exec('DROP TABLE timezones');
+    $terminal = fopen('php://memory', 'w+b');
+    fwrite($terminal, implode("\n", $answers)."\n"); rewind($terminal);
+    try {
+        deployRun($work.'/fresh-run', true, $terminal, static function(): void { throw new RuntimeException('Fixture fresh Composer failure'); });
+        throw new RuntimeException('Expected fresh package failure.');
+    } catch (RuntimeException $error) { deployCheck(true, str_contains($error->getMessage(), 'Fixture fresh Composer failure'), 'Empty destinations reach package installation'); }
+    finally { fclose($terminal); }
+    deployCleanup($work.'/fresh-run');
+    deployCheck(false, deployTableExists($connection, 'lgv_tz_install_guard'), 'Package failure removes only its database guard');
+    foreach (['private' => $work.'/installer-private', 'public' => $work.'/web/service'] as $key => $path) {
+        deployCheck(true, deploySameDirectory($path, $originalEmpty[$key]), 'Package failure retains original '.$key.' directory');
+        deployCheck(true, deployDirectoryIsEmpty($path), 'Package failure leaves '.$key.' directory empty');
+    }
 
     // A database recorded as newly created by this installer is removed on failure, even before table loading.
     $ownedName = $name.'_owned';

@@ -1,3 +1,9 @@
+**Unreleased** *October 10, 2026*
+
+- Fixed fresh server installation into pre-existing empty private or public service directories; empty directories no longer enter existing-service refresh validation.
+- Failed or interrupted publication restores the original empty directories, including their ownership and permissions. Publication refuses directories replaced or populated during setup.
+- Clarified directory selection and the workaround for older installers; added MySQL and PostgreSQL installation and recovery checks.
+
 **1.4.2** *October 9, 2026*
 
 - The server installer asks for the selected web directory's public URL and prints complete service, lookup, and test URLs, preserving nested URL prefixes; clarified the web directory and service subdirectory in the installation guide.

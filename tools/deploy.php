@@ -153,6 +153,84 @@ function deployRemoveTree(string $directory): void {
 }
 
 /***************************************************************************************************************************/
+/** \brief Check an empty directory without following links. Hidden files also count as contents. */
+function deployDirectoryIsEmpty(string $path): bool {
+    clearstatcache(true, $path);
+    return is_dir($path) && !is_link($path) && !(new FilesystemIterator($path, FilesystemIterator::SKIP_DOTS))->valid();
+}
+
+/***************************************************************************************************************************/
+/** \brief Recognize the exact original directory, including after it is moved aside for publication. */
+function deploySameDirectory(string $path, array $original): bool {
+    clearstatcache(true, $path);
+    if (!is_dir($path) || is_link($path)) { return false; }
+    $stat = lstat($path);
+    return $stat !== false &&
+        $stat['dev'] === $original['device'] && $stat['ino'] === $original['inode'];
+}
+
+/***************************************************************************************************************************/
+/** \brief Record existing empty destinations so fresh installation can publish into them and roll back exactly. */
+function deployEmptyDirectories(array $destinations): array {
+    $empty = [];
+    foreach ($destinations as $key => $path) {
+        if (!file_exists($path) && !is_link($path)) { continue; }
+        if (is_link($path) || !is_dir($path)) {
+            throw new RuntimeException('Installation destination must be a new or empty directory, not a file or link: '.$path);
+        }
+        if (deployDirectoryIsEmpty($path)) {
+            $stat = lstat($path);
+            $empty[$key] = ['device' => $stat['dev'], 'inode' => $stat['ino'],
+                'backup' => dirname($path).'/.lgv-tz-empty-'.bin2hex(random_bytes(12))];
+        }
+    }
+    return $empty;
+}
+
+/***************************************************************************************************************************/
+/** \brief Publish fresh staged code, retaining original empty directories until installation is committed. */
+function deployPublishDirectories(array $state): void {
+    foreach (['private', 'public'] as $key) {
+        $path = $state[$key];
+        $original = $state['empty_directories'][$key] ?? null;
+        if ($original !== null) {
+            if (!deploySameDirectory($path, $original) || !deployDirectoryIsEmpty($path)) {
+                throw new RuntimeException('The selected empty directory changed during installation; refusing to replace '.$path);
+            }
+            if (file_exists($original['backup']) || is_link($original['backup']) || !rename($path, $original['backup'])) {
+                throw new RuntimeException('Could not retain the original empty directory for recovery: '.$path);
+            }
+        } elseif (file_exists($path) || is_link($path)) {
+            throw new RuntimeException('Installation destination appeared during setup; refusing to replace '.$path);
+        }
+        if (!rename($state[$key.'_stage'], $path)) {
+            throw new RuntimeException('Could not publish the installation directories.');
+        }
+    }
+}
+
+/***************************************************************************************************************************/
+/** \brief Restore the original empty directories on failure, or remove their empty backups after success. */
+function deployEmptyDirectoryCleanup(array $state): void {
+    foreach ($state['empty_directories'] ?? [] as $key => $original) {
+        $backup = $original['backup'];
+        if (!file_exists($backup) && !is_link($backup)) { continue; }
+        if (!deploySameDirectory($backup, $original)) {
+            throw new RuntimeException('Original directory identity differs; refusing recovery for '.$backup);
+        }
+        if (!empty($state['published'])) {
+            if (!deployDirectoryIsEmpty($backup) || !rmdir($backup)) {
+                throw new RuntimeException('Could not remove the original empty-directory backup: '.$backup);
+            }
+        } else {
+            if (file_exists($state[$key]) || is_link($state[$key]) || !rename($backup, $state[$key])) {
+                throw new RuntimeException('Could not restore the original empty directory: '.$state[$key]);
+            }
+        }
+    }
+}
+
+/***************************************************************************************************************************/
 /** \brief Verify an existing installer-owned pair of directories and its unchanged database configuration. */
 function deployExistingInstallation(string $private, string $public, array $settings): array {
     foreach ([$private, $public] as $directory) {
@@ -395,19 +473,25 @@ function deployCleanup(string $work): void {
     if (empty($state['published'])) { $paths = array_merge($paths, [$state['private'], $state['public']]); }
     foreach ($paths as $path) {
         if (!is_dir($path)) { continue; }
+        foreach ($state['empty_directories'] ?? [] as $key => $original) {
+            // An original destination not yet moved for publication was never owned by this installation.
+            if ($path === $state[$key] && deploySameDirectory($path, $original)) { continue 2; }
+        }
         $marker = $path.'/.lgv-tz-install-owner';
         if (!is_file($marker) || !hash_equals($state['token'], trim(file_get_contents($marker)))) {
             throw new RuntimeException('Directory ownership differs; refusing to remove '.$path);
         }
         deployRemoveTree($path);
     }
+    deployEmptyDirectoryCleanup($state);
     unlink($file);
 }
 
 /***************************************************************************************************************************/
 /**
     \brief This gathers settings, loads and tests the Composer package, then publishes the endpoint.
-    The selected web directory must exist. Existing installer-owned directories can be refreshed without reloading boundaries;
+    The selected web directory must exist. New installations accept new or empty destinations.
+    Existing installer-owned directories can be refreshed without reloading boundaries;
     private files must be outside the web document root. Existing timezones tables are refused before loading.
     \throws Exception if setup, validation, or publication fails.
 */
@@ -442,7 +526,7 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null, ?call
     $webUrl = deployAsk($terminal, 'Public URL of that directory (e.g. https://example.com/path)');
     $endpoint = deployAsk($terminal, 'Service subdirectory (appended to the path and URL above)', 'timezone');
     $serviceUrl = deployServiceUrl($webUrl, $endpoint);
-    $private = deployAsk($terminal, 'Private application directory (outside the web root)', dirname($webRoot).'/lgv-tz-server');
+    $private = deployAsk($terminal, 'Private application directory (new or empty; outside the web root)', dirname($webRoot).'/lgv-tz-server');
     $parent = realpath(dirname($private));
     if (false === $parent || !is_writable($parent) || in_array(basename($private), ['.', '..', ''], true)) {
         throw new RuntimeException('The private application directory needs an existing writable parent.');
@@ -456,7 +540,9 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null, ?call
         throw new RuntimeException('The private application directory must be outside the web document root.');
     }
     $public = $webRoot.'/'.$endpoint;
-    $existing = file_exists($private) || is_link($private) || file_exists($public) || is_link($public)
+    $emptyDirectories = deployEmptyDirectories(['private' => $private, 'public' => $public]);
+    $existing = (file_exists($private) && !isset($emptyDirectories['private'])) ||
+        (file_exists($public) && !isset($emptyDirectories['public']))
         ? deployExistingInstallation($private, $public, $settings) : null;
     $groupName = deployAsk($terminal, 'Group that runs PHP (for private-file access)', posix_getgrgid(posix_getegid())['name']);
     $group = posix_getgrnam($groupName);
@@ -472,7 +558,7 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null, ?call
     $publicStage = $webRoot.'/.lgv-tz-install-'.bin2hex(random_bytes(12));
     $state = ['settings' => $settings, 'token' => $token, 'private' => $private, 'public' => $public,
         'private_stage' => $privateStage, 'public_stage' => $publicStage, 'database_created' => false,
-        'guard_created' => false, 'published' => false];
+        'guard_created' => false, 'published' => false, 'empty_directories' => $emptyDirectories];
     deploySave($work, $state);
     foreach ([$privateStage, $publicStage] as $path) {
         if (!mkdir($path, 0700) || false === file_put_contents($path.'/.lgv-tz-install-owner', $token)) {
@@ -572,7 +658,7 @@ function deployRun(string $work, bool $noSecret = false, $terminal = null, ?call
         'service_url' => $serviceUrl], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
     chmod($privateStage, 0750);
     chmod($publicStage, 0755);
-    if (!rename($privateStage, $private) || !rename($publicStage, $public)) { throw new RuntimeException('Could not publish the installation directories.'); }
+    deployPublishDirectories($state);
     $state['published'] = true;
     deploySave($work, $state);
     printf("\nInstalled %d polygons; %d/%d known locations passed (%.3f ms mean lookup).\n", $count, count($test_locations_param_array), count($test_locations_param_array), $lookupSeconds * 1000 / count($test_locations_param_array));
