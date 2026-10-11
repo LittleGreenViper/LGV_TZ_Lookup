@@ -111,7 +111,13 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('md__c_h_a_n_g_
   <div class="headertitle"><div class="title">CHANGELOG </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md1"></a> <b>1.4.2</b> <em>October 9, 2026</em></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md1"></a> <b>Unreleased</b> <em>October 10, 2026</em></p>
+<ul>
+<li>Fixed fresh server installation into pre-existing empty private or public service directories; empty directories no longer enter existing-service refresh validation.</li>
+<li>Failed or interrupted publication restores the original empty directories, including their ownership and permissions. Publication refuses directories replaced or populated during setup.</li>
+<li>Clarified directory selection and the workaround for older installers; added MySQL and PostgreSQL installation and recovery checks.</li>
+</ul>
+<p><b>1.4.2</b> <em>October 9, 2026</em></p>
 <ul>
 <li>The server installer asks for the selected web directory's public URL and prints complete service, lookup, and test URLs, preserving nested URL prefixes; clarified the web directory and service subdirectory in the installation guide.</li>
 <li>Rerunning the installer against a matching installer-owned service refreshes the code and updater while preserving the populated boundary database, private configuration, and secret. Failed or interrupted refreshes restore the previous directories.</li>

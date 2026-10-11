@@ -127,6 +127,12 @@ Functions</h2></td></tr>
 <tr class="memdesc:a0fc8457b194b2fffaaccf80161d04576"><td class="mdescLeft">&#160;</td><td class="mdescRight">This opens the configured application or administrative database.  <br /></td></tr>
 <tr class="memitem:adbaa36d846192e45be91ade47be64cbd" id="r_adbaa36d846192e45be91ade47be64cbd"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#adbaa36d846192e45be91ade47be64cbd">deployCopyTree</a> (string $source, string $destination)</td></tr>
 <tr class="memdesc:adbaa36d846192e45be91ade47be64cbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy an installation for staging, preserving additional files, permissions, and symbolic links.  <br /></td></tr>
+<tr class="memitem:a192601ebe6aa955d8552eed792211ecc" id="r_a192601ebe6aa955d8552eed792211ecc"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a192601ebe6aa955d8552eed792211ecc">deployDirectoryIsEmpty</a> (string $path)</td></tr>
+<tr class="memdesc:a192601ebe6aa955d8552eed792211ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check an empty directory without following links. Hidden files also count as contents.  <br /></td></tr>
+<tr class="memitem:a504dff9bcdada666fb75edb21df22ec8" id="r_a504dff9bcdada666fb75edb21df22ec8"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a504dff9bcdada666fb75edb21df22ec8">deployEmptyDirectories</a> (array $destinations)</td></tr>
+<tr class="memdesc:a504dff9bcdada666fb75edb21df22ec8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record existing empty destinations so fresh installation can publish into them and roll back exactly.  <br /></td></tr>
+<tr class="memitem:ad20e52fa53f5ee5f54ec4a28c1f094f5" id="r_ad20e52fa53f5ee5f54ec4a28c1f094f5"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ad20e52fa53f5ee5f54ec4a28c1f094f5">deployEmptyDirectoryCleanup</a> (array $state)</td></tr>
+<tr class="memdesc:ad20e52fa53f5ee5f54ec4a28c1f094f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore the original empty directories on failure, or remove their empty backups after success.  <br /></td></tr>
 <tr class="memitem:ad6aede70150b326ca06b5c90b899d363" id="r_ad6aede70150b326ca06b5c90b899d363"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ad6aede70150b326ca06b5c90b899d363">deployEndpointCode</a> (string $private, string $relativePackage, string $licenseHeader)</td></tr>
 <tr class="memdesc:ad6aede70150b326ca06b5c90b899d363"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the public entry point with the chosen private configuration and package paths.  <br /></td></tr>
 <tr class="memitem:ae9b44c4d1c3f6b8f1ba1e3f4150433be" id="r_ae9b44c4d1c3f6b8f1ba1e3f4150433be"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae9b44c4d1c3f6b8f1ba1e3f4150433be">deployExistingInstallation</a> (string $private, string $public, array $settings)</td></tr>
@@ -135,6 +141,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:a5c1a30afc5b411812bde0a5e011b7696"><td class="mdescLeft">&#160;</td><td class="mdescRight">This quotes a database identifier for the selected backend.  <br /></td></tr>
 <tr class="memitem:a46ca6e59730ca52a37ac10142ebfa216" id="r_a46ca6e59730ca52a37ac10142ebfa216"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a46ca6e59730ca52a37ac10142ebfa216">deployLock</a> (PDO $connection)</td></tr>
 <tr class="memdesc:a46ca6e59730ca52a37ac10142ebfa216"><td class="mdescLeft">&#160;</td><td class="mdescRight">This prevents two installers from loading the same database concurrently.  <br /></td></tr>
+<tr class="memitem:abf2ce7292f3ecf708181bb645ab611cb" id="r_abf2ce7292f3ecf708181bb645ab611cb"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#abf2ce7292f3ecf708181bb645ab611cb">deployPublishDirectories</a> (array $state)</td></tr>
+<tr class="memdesc:abf2ce7292f3ecf708181bb645ab611cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publish fresh staged code, retaining original empty directories until installation is committed.  <br /></td></tr>
 <tr class="memitem:ae4684d07a620d98a2bad6c377a61f20b" id="r_ae4684d07a620d98a2bad6c377a61f20b"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae4684d07a620d98a2bad6c377a61f20b">deployRefresh</a> (string $work, array $settings, string $private, string $public, int $group, string $serviceUrl, array $existing, callable $install)</td></tr>
 <tr class="memdesc:ae4684d07a620d98a2bad6c377a61f20b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refresh owned installed code using existing polygons, retaining the configuration and secret.  <br /></td></tr>
 <tr class="memitem:a9c656e59b6083887810f9dffe5aa7d23" id="r_a9c656e59b6083887810f9dffe5aa7d23"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a9c656e59b6083887810f9dffe5aa7d23">deployRefreshCleanup</a> (string $work, array $state)</td></tr>
@@ -142,7 +150,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a1930315b534abe14e18b3e2f5cf5a24f" id="r_a1930315b534abe14e18b3e2f5cf5a24f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a1930315b534abe14e18b3e2f5cf5a24f">deployRemoveTree</a> (string $directory)</td></tr>
 <tr class="memdesc:a1930315b534abe14e18b3e2f5cf5a24f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This removes a directory tree without following symlinks.  <br /></td></tr>
 <tr class="memitem:a640e62503a7999d888a155236297c572" id="r_a640e62503a7999d888a155236297c572"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a640e62503a7999d888a155236297c572">deployRun</a> (string $work, bool $noSecret=false, $terminal=null, ?callable $install=null)</td></tr>
-<tr class="memdesc:a640e62503a7999d888a155236297c572"><td class="mdescLeft">&#160;</td><td class="mdescRight">This gathers settings, loads and tests the Composer package, then publishes the endpoint. The selected web directory must exist. Existing installer-owned directories can be refreshed without reloading boundaries; private files must be outside the web document root. Existing timezones tables are refused before loading.  <br /></td></tr>
+<tr class="memdesc:a640e62503a7999d888a155236297c572"><td class="mdescLeft">&#160;</td><td class="mdescRight">This gathers settings, loads and tests the Composer package, then publishes the endpoint. The selected web directory must exist. New installations accept new or empty destinations. Existing installer-owned directories can be refreshed without reloading boundaries; private files must be outside the web document root. Existing timezones tables are refused before loading.  <br /></td></tr>
+<tr class="memitem:aa2f05ae84770f3ba5ae67219de71568c" id="r_aa2f05ae84770f3ba5ae67219de71568c"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aa2f05ae84770f3ba5ae67219de71568c">deploySameDirectory</a> (string $path, array $original)</td></tr>
+<tr class="memdesc:aa2f05ae84770f3ba5ae67219de71568c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recognize the exact original directory, including after it is moved aside for publication.  <br /></td></tr>
 <tr class="memitem:aa3c3784a9451093fc7505fceb46048aa" id="r_aa3c3784a9451093fc7505fceb46048aa"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aa3c3784a9451093fc7505fceb46048aa">deploySave</a> (string $work, array $state)</td></tr>
 <tr class="memdesc:aa3c3784a9451093fc7505fceb46048aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">This saves recovery state atomically, with credentials readable only by the installer user.  <br /></td></tr>
 <tr class="memitem:a4857631315358fb104b0850015cba32f" id="r_a4857631315358fb104b0850015cba32f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4857631315358fb104b0850015cba32f">deployServiceUrl</a> (string $webUrl, string $endpoint)</td></tr>
@@ -199,7 +209,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00092">92</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00113">$process</a>, <a class="el" href="tests_2deploy_8php_source.html#l00135">$terminal</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00092">deployAsk()</a>.</p>
+<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00113">$process</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00092">deployAsk()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00092">deployAsk()</a>.</p>
 <div id="dynsection-0" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
@@ -232,11 +242,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00360">360</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00438">438</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2deploy_8php_source.html#l00072">$work</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00360">deployCleanup()</a>.</p>
+<p class="reference">References <a class="el" href="tests_2update_8php_source.html#l00040">$work</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00438">deployCleanup()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00360">deployCleanup()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00438">deployCleanup()</a>.</p>
 <div id="dynsection-2" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary">
 </div>
@@ -279,9 +289,9 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00057">57</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="databases_8php_source.html#l00038">$driver</a>, <a class="el" href="databases_8php_source.html#l00213">$dsn</a>, <a class="el" href="tests_2deploy_8php_source.html#l00066">$settings</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00057">deployConnection()</a>.</p>
+<p class="reference">References <a class="el" href="databases_8php_source.html#l00038">$driver</a>, <a class="el" href="databases_8php_source.html#l00213">$dsn</a>, <a class="el" href="tests_2update_8php_source.html#l00034">$settings</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00057">deployConnection()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00057">deployConnection()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00259">deployRefresh()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00057">deployConnection()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00337">deployRefresh()</a>.</p>
 <div id="dynsection-4" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
 <div id="dynsection-4-summary" class="dynsummary">
 </div>
@@ -316,11 +326,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00202">202</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00280">280</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00067">$source</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00202">deployCopyTree()</a>.</p>
+<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00067">$source</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00280">deployCopyTree()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00202">deployCopyTree()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00280">deployCopyTree()</a>.</p>
 <div id="dynsection-6" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
 <div id="dynsection-6-summary" class="dynsummary">
 </div>
@@ -332,6 +342,111 @@ Functions</h2></td></tr>
 </div>
 <div id="dynsection-7-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_adbaa36d846192e45be91ade47be64cbd_icgraph.svg" width="128" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a192601ebe6aa955d8552eed792211ecc" name="a192601ebe6aa955d8552eed792211ecc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a192601ebe6aa955d8552eed792211ecc">&#9670;&#160;</a></span>deployDirectoryIsEmpty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">deployDirectoryIsEmpty </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>$path</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00157">157</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+
+<p class="reference">References <a class="el" href="tools_2deploy_8php_source.html#l00157">deployDirectoryIsEmpty()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00157">deployDirectoryIsEmpty()</a>, <a class="el" href="tools_2deploy_8php_source.html#l00174">deployEmptyDirectories()</a>, <a class="el" href="tools_2deploy_8php_source.html#l00214">deployEmptyDirectoryCleanup()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00192">deployPublishDirectories()</a>.</p>
+<div id="dynsection-8" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-8-summary" class="dynsummary">
+</div>
+<div id="dynsection-8-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a192601ebe6aa955d8552eed792211ecc_cgraph.svg" width="174" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div id="dynsection-9" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-9-summary" class="dynsummary">
+</div>
+<div id="dynsection-9-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a192601ebe6aa955d8552eed792211ecc_icgraph.svg" width="420" height="207"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a504dff9bcdada666fb75edb21df22ec8" name="a504dff9bcdada666fb75edb21df22ec8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a504dff9bcdada666fb75edb21df22ec8">&#9670;&#160;</a></span>deployEmptyDirectories()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">deployEmptyDirectories </td>
+          <td>(</td>
+          <td class="paramtype">array</td>          <td class="paramname"><span class="paramname"><em>$destinations</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00174">174</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+
+<p class="reference">References <a class="el" href="tools_2deploy_8php_source.html#l00157">deployDirectoryIsEmpty()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00174">deployEmptyDirectories()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00174">deployEmptyDirectories()</a>.</p>
+<div id="dynsection-10" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-10-summary" class="dynsummary">
+</div>
+<div id="dynsection-10-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a504dff9bcdada666fb75edb21df22ec8_cgraph.svg" width="383" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div id="dynsection-11" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-11-summary" class="dynsummary">
+</div>
+<div id="dynsection-11-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a504dff9bcdada666fb75edb21df22ec8_icgraph.svg" width="172" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="ad20e52fa53f5ee5f54ec4a28c1f094f5" name="ad20e52fa53f5ee5f54ec4a28c1f094f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad20e52fa53f5ee5f54ec4a28c1f094f5">&#9670;&#160;</a></span>deployEmptyDirectoryCleanup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">deployEmptyDirectoryCleanup </td>
+          <td>(</td>
+          <td class="paramtype">array</td>          <td class="paramname"><span class="paramname"><em>$state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00214">214</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+
+<p class="reference">References <a class="el" href="tools_2deploy_8php_source.html#l00157">deployDirectoryIsEmpty()</a>, <a class="el" href="tools_2deploy_8php_source.html#l00214">deployEmptyDirectoryCleanup()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00164">deploySameDirectory()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00214">deployEmptyDirectoryCleanup()</a>.</p>
+<div id="dynsection-12" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-12-summary" class="dynsummary">
+</div>
+<div id="dynsection-12-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_ad20e52fa53f5ee5f54ec4a28c1f094f5_cgraph.svg" width="420" height="134"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div id="dynsection-13" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-13-summary" class="dynsummary">
+</div>
+<div id="dynsection-13-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_ad20e52fa53f5ee5f54ec4a28c1f094f5_icgraph.svg" width="210" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -360,21 +475,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00217">217</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00295">295</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2deploy_8php_source.html#l00167">$private</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00217">deployEndpointCode()</a>.</p>
+<p class="reference">References <a class="el" href="tools_2deploy_8php_source.html#l00295">deployEndpointCode()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00217">deployEndpointCode()</a>.</p>
-<div id="dynsection-8" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-8-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00295">deployEndpointCode()</a>.</p>
+<div id="dynsection-14" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-14-summary" class="dynsummary">
 </div>
-<div id="dynsection-8-content" class="dyncontent hidden">
+<div id="dynsection-14-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_ad6aede70150b326ca06b5c90b899d363_cgraph.svg" width="154" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-9" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-9-summary" class="dynsummary">
+<div id="dynsection-15" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-15-summary" class="dynsummary">
 </div>
-<div id="dynsection-9-content" class="dyncontent hidden">
+<div id="dynsection-15-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_ad6aede70150b326ca06b5c90b899d363_icgraph.svg" width="154" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -404,21 +519,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00157">157</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00235">235</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, <a class="el" href="tests_2deploy_8php_source.html#l00167">$private</a>, <a class="el" href="tests_2deploy_8php_source.html#l00167">$public</a>, <a class="el" href="tests_2deploy_8php_source.html#l00066">$settings</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00157">deployExistingInstallation()</a>.</p>
+<p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, <a class="el" href="tests_2update_8php_source.html#l00034">$settings</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00235">deployExistingInstallation()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00157">deployExistingInstallation()</a>.</p>
-<div id="dynsection-10" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-10-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00235">deployExistingInstallation()</a>.</p>
+<div id="dynsection-16" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-16-summary" class="dynsummary">
 </div>
-<div id="dynsection-10-content" class="dyncontent hidden">
+<div id="dynsection-16-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_ae9b44c4d1c3f6b8f1ba1e3f4150433be_cgraph.svg" width="182" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-11" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-11-summary" class="dynsummary">
+<div id="dynsection-17" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-17-summary" class="dynsummary">
 </div>
-<div id="dynsection-11-content" class="dyncontent hidden">
+<div id="dynsection-17-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_ae9b44c4d1c3f6b8f1ba1e3f4150433be_icgraph.svg" width="182" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -448,16 +563,16 @@ Functions</h2></td></tr>
 <p class="reference">References <a class="el" href="databases_8php_source.html#l00038">$driver</a>, <a class="el" href="databases_8php_source.html#l00216">$name</a>, <a class="el" href="databases_8php_source.html#l00217">$quote</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00040">deployIdentifier()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00040">deployIdentifier()</a>.</p>
-<div id="dynsection-12" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-12-summary" class="dynsummary">
+<div id="dynsection-18" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-18-summary" class="dynsummary">
 </div>
-<div id="dynsection-12-content" class="dyncontent hidden">
+<div id="dynsection-18-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a5c1a30afc5b411812bde0a5e011b7696_cgraph.svg" width="122" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-13" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-13-summary" class="dynsummary">
+<div id="dynsection-19" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-19-summary" class="dynsummary">
 </div>
-<div id="dynsection-13-content" class="dyncontent hidden">
+<div id="dynsection-19-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a5c1a30afc5b411812bde0a5e011b7696_icgraph.svg" width="122" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -482,18 +597,53 @@ Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="composer_8php_source.html#l00031">$connection</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00069">deployLock()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00069">deployLock()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00259">deployRefresh()</a>.</p>
-<div id="dynsection-14" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-14-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00069">deployLock()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00337">deployRefresh()</a>.</p>
+<div id="dynsection-20" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-20-summary" class="dynsummary">
 </div>
-<div id="dynsection-14-content" class="dyncontent hidden">
+<div id="dynsection-20-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a46ca6e59730ca52a37ac10142ebfa216_cgraph.svg" width="99" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-15" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-15-summary" class="dynsummary">
+<div id="dynsection-21" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-21-summary" class="dynsummary">
 </div>
-<div id="dynsection-15-content" class="dyncontent hidden">
+<div id="dynsection-21-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a46ca6e59730ca52a37ac10142ebfa216_icgraph.svg" width="254" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="abf2ce7292f3ecf708181bb645ab611cb" name="abf2ce7292f3ecf708181bb645ab611cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf2ce7292f3ecf708181bb645ab611cb">&#9670;&#160;</a></span>deployPublishDirectories()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">deployPublishDirectories </td>
+          <td>(</td>
+          <td class="paramtype">array</td>          <td class="paramname"><span class="paramname"><em>$state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00192">192</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+
+<p class="reference">References <a class="el" href="tools_2deploy_8php_source.html#l00157">deployDirectoryIsEmpty()</a>, <a class="el" href="tools_2deploy_8php_source.html#l00192">deployPublishDirectories()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00164">deploySameDirectory()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00192">deployPublishDirectories()</a>.</p>
+<div id="dynsection-22" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-22-summary" class="dynsummary">
+</div>
+<div id="dynsection-22-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_abf2ce7292f3ecf708181bb645ab611cb_cgraph.svg" width="388" height="134"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div id="dynsection-23" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-23-summary" class="dynsummary">
+</div>
+<div id="dynsection-23-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_abf2ce7292f3ecf708181bb645ab611cb_icgraph.svg" width="178" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -547,21 +697,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00259">259</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00337">337</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="composer_8php_source.html#l00031">$connection</a>, <a class="el" href="tests_2deploy_8php_source.html#l00184">$existing</a>, <a class="el" href="tests_2deploy_8php_source.html#l00185">$group</a>, <a class="el" href="tests_2deploy_8php_source.html#l00167">$private</a>, <a class="el" href="tests_2deploy_8php_source.html#l00167">$public</a>, <a class="el" href="tests_2deploy_8php_source.html#l00186">$serviceUrl</a>, <a class="el" href="tests_2deploy_8php_source.html#l00066">$settings</a>, <a class="el" href="tests_2deploy_8php_source.html#l00072">$work</a>, <a class="el" href="tools_2deploy_8php_source.html#l00057">deployConnection()</a>, <a class="el" href="tools_2deploy_8php_source.html#l00069">deployLock()</a>, <a class="el" href="tools_2deploy_8php_source.html#l00259">deployRefresh()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00080">deployTableExists()</a>.</p>
+<p class="reference">References <a class="el" href="composer_8php_source.html#l00031">$connection</a>, <a class="el" href="tests_2update_8php_source.html#l00034">$settings</a>, <a class="el" href="tests_2update_8php_source.html#l00040">$work</a>, <a class="el" href="tools_2deploy_8php_source.html#l00057">deployConnection()</a>, <a class="el" href="tools_2deploy_8php_source.html#l00069">deployLock()</a>, <a class="el" href="tools_2deploy_8php_source.html#l00337">deployRefresh()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00080">deployTableExists()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00259">deployRefresh()</a>.</p>
-<div id="dynsection-16" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-16-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00337">deployRefresh()</a>.</p>
+<div id="dynsection-24" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-24-summary" class="dynsummary">
 </div>
-<div id="dynsection-16-content" class="dyncontent hidden">
+<div id="dynsection-24-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_ae4684d07a620d98a2bad6c377a61f20b_cgraph.svg" width="294" height="207"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-17" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-17-summary" class="dynsummary">
+<div id="dynsection-25" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-25-summary" class="dynsummary">
 </div>
-<div id="dynsection-17-content" class="dyncontent hidden">
+<div id="dynsection-25-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_ae4684d07a620d98a2bad6c377a61f20b_icgraph.svg" width="118" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -586,21 +736,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00227">227</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00305">305</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2deploy_8php_source.html#l00112">$state</a>, <a class="el" href="tests_2deploy_8php_source.html#l00072">$work</a>, <a class="el" href="tools_2deploy_8php_source.html#l00227">deployRefreshCleanup()</a>, and <a class="el" href="src_2index_8php_source.html#l00051">if</a>.</p>
+<p class="reference">References <a class="el" href="tests_2update_8php_source.html#l00040">$work</a>, <a class="el" href="tools_2deploy_8php_source.html#l00305">deployRefreshCleanup()</a>, and <a class="el" href="src_2index_8php_source.html#l00051">if</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00227">deployRefreshCleanup()</a>.</p>
-<div id="dynsection-18" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-18-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00305">deployRefreshCleanup()</a>.</p>
+<div id="dynsection-26" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-26-summary" class="dynsummary">
 </div>
-<div id="dynsection-18-content" class="dyncontent hidden">
+<div id="dynsection-26-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a9c656e59b6083887810f9dffe5aa7d23_cgraph.svg" width="166" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-19" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-19-summary" class="dynsummary">
+<div id="dynsection-27" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-27-summary" class="dynsummary">
 </div>
-<div id="dynsection-19-content" class="dyncontent hidden">
+<div id="dynsection-27-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a9c656e59b6083887810f9dffe5aa7d23_icgraph.svg" width="166" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -626,16 +776,16 @@ Functions</h2></td></tr>
 <p class="reference">References <a class="el" href="tests_2demo_8php_source.html#l00107">$directory</a>, <a class="el" href="tools_2deploy_8php_source.html#l00145">deployRemoveTree()</a>, and <a class="el" href="src_2index_8php_source.html#l00051">if</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00145">deployRemoveTree()</a>.</p>
-<div id="dynsection-20" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-20-summary" class="dynsummary">
+<div id="dynsection-28" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-28-summary" class="dynsummary">
 </div>
-<div id="dynsection-20-content" class="dyncontent hidden">
+<div id="dynsection-28-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a1930315b534abe14e18b3e2f5cf5a24f_cgraph.svg" width="146" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-21" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-21-summary" class="dynsummary">
+<div id="dynsection-29" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-29-summary" class="dynsummary">
 </div>
-<div id="dynsection-21-content" class="dyncontent hidden">
+<div id="dynsection-29-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a1930315b534abe14e18b3e2f5cf5a24f_icgraph.svg" width="146" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -676,22 +826,61 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00414">414</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00498">498</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2deploy_8php_source.html#l00135">$terminal</a>, <a class="el" href="tests_2deploy_8php_source.html#l00072">$work</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00414">deployRun()</a>.</p>
+<p class="reference">References <a class="el" href="tests_2update_8php_source.html#l00040">$work</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00498">deployRun()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00414">deployRun()</a>.</p>
-<div id="dynsection-22" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-22-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00498">deployRun()</a>.</p>
+<div id="dynsection-30" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-30-summary" class="dynsummary">
 </div>
-<div id="dynsection-22-content" class="dyncontent hidden">
+<div id="dynsection-30-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a640e62503a7999d888a155236297c572_cgraph.svg" width="95" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-23" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-23-summary" class="dynsummary">
+<div id="dynsection-31" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-31-summary" class="dynsummary">
 </div>
-<div id="dynsection-23-content" class="dyncontent hidden">
+<div id="dynsection-31-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a640e62503a7999d888a155236297c572_icgraph.svg" width="95" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="aa2f05ae84770f3ba5ae67219de71568c" name="aa2f05ae84770f3ba5ae67219de71568c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2f05ae84770f3ba5ae67219de71568c">&#9670;&#160;</a></span>deploySameDirectory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">deploySameDirectory </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>$path</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">array</td>          <td class="paramname"><span class="paramname"><em>$original</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00164">164</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
+
+<p class="reference">References <a class="el" href="tools_2deploy_8php_source.html#l00164">deploySameDirectory()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00214">deployEmptyDirectoryCleanup()</a>, <a class="el" href="tools_2deploy_8php_source.html#l00192">deployPublishDirectories()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00164">deploySameDirectory()</a>.</p>
+<div id="dynsection-32" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-32-summary" class="dynsummary">
+</div>
+<div id="dynsection-32-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_aa2f05ae84770f3ba5ae67219de71568c_cgraph.svg" width="158" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div id="dynsection-33" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-33-summary" class="dynsummary">
+</div>
+<div id="dynsection-33-content" class="dyncontent hidden">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_aa2f05ae84770f3ba5ae67219de71568c_icgraph.svg" width="404" height="134"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -717,19 +906,19 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00047">47</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="tests_2deploy_8php_source.html#l00112">$state</a>, <a class="el" href="tests_2deploy_8php_source.html#l00072">$work</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00047">deploySave()</a>.</p>
+<p class="reference">References <a class="el" href="tests_2update_8php_source.html#l00040">$work</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00047">deploySave()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00047">deploySave()</a>.</p>
-<div id="dynsection-24" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-24-summary" class="dynsummary">
+<div id="dynsection-34" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-34-summary" class="dynsummary">
 </div>
-<div id="dynsection-24-content" class="dyncontent hidden">
+<div id="dynsection-34-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_aa3c3784a9451093fc7505fceb46048aa_cgraph.svg" width="102" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-25" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-25-summary" class="dynsummary">
+<div id="dynsection-35" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-35-summary" class="dynsummary">
 </div>
-<div id="dynsection-25-content" class="dyncontent hidden">
+<div id="dynsection-35-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_aa3c3784a9451093fc7505fceb46048aa_icgraph.svg" width="102" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -759,16 +948,16 @@ Functions</h2></td></tr>
 <p class="reference">References <a class="el" href="tools_2deploy_8php_source.html#l00128">deployServiceUrl()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00128">deployServiceUrl()</a>.</p>
-<div id="dynsection-26" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-26-summary" class="dynsummary">
+<div id="dynsection-36" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-36-summary" class="dynsummary">
 </div>
-<div id="dynsection-26-content" class="dyncontent hidden">
+<div id="dynsection-36-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a4857631315358fb104b0850015cba32f_cgraph.svg" width="132" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-27" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-27-summary" class="dynsummary">
+<div id="dynsection-37" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-37-summary" class="dynsummary">
 </div>
-<div id="dynsection-27-content" class="dyncontent hidden">
+<div id="dynsection-37-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_a4857631315358fb104b0850015cba32f_icgraph.svg" width="132" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
@@ -795,19 +984,19 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="tools_2deploy_8php_source.html#l00080">80</a> of file <a class="el" href="tools_2deploy_8php_source.html">deploy.php</a>.</p>
 
-<p class="reference">References <a class="el" href="composer_8php_source.html#l00031">$connection</a>, <a class="el" href="tests_2deploy_8php_source.html#l00155">$statement</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00080">deployTableExists()</a>.</p>
+<p class="reference">References <a class="el" href="composer_8php_source.html#l00031">$connection</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00080">deployTableExists()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00259">deployRefresh()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00080">deployTableExists()</a>.</p>
-<div id="dynsection-28" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
-<div id="dynsection-28-summary" class="dynsummary">
+<p class="reference">Referenced by <a class="el" href="tools_2deploy_8php_source.html#l00337">deployRefresh()</a>, and <a class="el" href="tools_2deploy_8php_source.html#l00080">deployTableExists()</a>.</p>
+<div id="dynsection-38" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the call graph for this function:</div>
+<div id="dynsection-38-summary" class="dynsummary">
 </div>
-<div id="dynsection-28-content" class="dyncontent hidden">
+<div id="dynsection-38-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_aba97a74bb6032ad9511613e5c70c7c10_cgraph.svg" width="139" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div id="dynsection-29" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
-<div id="dynsection-29-summary" class="dynsummary">
+<div id="dynsection-39" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Here is the caller graph for this function:</div>
+<div id="dynsection-39-summary" class="dynsummary">
 </div>
-<div id="dynsection-29-content" class="dyncontent hidden">
+<div id="dynsection-39-content" class="dyncontent hidden">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="tools_2deploy_8php_aba97a74bb6032ad9511613e5c70c7c10_icgraph.svg" width="294" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 

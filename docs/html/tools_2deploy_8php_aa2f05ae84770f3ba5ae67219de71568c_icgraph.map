@@ -1,0 +1,10 @@
+<map id="deploySameDirectory" name="deploySameDirectory">
+<area shape="rect" id="Node000001" title="Recognize the exact original directory, including after it is moved aside for publication." alt="" coords="252,67,399,92"/>
+<area shape="poly" id="edge5_Node000001_Node000001" title=" " alt="" coords="365,57,354,49,325,45,302,47,290,52,287,58,294,65,290,68,282,58,286,48,301,42,325,40,356,44,368,53"/>
+<area shape="rect" id="Node000002" href="$tools_2deploy_8php.html#ad20e52fa53f5ee5f54ec4a28c1f094f5" title="Restore the original empty directories on failure, or remove their empty backups after success." alt="" coords="5,29,204,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="237,67,180,57,181,52,238,62"/>
+<area shape="rect" id="Node000003" href="$tools_2deploy_8php.html#abf2ce7292f3ecf708181bb645ab611cb" title="Publish fresh staged code, retaining original empty directories until installation is committed." alt="" coords="21,103,188,128"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="238,96,183,105,182,100,237,91"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="144,20,133,11,105,8,81,10,69,15,66,20,73,28,69,31,61,21,65,11,80,5,105,3,135,6,147,15"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="144,93,133,85,105,81,81,83,69,88,66,94,73,101,69,104,61,94,65,84,80,78,105,76,135,80,147,89"/>
+</map>

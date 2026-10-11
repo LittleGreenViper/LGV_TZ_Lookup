@@ -44,6 +44,8 @@ function deployCheck($expected, $actual, string $label): void {
     if ($expected !== $actual) { throw new RuntimeException($label.' failed.'); }
 }
 
+// Keep the procedural driver in the source browser; Doxygen misreads its catch/finally clauses as declarations.
+/** \cond */
 // The web directory can be a nested served directory, so its URL prefix must survive deployment reporting.
 foreach ([
     ['https://example.com', 'timezone', 'https://example.com/timezone/'],
@@ -383,3 +385,4 @@ try {
     $admin->exec('DROP DATABASE '.deployIdentifier($name, $driver));
     deployRemoveTree($work);
 }
+/** \endcond */

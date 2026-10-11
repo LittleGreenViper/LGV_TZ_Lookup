@@ -2,7 +2,7 @@
 
 # LGV_TZ_Lookup
 
-A small PHP library that turns longitude and latitude into an IANA time zone name, such as `America/New_York`. Use it in your application through Composer, or run it as a simple HTTP service.
+A small PHP library that turns longitude and latitude into an [IANA time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) name, such as `America/New_York`. Use it in your application through Composer, or run it as a simple HTTP service.
 
 Requires **PHP 8.0+**, **PDO**, and **MySQL or PostgreSQL** with a loaded boundary database. Boundary data comes from the [Timezone Boundary Builder project](https://github.com/evansiroky/timezone-boundary-builder).
 

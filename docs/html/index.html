@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 <div class="textblock"><p><a class="anchor" id="md__r_e_a_d_m_e"></a> <img src="img/icon.png" alt="Little Green Viper" width="64" class="inline"/></p>
 <h1 class="doxsection"><a class="anchor" id="lgv_tz_lookup"></a>
 LGV_TZ_Lookup</h1>
-<p>A small PHP library that turns longitude and latitude into an IANA time zone name, such as <span class="tt">America/New_York</span>. Use it in your application through Composer, or run it as a simple HTTP service.</p>
+<p>A small PHP library that turns longitude and latitude into an <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">IANA time zone</a> name, such as <span class="tt">America/New_York</span>. Use it in your application through Composer, or run it as a simple HTTP service.</p>
 <p>Requires <b>PHP 8.0+</b>, <b>PDO</b>, and <b>MySQL or PostgreSQL</b> with a loaded boundary database. Boundary data comes from the <a href="https://github.com/evansiroky/timezone-boundary-builder">Timezone Boundary Builder project</a>.</p>
 <h2 class="doxsection"><a class="anchor" id="what-problem-does-this-solve"></a>
 What Problem Does This Solve?</h2>
@@ -155,6 +155,7 @@ One-Command Server Deployment</h2>
 </div><!-- fragment --><p>It asks for database and server settings, downloads and loads the latest boundaries, tests the lookups, and installs the endpoint. A random server secret is enabled by default. The final output gives you the secret and a request URL, such as:</p>
 <div class="fragment"><div class="line">https://your-server/timezone/?ll=-77.036543,38.895037&amp;secret=&lt;YOUR SECRET&gt;</div>
 </div><!-- fragment --><p>Enter an existing web directory's filesystem path and the public URL that maps to that directory. The installer appends the service subdirectory (default <span class="tt">timezone</span>) to both. It prints the complete service, lookup, and test URLs, including any existing URL prefix. Use those URLs to access the installed service.</p>
+<p>New installations accept a new or empty private application directory outside the web tree. The empty-directory fix is newer than 1.4.2; with that release, choose a new subdirectory inside the existing empty directory, or use the updated installer worker. See <a href="md_docs_2guide.html#choosing-the-web-directory-and-service-subdirectory">directory choices</a>.</p>
 <p>Use <span class="tt">./deploy.sh --no-secret</span> for public access. You need an existing PHP-enabled web server and database service. See the <a href="md_docs_2guide.html#deploying-a-server">deployment guide</a> for prerequisites, directory choices, and recovery.</p>
 <p>Starting with <b>1.4.2</b>, rerun the updated <span class="tt">./deploy.sh</span> with the same database settings, public service directory, and private directory to refresh an installer-owned service. It retains the existing boundaries, configuration, and secret. See <a href="md_docs_2guide.html#upgrading-an-existing-installation">upgrading an existing installation</a>. The printed test URL now includes lookup timing and PHP memory metrics.</p>
 <h3 class="doxsection"><a class="anchor" id="what-to-copy-to-the-server"></a>

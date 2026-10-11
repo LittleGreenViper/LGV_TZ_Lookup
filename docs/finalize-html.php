@@ -23,7 +23,8 @@
 
     Doxygen 1.18 emits raw dollar/underscore index links for PHP names, while the corresponding anchors are escaped.
     Some short, ungrouped function lists also receive an alphabetical bar without section anchors. We repair only
-    these generated index links, then check all generated local files, images, scripts, styles, and HTML anchors.
+    these generated index links, including links between split index pages, then check all generated local files,
+    images, scripts, styles, and HTML anchors.
     A failed check prevents generate-docs.sh from replacing the existing documentation.
 */
 declare(strict_types = 1);
@@ -36,17 +37,29 @@ $directory = realpath($argv[1]);
 $pages = [];
 foreach (glob($directory.'/*.html') as $file) {
     $html = file_get_contents($file);
-    foreach (['#index_$' => '#index__24', '#index__' => '#index__5F'] as $old => $new) {
-        if (str_contains($html, 'id="'.substr($new, 1).'"')) {
-            $html = str_replace('href="'.$old.'"', 'href="'.$new.'"', $html);
-        }
-    }
     if (str_contains($html, 'href="#index_') && !str_contains($html, 'id="index_')) {
         $html = preg_replace('/^<div class="qindex">[^\r\n]*<\/div>\r?\n/m', '', $html);
     }
-    file_put_contents($file, $html);
     preg_match_all('/\b(?:id|name)="([^"]*)"/', $html, $ids);
     $pages[$file] = ['html' => $html, 'ids' => array_fill_keys($ids[1], true)];
+}
+// Collect every page's anchors before repairing links that may target another index page.
+foreach ($pages as $file => $page) {
+    $html = preg_replace_callback('/\bhref="([^"#]*)#(index_\$|index__)"/',
+        static function(array $match) use ($file, $pages): string {
+            $path = html_entity_decode($match[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            if (preg_match('/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i', $path)) { return $match[0]; }
+            $url = parse_url($path);
+            $path = rawurldecode($url['path'] ?? '');
+            $target = $path === '' ? $file : realpath(dirname($file).'/'.$path);
+            $anchor = ['index_$' => 'index__24', 'index__' => 'index__5F'][$match[2]];
+            if (!isset($pages[$target]['ids'][$match[2]]) && isset($pages[$target]['ids'][$anchor])) {
+                return 'href="'.$match[1].'#'.$anchor.'"';
+            }
+            return $match[0];
+        }, $page['html']);
+    file_put_contents($file, $html);
+    $pages[$file]['html'] = $html;
 }
 $errors = [];
 foreach ($pages as $file => $page) {

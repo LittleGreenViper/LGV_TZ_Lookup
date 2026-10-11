@@ -1,0 +1,10 @@
+<map id="deployPublishDirectories" name="deployPublishDirectories">
+<area shape="rect" id="Node000001" title="Publish fresh staged code, retaining original empty directories until installation is committed." alt="" coords="5,67,172,92"/>
+<area shape="poly" id="edge3_Node000001_Node000001" title=" " alt="" coords="54,68,47,58,51,48,65,42,89,40,118,44,130,53,126,57,116,49,89,45,66,47,54,52,52,58,58,65"/>
+<area shape="rect" id="Node000002" href="$tools_2deploy_8php.html#a192601ebe6aa955d8552eed792211ecc" title="Check an empty directory without following links. Hidden files also count as contents." alt="" coords="220,29,383,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,64,215,54,216,60,162,69"/>
+<area shape="rect" id="Node000003" href="$tools_2deploy_8php.html#aa2f05ae84770f3ba5ae67219de71568c" title="Recognize the exact original directory, including after it is moved aside for publication." alt="" coords="228,103,375,128"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="164,89,215,98,214,103,164,95"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="267,31,259,21,263,11,278,5,301,3,331,6,342,15,339,20,329,11,301,8,279,10,267,15,265,20,271,28"/>
+<area shape="poly" id="edge5_Node000003_Node000003" title=" " alt="" coords="267,104,259,94,263,84,278,78,301,76,331,80,342,89,339,93,329,85,301,81,279,83,267,88,265,94,271,101"/>
+</map>
